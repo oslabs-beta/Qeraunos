@@ -2,16 +2,16 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: path.join(__dirname, './client/public/main.js'),
+  entry: path.join(__dirname, './client/main.js'),
   mode: process.env.NODE_ENV,
   output: {
-    path: path.join(__dirname, '/build/'),
+    path: path.join(__dirname, './build/'),
     publicPath: '/build/',
     filename: 'bundle.js',
   },
   devServer: {
     static: {
-      directory: path.resolve(__dirname, 'client/components/public'),
+      directory: path.resolve(__dirname, '/client/'),
       publicPath: 'bundle.js',
     },
     proxy: {
@@ -22,8 +22,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/public/index.html',
-      filename: './client/public/index.html',
+      template: './client/index.html',
+      filename: './client/index.html',
     }),
   ],
   module: {
