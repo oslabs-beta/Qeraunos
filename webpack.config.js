@@ -6,7 +6,7 @@ module.exports = {
   mode: process.env.NODE_ENV,
   output: {
     path: path.join(__dirname, './build/'),
-    publicPath: '/build/',
+    publicPath: '/',
     filename: 'bundle.js',
   },
   devServer: {
@@ -23,7 +23,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './client/index.html',
-      filename: './client/index.html',
+      filename: './index.html',
     }),
   ],
   module: {
