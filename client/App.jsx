@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   RecoilRoot,
   atom,
@@ -18,8 +19,8 @@ const App = () => {
         <img src={whiteLogo} alt="Qeraunos Logo" className="logo" />
       </div>
       <div className="main-display">
-        <Sidebar className="sidebar" />
-        <DataVisualizer className="dataVisualizer" />
+        <Sidebar />
+        <DataVisualizer />
       </div>
     </RecoilRoot>
   );

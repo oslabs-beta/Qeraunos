@@ -1,11 +1,12 @@
 import React from 'react';
+import '../stylesheets/styles.scss';
 
-const dataVisualizer = () => {
+const DataVisualizer = () => {
   return (
-    <div>
+    <div className="dataVisualizer">
       <p>data</p>
     </div>
   );
 };
 
-export default dataVisualizer;
+export default DataVisualizer;
