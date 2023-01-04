@@ -1,1 +1,47 @@
+//global variables
 
+$black: black;
+$light-grey: #333;
+$dark-grey: #333;
+
+$primary-blue: blue;
+$secondary-blue: blue;
+$alert: red;
+$white: white;
+
+* {
+  margin: none;
+  padding: none;
+}
+
+body {
+  background-color: $black;
+  color: $white;
+}
+
+.logo {
+  max-height: 100px;
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 15px;
+}
+
+.dataVisualizer {
+  flex-grow: 1;
+  border: 1px $white solid;
+}
+
+.sidebar {
+  flex-grow: 0;
+  border: 1px $white solid;
+  background-color: blue;
+}
