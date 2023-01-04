@@ -1,13 +1,13 @@
 import React from 'react';
-import starwarsButton from '../components/starwarsButton';
+import StarwarsButton from '../components/StarwarsButton';
 
-const sidebar = () => {
+const Sidebar = () => {
   return (
     <div>
       <p>sidebar</p>
-      <starwarsButton />
+      <StarwarsButton />
     </div>
   );
 };
 
-export default sidebar;
+export default Sidebar;
