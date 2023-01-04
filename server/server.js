@@ -6,17 +6,17 @@ const app = express();
 const PORT = 3000;
 require('dotenv').config();
 
-// app.use(
-//   '/graphql',
-//   expressGraphQL({
-//     schema,
-//     graphiql: true,
-//   })
-// );
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.resolve(__dirname)));
+
+app.use(
+  '/graphql',
+  expressGraphQL({
+    schema,
+    graphiql: true,
+  })
+);
 
 // 404 error handler
 app.use((req, res) => {
