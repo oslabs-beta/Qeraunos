@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   RecoilRoot,
   atom,
@@ -6,16 +7,20 @@ import {
   useRecoilState,
   useRecoilValue,
 } from 'recoil';
+import './stylesheets/styles.scss';
 import Sidebar from './container/Sidebar.jsx';
-import DataVisualizer from './container/dataVisualizer.jsx';
+import DataVisualizer from './container/DataVisualizer.jsx';
+import whiteLogo from './resources/logo-white.png';
 
 const App = () => {
   return (
     <RecoilRoot>
-      <p>Qeraunos</p>
+      <div>
+        <img src={whiteLogo} alt="Qeraunos Logo" className="logo" />
+      </div>
       <div className="main-display">
-        <Sidebar className="sidebar" />
-        <DataVisualizer className="dataVisualizer" />
+        <Sidebar />
+        <DataVisualizer />
       </div>
     </RecoilRoot>
   );
