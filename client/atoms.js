@@ -2,5 +2,5 @@ import { atom } from 'recoil';
 
 export const responseTimesState = atom({
   key: 'responseTimesState',
-  default: [],
+  default: [0],
 });
