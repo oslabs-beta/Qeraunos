@@ -1,20 +1,10 @@
 const path = require('path');
 const express = require('express');
 const expressGraphQL = require('express-graphql').graphqlHTTP;
+const schema = require('./schema/schema');
 const app = express();
-const {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLInt,
-  GraphQLList,
-  GraphQLNonNull,
-} = require('graphql');
 const PORT = 3000;
-
-// const schema = new GraphQLSchema({
-//   query: new GraphQLObjectType(),
-// });
+require('dotenv').config();
 
 // app.use(
 //   '/graphql',
