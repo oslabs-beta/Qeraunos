@@ -2,17 +2,18 @@ const path = require('path');
 const express = require('express');
 const expressGraphQL = require('express-graphql').graphqlHTTP;
 const schema = require('./schema/schema');
+const LfuCache = require('')
 const app = express();
 const PORT = 3000;
 require('dotenv').config();
 
-// app.use(
-//   '/graphql',
-//   expressGraphQL({
-//     schema,
-//     graphiql: true,
-//   })
-// );
+app.use(
+  '/graphql',
+  expressGraphQL({
+    schema,
+    graphiql: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
