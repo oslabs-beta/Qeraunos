@@ -6,10 +6,12 @@ const dataVisualizer = () => {
   const labels = [];
   const { responseTime } = useResponseTime();
   for (let i = 0; i < responseTime.length; i++) {
-    if (i > 0) {
-      labels.push('Cached');
-    } else {
+    if (i === 0) {
+      labels.push('');
+    } else if (i === 1) {
       labels.push('Uncached');
+    } else {
+      labels.push('Cached');
     }
   }
 
