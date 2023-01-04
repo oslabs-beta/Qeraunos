@@ -6,13 +6,13 @@ const app = express();
 const PORT = 3000;
 require('dotenv').config();
 
-// app.use(
-//   '/graphql',
-//   expressGraphQL({
-//     schema,
-//     graphiql: true,
-//   })
-// );
+app.use(
+  '/graphql',
+  expressGraphQL({
+    schema,
+    graphiql: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
