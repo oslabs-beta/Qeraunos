@@ -9,7 +9,7 @@ import {
 } from 'recoil';
 import './stylesheets/styles.scss';
 import Sidebar from './container/Sidebar.jsx';
-import DataVisualizer from './container/dataVisualizer.jsx';
+import DataVisualizer from './container/DataVisualizer.jsx';
 import whiteLogo from './resources/logo-white.png';
 
 const App = () => {
