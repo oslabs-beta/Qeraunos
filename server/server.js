@@ -16,7 +16,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.resolve(__dirname)));
+app.use(express.static(path.resolve(__dirname, '../client')));
 
 // 404 error handler
 app.use((req, res) => {

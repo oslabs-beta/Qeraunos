@@ -1,0 +1,68 @@
+//global variables
+
+$black: black;
+$light-grey: #333;
+$dark-grey: #333;
+
+$primary-blue: blue;
+$secondary-blue: blue;
+$alert: red;
+$white: white;
+
+* {
+  margin: none;
+  padding: none;
+}
+
+body {
+  background-color: $black;
+  color: $white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Inter', sans-serif;
+}
+
+p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+}
+
+.logo {
+  max-height: 100px;
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 15px;
+}
+
+.sidebar {
+  border: 1px solid $white;
+  border-radius: 10px;
+  padding: 50px;
+  margin: 15px;
+  flex-grow: 0;
+  min-height: 40vw;
+}
+
+.dataVisualizer {
+  border: 1px solid $white;
+  border-radius: 10px;
+  padding: 50px;
+  margin: 15px;
+  flex-grow: 1;
+  min-height: 40vw;
+}
