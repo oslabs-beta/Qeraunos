@@ -10,19 +10,19 @@ const {
   GraphQLList,
   GraphQLNonNull,
 } = require('graphql');
-const PORT = 8080;
+const PORT = 3000;
 
-const schema = new GraphQLSchema({
-  query: new GraphQLObjectType(),
-});
+// const schema = new GraphQLSchema({
+//   query: new GraphQLObjectType(),
+// });
 
-app.use(
-  '/graphql',
-  expressGraphQL({
-    schema,
-    graphiql: true,
-  })
-);
+// app.use(
+//   '/graphql',
+//   expressGraphQL({
+//     schema,
+//     graphiql: true,
+//   })
+// );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
