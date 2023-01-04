@@ -1,16 +1,23 @@
 import React from 'react';
-import sidebar from './container/sidebar.jsx';
-import dataVisualizer from './container/dataVisualizer.jsx';
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+import Sidebar from './container/Sidebar.jsx';
+import DataVisualizer from './container/dataVisualizer.jsx';
 
 const App = () => {
   return (
-    <div>
+    <RecoilRoot>
       <p>Qeraunos</p>
-      <div className='main-display'>
-        <sidebar className='sidebar' />
-        <dataVisualizer className='dataVisualizer' />
+      <div className="main-display">
+        <Sidebar className="sidebar" />
+        <DataVisualizer className="dataVisualizer" />
       </div>
-    </div>
+    </RecoilRoot>
   );
 };
 
