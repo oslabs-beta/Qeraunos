@@ -10,7 +10,7 @@ const starwarsButton = () => {
     const startTime = Date.now();
 
     const testQueryTime = await axios({
-      url: '/graphql',
+      url: 'http://localhost:8080/graphql',
       method: 'post',
       data: {
         query: `query { people { name } }`,
