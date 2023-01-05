@@ -6,7 +6,7 @@ import LineChart from '../components/chart';
 
 const DataVisualizer = () => {
   return (
-    <div className='dataVisualizer'>
+    <div className="dataVisualizer">
       <LineChart />
     </div>
   );

@@ -11,6 +11,7 @@ import './stylesheets/styles.scss';
 import Sidebar from './container/Sidebar.jsx';
 import DataVisualizer from './container/DataVisualizer.jsx';
 import whiteLogo from './resources/logo-white.png';
+import blueLogo from './resources/logo-blue.png';
 
 const App = () => {
   return (
