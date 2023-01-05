@@ -7,6 +7,7 @@ const {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
+  GraphQLID,
 } = require('graphql');
 
 const PersonType = new GraphQLObjectType({
@@ -39,13 +40,13 @@ const RootQuery = new GraphQLObjectType({
     },
     person: {
       type: new GraphQLList(PersonType),
-      args: { id: {type: GraphQLInt } },
+      args: { id: { type: GraphQLInt } },
       resolve: async (parent, args) => {
         const sqlQuery = `SELECT * FROM people WHERE _id=${args.id}`;
         const data = await db.query(sqlQuery);
         return data.rows;
-      }
-    }
+      },
+    },
   },
 });
 
