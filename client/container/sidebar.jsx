@@ -5,7 +5,6 @@ import '../stylesheets/styles.scss';
 const Sidebar = () => {
   return (
     <div className="sidebar">
-      <p>sidebar</p>
       <StarwarsButton />
     </div>
   );

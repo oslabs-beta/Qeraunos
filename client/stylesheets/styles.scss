@@ -4,10 +4,11 @@ $black: black;
 $light-grey: #333;
 $dark-grey: #333;
 
-$primary-blue: blue;
+$primary-blue: #010e42;
 $secondary-blue: blue;
 $alert: red;
 $white: white;
+$foreground: #e2e2e2;
 
 * {
   margin: none;
@@ -15,8 +16,9 @@ $white: white;
 }
 
 body {
-  background-color: $black;
-  color: $white;
+  background-color: $primary-blue;
+  background-image: url('../resources/star-background.png');
+  color: $black;
 }
 
 h1,
@@ -30,7 +32,7 @@ h6 {
 
 p {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 100;
+  font-weight: 300;
 }
 
 .logo {
@@ -50,19 +52,37 @@ p {
 }
 
 .sidebar {
-  border: 1px solid $white;
+  border: 1px solid $foreground;
   border-radius: 10px;
   padding: 50px;
   margin: 15px;
   flex-grow: 0;
   min-height: 40vw;
+  box-shadow: $foreground 0px 2px 8px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $foreground;
 }
 
 .dataVisualizer {
-  border: 1px solid $white;
+  border: 1px solid $foreground;
   border-radius: 10px;
   padding: 50px;
   margin: 15px;
   flex-grow: 1;
   min-height: 40vw;
+  box-shadow: $foreground 0px 2px 8px 0px;
+  background-color: $foreground;
+}
+
+button {
+  padding: 10px 40px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  border: 1px solid $primary-blue;
+  border-radius: 10px;
+  background-color: $primary-blue;
+  color: $white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
