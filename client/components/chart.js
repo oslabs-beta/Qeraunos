@@ -22,10 +22,14 @@ function LineChart() {
       {
         label: 'Response Time',
         data: responseTime,
+        backgroundColor: 'rgba(255, 255, 255)',
+        borderColor: 'rgb(75, 48, 232)',
+        borderWidth: 1,
+        bodyColor: 'rgb(75, 48, 232)',
       },
     ],
   };
-  return <Line data={chartResData} />;
+  return <Line data={chartResData} width={600} height={200} />;
 }
 
 export default LineChart;
