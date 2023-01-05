@@ -29,7 +29,7 @@ const DataVisualizer = () => {
   };
 
   return (
-    <div className="dataVisualizer">
+    <div className='dataVisualizer'>
       <p>data</p>
       <LineChart chartData={chartResData} />
     </div>
