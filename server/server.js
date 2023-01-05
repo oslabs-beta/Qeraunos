@@ -7,6 +7,10 @@ const app = express();
 const PORT = 3000;
 require('dotenv').config();
 
+const myLFU = new LfuCache(5);
+myLFU.set(1, 1);
+console.log(myLFU);
+
 app.use(
   '/graphql',
   expressGraphQL({

@@ -62,7 +62,6 @@ function FreqNode() {
   const myLFU = new LFUCache(5);
   myLFU.put(1, 1);
   myLFU.get(1);
-  console.log(myLFU);
   myLFU.put(2, 2);
   myLFU.put(3, 3);
   myLFU.put(4, 4);
