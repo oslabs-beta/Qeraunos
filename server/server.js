@@ -2,34 +2,26 @@ const path = require('path');
 const express = require('express');
 const expressGraphQL = require('express-graphql').graphqlHTTP;
 const schema = require('./schema/schema');
-const LfuCache = require('../caching/LFU-caching');
+const LfuCache = require('../caching/LFU-caching2');
+const { Qeraunos } = require('./controllers/qeraunos');
 const app = express();
 const PORT = 3000;
 require('dotenv').config();
-
-const myLFU = new LfuCache(5);
-myLFU.set(1, 1);
-console.log(myLFU);
-
-app.use(
-  '/graphql',
-  expressGraphQL({
-    schema,
-    graphiql: true,
-  })
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
 
-app.use(
-  '/graphql',
-  expressGraphQL({
-    schema,
-    graphiql: true,
-  })
-);
+const qeraunos = new Qeraunos(schema);
+
+app.use('/graphql', qeraunos.query, (req, res) => {
+  return res.status(200).send(res.locals.graphql);
+});
+
+// expressGraphQL({
+//   schema,
+//   graphiql: true,
+// })
 
 // 404 error handler
 app.use((req, res) => {

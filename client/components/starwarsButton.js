@@ -13,11 +13,11 @@ const starwarsButton = () => {
       url: 'http://localhost:8080/graphql',
       method: 'post',
       data: {
-        query: `query { people { name } }`,
+        query: `query { people { name, height } }`,
       },
     })
       .then(function (response) {
-        console.log(response);
+        console.log('frontend resp', response);
         return Date.now();
       })
       .catch(function (error) {
