@@ -17,9 +17,9 @@ const App = () => {
   return (
     <RecoilRoot>
       <div>
-        <img src={whiteLogo} alt="Qeraunos Logo" className="logo" />
+        <img src={whiteLogo} alt='Qeraunos Logo' className='logo' />
       </div>
-      <div className="main-display">
+      <div className='main-display'>
         <Sidebar />
         <DataVisualizer />
       </div>
