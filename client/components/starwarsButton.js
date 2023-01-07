@@ -13,7 +13,7 @@ const starwarsButton = () => {
       url: 'http://localhost:8080/graphql',
       method: 'post',
       data: {
-        query: `query { people { name, height } }`,
+        query: `query { people { _id, name, mass, hair_color, skin_color, eye_color, birth_year, gender, species_id, homeworld_id, height } }`,
       },
     })
       .then(function (response) {
