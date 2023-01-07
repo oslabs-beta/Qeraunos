@@ -10,12 +10,6 @@ require('dotenv').config();
 
 const qeraunos = new Qeraunos(schema);
 
-const myLFU = new LfuCache(5);
-myLFU.set(1, 1);
-console.log(myLFU);
-
-app.use('/graphql');
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
