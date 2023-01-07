@@ -6,7 +6,8 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "jsx": "react"
+    "jsx": "react",
+    "skipLibCheck": true
   },
   "include": ["client/**/*", "server/**/*"],
   "exclude": ["node_modules"]

@@ -1,14 +1,19 @@
 const LfuCache = require('../../caching/LFU-caching2');
 const schema = require('../schema/schema');
 const { graphql } = require('graphql');
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 
-function Qeraunos(schema) {
+function Qeraunos(schema: unknown) {
   this.schema = schema;
 }
 
 const newLfu = new LfuCache(100);
 
-Qeraunos.prototype.query = async function (req, res, next) {
+Qeraunos.prototype.query = async function (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     // create unique id key from query string
     const key = keyConverter(req.body.query);
@@ -37,7 +42,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
 };
 
 // converts query from client into a unique key by removing extraneous symbols into a single string
-const keyConverter = (query) => {
+const keyConverter = (query: unknown) => {
   return JSON.stringify(query).replace(/[\{\},\s]/g, '');
 };
 

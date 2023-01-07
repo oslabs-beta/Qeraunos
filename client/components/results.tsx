@@ -1,11 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { useResponseTime } from '../useResponseTimeState.js';
 
-function Results() {
+function Results(): JSX.Element {
   const { responseTime } = useResponseTime();
-  const uncached = responseTime[1] ? responseTime[1] : 'N/A';
-  const cached =
-    responseTime.length > 2 ? responseTime[responseTime.length - 1] : 'N/A';
+  const uncached: string = responseTime[1] ? String(responseTime[1]) : 'N/A';
+  const cached: string =
+    responseTime.length > 2
+      ? String(responseTime[responseTime.length - 1])
+      : 'N/A';
 
   return (
     <div>

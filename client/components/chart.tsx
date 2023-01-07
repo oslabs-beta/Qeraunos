@@ -1,10 +1,22 @@
-import React from 'react';
+import * as React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
-import { useResponseTime } from '../useResponseTimeState.js';
+import { useResponseTime } from '../useResponseTimeState';
 
-function LineChart() {
-  const labels = [];
+type ChartData = {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    borderColor?: string;
+    backgroundColor?: string;
+    borderWidth?: number;
+    bodyColor?: String;
+  }[];
+};
+
+function LineChart(): JSX.Element {
+  const labels: string[] = [];
   const { responseTime } = useResponseTime();
   for (let i = 0; i < responseTime.length; i++) {
     if (i === 0) {
@@ -16,7 +28,7 @@ function LineChart() {
     }
   }
 
-  const chartResData = {
+  const chartResData: ChartData = {
     labels: labels,
     datasets: [
       {

@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import StarwarsButton from '../components/StarwarsButton';
 import '../stylesheets/styles.scss';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className='sidebar'>
       <StarwarsButton />
     </div>
   );
