@@ -14,11 +14,11 @@ const StarwarsButton = () => {
       url: 'http://localhost:8080/graphql',
       method: 'post',
       data: {
-        query: `query { people { name } }`,
+        query: `query { people { _id, name, mass, hair_color, skin_color, eye_color, birth_year, gender, species_id, homeworld_id, height } }`,
       },
     })
       .then(function (response) {
-        console.log(response);
+        console.log('response: ', response);
         return Date.now();
       })
       .catch(function (error) {
@@ -35,7 +35,7 @@ const StarwarsButton = () => {
   return (
     <div>
       <button
-        id="btn-main"
+        id='btn-main'
         onClick={(e) => {
           setTime();
         }}
