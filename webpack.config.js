@@ -58,8 +58,8 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
-    resolve: {
-      extensions: ['.jsx', '.js', '.ts', '.tsx'],
-    },
+  },
+  resolve: {
+    extensions: ['.jsx', '.js', '.ts', '.tsx'],
   },
 };
