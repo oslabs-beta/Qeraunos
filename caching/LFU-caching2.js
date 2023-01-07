@@ -99,7 +99,7 @@ LfuCache.prototype.removeNode = function (newNode, freqList) {
 
 // O(1) get function to get node from key
 LfuCache.prototype.get = function (key) {
-  if (!this.keys[key]) return 'data does not exist in cache';
+  if (!this.keys[key]) return undefined;
   // get, update, return the nodes freqCount
   let node = this.keys[key];
   this.updateNode(node);
