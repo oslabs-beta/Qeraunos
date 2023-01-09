@@ -2,8 +2,9 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { useResponseTime } from '../useResponseTimeState.js';
 import axios from 'axios';
+import '../stylesheets/styles.scss';
 
-const starwarsButton = () => {
+const StarwarsButton = () => {
   const { responseTime, setResponseTime } = useResponseTime();
 
   const setTime = async () => {
@@ -17,7 +18,7 @@ const starwarsButton = () => {
       },
     })
       .then(function (response) {
-        console.log('frontend resp', response);
+        console.log('response: ', response);
         return Date.now();
       })
       .catch(function (error) {
@@ -33,8 +34,8 @@ const starwarsButton = () => {
 
   return (
     <div>
-      <p>Starwars Button Here</p>
       <button
+        id='btn-main'
         onClick={(e) => {
           setTime();
         }}
@@ -45,4 +46,4 @@ const starwarsButton = () => {
   );
 };
 
-export default starwarsButton;
+export default StarwarsButton;

@@ -8,20 +8,15 @@ const app = express();
 const PORT = 3000;
 require('dotenv').config();
 
+const qeraunos = new Qeraunos(schema);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
 
-const qeraunos = new Qeraunos(schema);
-
 app.use('/graphql', qeraunos.query, (req, res) => {
   return res.status(200).send(res.locals.graphql);
 });
-
-// expressGraphQL({
-//   schema,
-//   graphiql: true,
-// })
 
 // 404 error handler
 app.use((req, res) => {
