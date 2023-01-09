@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink, useMatch, useResolvedPath } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import whiteLogo from '../resources/logo-white.png';
 
 function Navbar() {
