@@ -28,7 +28,7 @@ const PersonType = new GraphQLObjectType({
       type: GraphQLString,
       resolve: async (person) => {
         const id = [person.homeworld_id];
-        const sqlQuery = 'SELECT p.name FROM planets p WHERE p._id = $1';
+        const sqlQuery = 'SELECT p.* FROM planets p WHERE p._id = $1';
         const data = await db.query(sqlQuery, id);
         return data.rows[0].name;
       },
