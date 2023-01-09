@@ -13,9 +13,11 @@ $foreground: #e2e2e2;
 * {
   margin: none;
   padding: none;
+  box-sizing: border-box;
 }
 
 body {
+  margin: 0px;
   background-color: $primary-blue;
   background-image: url('../resources/star-background.png');
   color: $black;
@@ -28,6 +30,7 @@ h4,
 h5,
 h6 {
   font-family: 'Inter', sans-serif;
+  color: $white;
 }
 
 p {
@@ -35,10 +38,15 @@ p {
   font-weight: 300;
 }
 
+.container {
+  padding: 10px;
+  margin: 10px;
+}
+
 .logo {
   max-height: 100px;
   display: block;
-  margin-top: 50px;
+  // margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -85,4 +93,53 @@ button {
   background-color: $primary-blue;
   color: $white;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+// navbar styling
+
+.nav {
+  background-color: rgba(255, 255, 255, 0.077);
+  color: $white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 2rem;
+  padding: 0 1rem;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 18px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+
+    li.active {
+      text-decoration: underline;
+    }
+
+    li:hover {
+      background-color: rgba(255, 255, 255, 0.346);
+    }
+  }
+
+  .active {
+    text-decoration: underline;
+  }
+}
+
+.nav-logo {
+  padding: 7px;
+  margin: 0px;
+  display: flex;
+  align-items: center;
 }
