@@ -33,6 +33,7 @@ const LfuCache = function (capacity) {
 //This is the LRU aspect of the LFU/LRU cache
 LfuCache.prototype.removeAtTail = function (DLL) {
   // delete the tail node from hashtable
+  const deleted = this.keys[DLL.tail.key];
   delete this.keys[DLL.tail.key];
   // delete from linked list
   // if there is only one node in list
@@ -45,6 +46,7 @@ LfuCache.prototype.removeAtTail = function (DLL) {
     DLL.tail.next = null;
   }
   this.size--;
+  return deleted;
 };
 
 //If (key, value) doesn't exist in the cache, use this method to insert into cache
@@ -136,10 +138,46 @@ LfuCache.prototype.set = function (key, value) {
   else if (this.size >= this.capacity && this.capacity > 0) {
     // remove the least frequently occurring data from the tail, and if there are multiple in this frequency, remove the least recently used one
     let leastFreqNode = this.frequency[this.minFrequency];
-    this.removeAtTail(leastFreqNode);
+    //this keeps track of the removed node and returns it
+    const removed = this.removeAtTail(leastFreqNode);
     // after removing the tail to make room, add the new node
     this.addNode(key, value);
+    return removed;
   }
 };
+
+// const myLFU = new LfuCache(3);
+// myLFU.set(1, 1);
+// console.log([myLFU.keys[1].key, myLFU.keys[1].value] == [1, 1]);
+// myLFU.set(2, 2);
+// console.log(myLFU);
+// myLFU.get(2);
+// console.log(myLFU);
+// myLFU.set(3, 3);
+// myLFU.get(3);
+// myLFU.get(3);
+// console.log(myLFU);
+// console.log(myLFU.set(4, 4));
+// myLFU.get(4);
+// myLFU.get(4);
+// myLFU.get(4);
+// myLFU.set(5, 5);
+// myLFU.get(5);
+// myLFU.get(5);
+// myLFU.get(5);
+// myLFU.get(5);
+// myLFU.set(6, 6);
+// console.log(myLFU);
+// console.log(myLFU.get(6));
+// console.log(myLFU);
+
+// const newLFU = new LfuCache(3);
+// for (let i = 0; i < 3; i++) {
+//   newLFU.set(i, i);
+//   if (i === 0) continue;
+//   newLFU.set(i, i);
+// }
+// const deleteNode = newLFU.set(3, 3);
+// console.log(deleteNode);
 
 module.exports = LfuCache;
