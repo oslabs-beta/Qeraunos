@@ -16,6 +16,10 @@ app.use('/graphql', qeraunos.query, (req, res) => {
   return res.status(200).send(res.locals);
 });
 
+// app.use('/graphql', qeraunos.mutations, (req, res) => {
+//   return res.status(200).send(res.locals);
+// });
+
 // 404 error handler
 app.use((req, res) => {
   console.error('Server.js 404');
