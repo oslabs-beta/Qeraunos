@@ -9,19 +9,20 @@ function LineChart() {
   for (let i = 0; i < responseTime.length; i++) {
     if (i === 0) {
       labels.push('');
-    } else if (i === 1) {
-      labels.push('Uncached');
     } else {
-      labels.push('Cached');
+      labels.push(responseTime[i].cached);
     }
   }
+  const times = responseTime.map((e) => {
+    return e.resTime;
+  });
 
   const chartResData = {
     labels: labels,
     datasets: [
       {
         label: 'Response Time',
-        data: responseTime,
+        data: times,
         backgroundColor: 'rgba(255, 255, 255)',
         borderColor: 'rgb(75, 48, 232)',
         borderWidth: 1,

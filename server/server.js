@@ -1,8 +1,6 @@
 const path = require('path');
 const express = require('express');
-const expressGraphQL = require('express-graphql').graphqlHTTP;
 const schema = require('./schema/schema');
-const LfuCache = require('../caching/LFU-caching2');
 const { Qeraunos } = require('./controllers/qeraunos');
 const app = express();
 const PORT = 3000;
@@ -15,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
 
 app.use('/graphql', qeraunos.query, (req, res) => {
-  return res.status(200).send(res.locals.graphql);
+  return res.status(200).send(res.locals);
 });
 
 // 404 error handler
