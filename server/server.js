@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
 
 app.use('/graphql', qeraunos.query, (req, res) => {
-  return res.status(200).send(res.locals.graphql);
+  return res.status(200).send(res.locals);
 });
 
 // 404 error handler
