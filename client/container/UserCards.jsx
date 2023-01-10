@@ -12,19 +12,19 @@ function UserCards() {
     {
       name: 'Arthur Huynh',
       title: 'Software Engineer',
-      linkedIn: 'https://www.linkedin.com/',
+      linkedIn: 'www.linkedin.com/in/arthurnhuynh',
       image: 'url image here',
     },
     {
       name: 'Dennis Cheung',
       title: 'Software Engineer',
-      linkedIn: 'https://www.linkedin.com/',
+      linkedIn: 'https://www.linkedin.com/in/denniskhcheung/',
       image: 'url image here',
     },
     {
       name: 'Jason Hwang',
       title: 'Software Engineer',
-      linkedIn: 'https://www.linkedin.com/',
+      linkedIn: 'www.linkedin.com/in/jason-jh-hwang',
       image: 'url image here',
     },
   ];
