@@ -12,6 +12,9 @@ function Qeraunos(schema) {
 const newLfu = new LfuCache(3);
 
 Qeraunos.prototype.query = async function (req, res, next) {
+  if (!req.body.query) {
+    return next();
+  }
   try {
     // create unique id key from query string
     const key = keyConverter(req.body.query);
@@ -25,7 +28,6 @@ Qeraunos.prototype.query = async function (req, res, next) {
       // console.log('THIS.KEYS: ', newLfu.keys);
       return next();
     } else {
-      console.log('in graphql');
       const data = await graphql({
         schema: this.schema,
         source: req.body.query,
@@ -41,6 +43,19 @@ Qeraunos.prototype.query = async function (req, res, next) {
       message: { err: 'An error occurred in qeraunos controller' },
     });
   }
+};
+
+Qeraunos.prototype.mutation = async function (req, res, next) {
+  if (!req.body.mutation) return next();
+  const key = keyConverter(req.body.mutation);
+  const data = await graphql({
+    schema: this.schema,
+    source: req.body.mutation,
+  });
+  res.locals.graphql = data;
+  res.locals.response = 'Uncached';
+  newLfu.set(key, data);
+  return next();
 };
 
 // converts query from client into a unique key by removing extraneous symbols into a single string

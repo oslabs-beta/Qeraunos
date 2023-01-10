@@ -72,6 +72,7 @@ const RootQuery = new GraphQLObjectType({
       resolve: async (parent, args) => {
         const sqlQuery = `SELECT * FROM people`;
         const data = await db.query(sqlQuery);
+        console.log(data.rows);
         return data.rows;
       },
     },
@@ -104,6 +105,91 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+const RootMutation = new GraphQLObjectType({
+  name: 'RootMutation',
+  fields: {
+    addPerson: {
+      type: PersonType,
+      description: 'Add a person',
+      args: {
+        name: { type: GraphQLNonNull(GraphQLString) },
+        mass: { type: GraphQLString },
+        hair_color: { type: GraphQLString },
+        skin_color: { type: GraphQLString },
+        eye_color: { type: GraphQLString },
+        birth_year: { type: GraphQLString },
+        gender: { type: GraphQLString },
+        species_id: { type: GraphQLString },
+        homeworld_id: { type: GraphQLString },
+        height: { type: GraphQLInt },
+      },
+      resolve: async (parent, args) => {
+        const {
+          name,
+          mass,
+          hair_color,
+          skin_color,
+          eye_color,
+          birth_year,
+          gender,
+          species_id,
+          homeworld_id,
+          height,
+        } = args;
+        const arr = [
+          name,
+          mass,
+          hair_color,
+          skin_color,
+          eye_color,
+          birth_year,
+          gender,
+          species_id,
+          homeworld_id,
+          height,
+        ];
+        console.log('arr', arr);
+        const sqlStr = `INSERT INTO 
+        people (name, mass, hair_color, skin_color, eye_color, birth_year, gender, species_id, homeworld_id, height)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+        const newSQL = `SELECT * FROM people p WHERE p.name = 'Arthur'`;
+        // const insertion = await db.query(sqlStr, arr);
+        // console.log('executed insert');
+        const person = await db.query(newSQL);
+        console.log('In mutate', person.rows[0]);
+        return person.rows[0];
+      },
+    },
+    //   deletePerson: {
+    //     type: PersonType,
+    //     args: { id: { type: GraphQLInt } },
+    //     resolve: async (parent, args) => {
+    //       const sqlQuery = `SELECT * FROM people WHERE _id=${args.id}`;
+    //       const data = await db.query(sqlQuery);
+    //       return data.rows[0];
+    //     },
+    //   },
+    //   updatePerson: {
+    //     type: new GraphQLList(PlanetType),
+    //     resolve: async (parent, args) => {
+    //       const sqlQuery = `SELECT * FROM planets`;
+    //       const data = await db.query(sqlQuery);
+    //       return data.rows;
+    //     },
+    //   },
+    //   planet: {
+    //     type: PlanetType,
+    //     args: { id: { type: GraphQLInt } },
+    //     resolve: async (parents, args) => {
+    //       const sqlQuery = `SELECT * FROM planets WHERE _id=${args.id}`;
+    //       const data = await db.query(sqlQuery);
+    //       return data.rows[0];
+    //     },
+    //   },
+  },
+});
+
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation: RootMutation,
 });
