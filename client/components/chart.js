@@ -9,10 +9,10 @@ function LineChart() {
   for (let i = 0; i < responseTime.length; i++) {
     if (i === 0) {
       labels.push('');
-    } else if (i === 1) {
-      labels.push('Uncached');
-    } else {
+    } else if (responseTime[i].cached === 'cached') {
       labels.push('Cached');
+    } else {
+      labels.push('uncached');
     }
   }
 
