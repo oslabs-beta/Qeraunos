@@ -7,7 +7,6 @@ const {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLID,
 } = require('graphql');
 
 const PersonType = new GraphQLObjectType({

@@ -2,11 +2,13 @@ const LfuCache = require('../../caching/LFU-caching2');
 // const schema = require('../schema/schema');
 const { graphql } = require('graphql');
 
+// builds qeraunos middleware
 function Qeraunos(schema) {
   this.schema = schema;
   this.query = this.query.bind(this);
 }
 
+//THIS IS HARDCODED --> DO WE WANT TO GIVE USER THE OPTION TO SET CAPACITY?
 const newLfu = new LfuCache(3);
 
 Qeraunos.prototype.query = async function (req, res, next) {
@@ -14,7 +16,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
     // create unique id key from query string
     const key = keyConverter(req.body.query);
     // check whether key exists in cache, if so return value from cache.
-    // if not, send a graphQL query using client query
+    // if not, send a graphQL query
     if (newLfu.keys[key]) {
       // console.log('newLfu.keys[key]: ', newLfu.keys[key]);
       // console.log('in cache');
@@ -43,7 +45,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
 
 // converts query from client into a unique key by removing extraneous symbols into a single string
 const keyConverter = (query) => {
-  return JSON.stringify(query).replace(/[\{\},\s]/g, '');
+  return JSON.stringify(query).replace(/[\{\},\s_]/g, '');
 };
 
 module.exports = { Qeraunos };
