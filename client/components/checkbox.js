@@ -23,7 +23,7 @@ const Checkbox = () => {
     console.log(queryString);
     const startTime = Date.now();
 
-    const testQueryTime = await axios({
+    const queryTimeObj = await axios({
       url: 'http://localhost:8080/graphql',
       method: 'post',
       data: {
@@ -31,18 +31,29 @@ const Checkbox = () => {
       },
     })
       .then(function (response) {
-        console.log('response: ', response);
-        return Date.now();
+        // console.log('response: ', response);
+        
+        const obj = {
+          ...responseTime[responseTime.length -1],
+          cached: response.data.response,
+          resTime: Date.now() - startTime,
+        };
+        if (response.data.response === 'Cached') {
+          obj.lastCached = obj.resTime;
+        } else {
+          obj.lastUncached = obj.resTime;
+        }
+        return obj;
       })
       .catch(function (error) {
         console.log(error);
       });
 
-    console.log(testQueryTime);
-    const newResponseTime = testQueryTime - startTime;
-    console.log(newResponseTime);
-    setResponseTime([...responseTime, newResponseTime]);
-    console.log(responseTime);
+    // console.log(testQueryTime);
+    // const newResponseTime = testQueryTime - startTime;
+    // console.log(newResponseTime);
+    setResponseTime([...responseTime, queryTimeObj]);
+    // console.log(responseTime);
   };
 
   return (

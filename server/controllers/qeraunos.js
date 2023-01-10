@@ -19,6 +19,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
       // console.log('newLfu.keys[key]: ', newLfu.keys[key]);
       // console.log('in cache');
       res.locals.graphql = newLfu.get(key);
+      res.locals.response = 'Cached';
       // console.log('THIS.KEYS: ', newLfu.keys);
       return next();
     } else {
@@ -28,6 +29,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
         source: req.body.query,
       });
       res.locals.graphql = data;
+      res.locals.response = 'Uncached';
       newLfu.set(key, data);
       return next();
     }
