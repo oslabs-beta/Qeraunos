@@ -27,12 +27,12 @@ const App = () => {
   return (
     <RecoilRoot>
       <Navbar />
-      <div className="container">
+      <div className='container'>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/demo" element={<Demo />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/installation" element={<Installation />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/demo' element={<Demo />} />
+          <Route path='/team' element={<Team />} />
+          <Route path='/installation' element={<Installation />} />
         </Routes>
       </div>
     </RecoilRoot>

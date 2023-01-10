@@ -164,9 +164,7 @@ const RootMutation = new GraphQLObjectType({
     //     type: PersonType,
     //     args: { id: { type: GraphQLInt } },
     //     resolve: async (parent, args) => {
-    //       const sqlQuery = `SELECT * FROM people WHERE _id=${args.id}`;
-    //       const data = await db.query(sqlQuery);
-    //       return data.rows[0];
+    //
     //     },
     //   },
     //   updatePerson: {
