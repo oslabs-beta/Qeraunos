@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
 
-app.use('/graphql', qeraunos.query, (req, res) => {
+app.use('/graphql', qeraunos.query, qeraunos.mutation, (req, res) => {
   return res.status(200).send(res.locals);
 });
 
