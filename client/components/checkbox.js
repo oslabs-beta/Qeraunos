@@ -6,7 +6,7 @@ import '../stylesheets/styles.scss';
 const Checkbox = () => {
   const { responseTime, setResponseTime } = useResponseTime();
   const [queryString, setQueryString] = useState('');
-  const [people, setPeople] = useState(true);
+  const [queryResult, setqueryResult] = useState('');
   const [_id, set_id] = useState(true);
   const [name, setName] = useState(true);
   const [mass, setMass] = useState(true);
@@ -17,7 +17,7 @@ const Checkbox = () => {
       mass ? ' mass' : ''
     }${hair_color ? ' hair_color' : ''}}}`;
     setQueryString(string);
-  }, [people, _id, name, mass, hair_color]);
+  }, [_id, name, mass, hair_color]);
 
   const setTime = async () => {
     console.log(queryString);
@@ -31,10 +31,13 @@ const Checkbox = () => {
       },
     })
       .then(function (response) {
-        // console.log('response: ', response);
-        
+        console.log('RESPONSE', response);
+        setqueryResult(
+          JSON.stringify(response.data.graphql.data.people, null, 2)
+        );
+
         const obj = {
-          ...responseTime[responseTime.length -1],
+          ...responseTime[responseTime.length - 1],
           cached: response.data.response,
           resTime: Date.now() - startTime,
         };
@@ -59,16 +62,7 @@ const Checkbox = () => {
   return (
     <div className='checkboxContainer'>
       <div className='cb-header'>
-        <input
-          type='checkbox'
-          id='people'
-          name='people'
-          value='people'
-          checked={people}
-          onChange={() => (people ? setPeople(false) : setPeople(true))}
-        />
-        <label htmlFor='people'> People</label>
-        <br />
+        <p>People</p>
         <input
           type='checkbox'
           id='_id'
@@ -108,6 +102,9 @@ const Checkbox = () => {
         />
         <label htmlFor='hair_color'> Hair Color</label>
       </div>
+      <div>
+        <pre>{queryString}</pre>
+      </div>
       <button
         id='cb-button'
         onClick={(e) => {
@@ -116,6 +113,10 @@ const Checkbox = () => {
       >
         Run Query
       </button>
+      <div>
+        <p>Query Results</p>
+        <pre className='queryResult'> {queryResult}</pre>
+      </div>
     </div>
   );
 };

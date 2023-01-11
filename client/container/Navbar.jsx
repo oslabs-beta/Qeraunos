@@ -7,7 +7,6 @@ function Navbar() {
     <nav className="nav">
       <div className="nav-logo">
         <Link to="/">
-          {' '}
           <img src={whiteLogo} alt="Qeraunos Logo" className="logo" />
         </Link>
       </div>
