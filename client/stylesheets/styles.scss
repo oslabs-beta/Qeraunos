@@ -153,6 +153,17 @@ button:active {
   align-items: center;
 }
 
+.queryResult {
+  height: 250px;
+  width: 300x;
+  overflow-y: scroll;
+}
+
+.nameResult {
+  height: 250px;
+  width: 300x;
+}
+
 //TEAM MEMBER CARD
 .team {
   display: flex;
