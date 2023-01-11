@@ -205,7 +205,7 @@ const RootMutation = new GraphQLObjectType({
           }
         }
         const updatedPerson = { ...person.rows[0], ...legitProperties };
-        id = updatedPerson.id;
+        id = updatedPerson._id;
         name = updatedPerson.name;
         mass = updatedPerson.mass;
         hair_color = updatedPerson.hair_color;
