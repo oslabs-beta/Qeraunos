@@ -105,13 +105,15 @@ button:active {
 // navbar styling
 
 .nav {
-  background-color: $black;
+  background-color: inherit;
   color: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0 2rem;
   padding: 0 1rem;
+  margin-right: 50px;
+  box-shadow: rgba(197, 197, 198, 0.1) 0px 10px 10px -10px;
 
   a {
     color: inherit;
@@ -161,6 +163,59 @@ button:active {
   height: 250px;
   width: 300x;
 }
+
+//TEAM MEMBER CARD
+.team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.member-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 50px;
+  margin: 15px;
+  box-shadow: $foreground 0px 2px 8px 0px;
+  // box-shadow: rgba(197, 197, 198, 0.1)0px 2px 8px 0px;
+  background-color: inherit;
+  color: $foreground;
+  h1,
+  h2,
+  h3,
+  p {
+    color: $white;
+    text-align: center;
+  }
+  h1 {
+    margin-top: 50px;
+    font-size: 20px;
+  }
+  h2 {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  h3 {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+.member-pic {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: $foreground 0px 2px 8px 0px;
+}
+
+.fa-linkedin {
+  background-color: white;
+  color: white;
+}
+
+//BACKGROUND
 
 #stars {
   width: 1px;
