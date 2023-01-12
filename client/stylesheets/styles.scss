@@ -51,6 +51,10 @@ p {
   margin-right: auto;
 }
 
+.home-logo {
+  // color: $white;
+  fill: green;
+}
 .main-display {
   display: flex;
   flex-direction: row;
@@ -210,9 +214,8 @@ button:active {
   box-shadow: $foreground 0px 2px 8px 0px;
 }
 
-.fa-linkedin {
-  background-color: white;
-  color: white;
+.linkedin-icon {
+  fill: #010e42;
 }
 
 //BACKGROUND
