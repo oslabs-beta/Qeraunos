@@ -19,7 +19,6 @@ $foreground: #f5f5f5;
 body {
   margin: 0px;
   background-color: $black;
-  background-image: url('../resources/star-background.png');
   color: $black;
 }
 
@@ -51,9 +50,23 @@ p {
   margin-right: auto;
 }
 
+//HOME PAGE STYLING
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin: auto;
+}
+
 .home-logo {
-  // color: $white;
+  color: $white;
   fill: green;
+  h1 {
+    color: $white;
+  }
 }
 .main-display {
   display: flex;

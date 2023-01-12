@@ -1,5 +1,4 @@
 import React from 'react';
-// import Linkedin from '../resources/linkedin-icon.svg';
 import { ReactComponent as Linkedin } from '../resources/linkedin-icon.svg';
 
 function TeamMember(props) {
@@ -11,8 +10,9 @@ function TeamMember(props) {
       <h1>{name}</h1>
       <h2>{title}</h2>
       <h3>
-        <Linkedin className="linkedin-icon" />
-        {/* <img src="Linkedin" alt="icon" /> */}
+        <a href={linkedIn} target="_blank" rel="noreferrer noopener">
+          <Linkedin className="linkedin-icon" />
+        </a>
       </h3>
     </div>
   );
