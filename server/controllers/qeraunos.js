@@ -30,7 +30,7 @@ const graphqlParser = (schema, body) => {
   const parsed = parse(body).definitions[0];
   const operation = parsed.operation;
   // this will remove spaces and reference to mutation in body str
-  body = body.replace(/mutation|\s/g, '');
+  body = body.replace(/query|mutation|\s/g, '');
   //this will clean up the body so that only the id is in the arg
   if (operation === 'mutation') {
     const id = body.split('(')[1].split(',')[0];
@@ -42,6 +42,7 @@ const graphqlParser = (schema, body) => {
   const field = parsed.selectionSet.selections[0].name.value; // string
   // console.log('FIELD: ', field);
   // finds the correct type based on the field type pair
+  console.log('FIELD', fieldToType[field]);
   const type = fieldToType[field].toString();
   // console.log('TYPE: ', type);
   // grabs all the parameters in the query search and stores in an array.
@@ -135,7 +136,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
       if (newLfu.keys[key]) {
         res.locals.graphql = newLfu.get(key);
         res.locals.response = 'Cached';
-        console.log('OLD CACHE OBJ IN QUERY', newLfu.keys);
+        console.log('OLD CACHE OBJ IN QUERY', newLfu.keys[key].value.data);
         return next();
       } else {
         const data = await graphql({
