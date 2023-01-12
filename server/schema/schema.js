@@ -25,8 +25,8 @@ const PersonType = new GraphQLObjectType({
     height: { type: GraphQLInt },
     homeworld: {
       type: GraphQLString,
-      resolve: async (person) => {
-        const id = [person.homeworld_id];
+      resolve: async (prevProps) => {
+        const id = [prevProps.homeworld_id];
         const sqlQuery = 'SELECT p.* FROM planets p WHERE p._id = $1';
         const data = await db.query(sqlQuery, id);
         return data.rows[0].name;
@@ -72,7 +72,6 @@ const RootQuery = new GraphQLObjectType({
       resolve: async (parent, args) => {
         const sqlQuery = `SELECT * FROM people`;
         const data = await db.query(sqlQuery);
-        console.log(data.rows);
         return data.rows;
       },
     },
@@ -110,7 +109,7 @@ const RootMutation = new GraphQLObjectType({
   fields: {
     addPerson: {
       type: PersonType,
-      description: 'Add a person',
+      description: 'Add a prevProps',
       args: {
         name: { type: GraphQLNonNull(GraphQLString) },
         mass: { type: GraphQLString },
@@ -148,16 +147,14 @@ const RootMutation = new GraphQLObjectType({
           homeworld_id,
           height,
         ];
-        console.log('arr', arr);
         const sqlStr = `INSERT INTO 
         people (name, mass, hair_color, skin_color, eye_color, birth_year, gender, species_id, homeworld_id, height)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
-        const newSQL = `SELECT * FROM people p WHERE p.name = 'Arthur'`;
-        // const insertion = await db.query(sqlStr, arr);
-        // console.log('executed insert');
-        const person = await db.query(newSQL);
-        console.log('In mutate', person.rows[0]);
-        return person.rows[0];
+        const newSQL = `SELECT * FROM people p WHERE p.name = $1 AND p.mass = $2`;
+        await db.query(sqlStr, arr);
+        const searchArr = [name, mass];
+        const prevProps = await db.query(newSQL, searchArr);
+        return prevProps.rows[0];
       },
     },
     //   deletePerson: {
@@ -167,14 +164,117 @@ const RootMutation = new GraphQLObjectType({
     //
     //     },
     //   },
-    //   updatePerson: {
-    //     type: new GraphQLList(PlanetType),
-    //     resolve: async (parent, args) => {
-    //       const sqlQuery = `SELECT * FROM planets`;
-    //       const data = await db.query(sqlQuery);
-    //       return data.rows;
-    //     },
-    //   },
+    updatePerson: {
+      type: PersonType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLInt) },
+        name: { type: GraphQLString },
+        mass: { type: GraphQLString },
+        hair_color: { type: GraphQLString },
+        skin_color: { type: GraphQLString },
+        eye_color: { type: GraphQLString },
+        birth_year: { type: GraphQLString },
+        gender: { type: GraphQLString },
+        species_id: { type: GraphQLString },
+        homeworld_id: { type: GraphQLString },
+        height: { type: GraphQLInt },
+      },
+      resolve: async (parent, args) => {
+        //should we use coalesce instead for queries
+        const searchArr = [args.id];
+        const searchSQL = 'SELECT * FROM people p WHERE p._id = $1';
+        const prevProps = await db.query(searchSQL, searchArr);
+        let {
+          id,
+          name,
+          mass,
+          hair_color,
+          skin_color,
+          eye_color,
+          birth_year,
+          gender,
+          species_id,
+          homeworld_id,
+          height,
+        } = args;
+
+        const legitProperties = {};
+        for (let key in args) {
+          if (args[key]) {
+            legitProperties[key] = args[key];
+          }
+        }
+        const updatedPerson = { ...prevProps.rows[0], ...legitProperties };
+        id = updatedPerson.id;
+        name = updatedPerson.name;
+        mass = updatedPerson.mass;
+        hair_color = updatedPerson.hair_color;
+        skin_color = updatedPerson.skin_color;
+        eye_color = updatedPerson.eye_color;
+        birth_year = updatedPerson.birth_year;
+        gender = updatedPerson.gender;
+        species_id = updatedPerson.species_id;
+        homeworld_id = updatedPerson.homeworld_id;
+        height = updatedPerson.height;
+
+        const arr = [
+          id,
+          name,
+          mass,
+          hair_color,
+          skin_color,
+          eye_color,
+          birth_year,
+          gender,
+          species_id,
+          homeworld_id,
+          height,
+        ];
+
+        // const sqlSearch = `SELECT * FROM people WHERE _id = $1`;
+        // let prevProps = await db.query(sqlSearch, [args.id]);
+        // prevProps = prevProps.rows[0];
+        // console.log('prevProps', prevProps);
+        // const sqlQuery = `UPDATE people p
+        // SET name = COALESCE($2, $3), mass = COALESCE($4, $5),
+        // hair_color = COALESCE($6, $7),
+        // skin_color = COALESCE($8, $9),
+        // eye_color = COALESCE($10, $11),
+        // birth_year = COALESCE($12, $13),
+        // gender = COALESCE($14, $15),
+        // species_id = COALESCE($16, $17),
+        // homeworld_id = COALESCE($18, $19),
+        // height = COALESCE($20, $21)
+        // WHERE p._id = $1`;
+        // const arr = [
+        //   args.id,
+        //   args.name,
+        //   prevProps.name,
+        //   args.mass,
+        //   prevProps.mass,
+        //   args.hair_color,
+        //   prevProps.hair_color,
+        //   args.skin_color,
+        //   prevProps.skin_color,
+        //   args.eye_color,
+        //   prevProps.eye_color,
+        //   args.birth_year,
+        //   args.gender,
+        //   prevProps.gender,
+        //   args.species_id,
+        //   prevProps.species_id,
+        //   args.homeworld_id,
+        //   prevProps.homeworld_id,
+        //   args.height,
+        //   prevProps.height,
+        // ];
+        const sqlQuery = `UPDATE people p
+        SET name = $2, mass = $3, hair_color = $4, skin_color = $5, eye_color = $6, birth_year = $7, gender = $8, species_id = $9, homeworld_id = $10, height = $11
+        WHERE p._id = $1`;
+        const data = await db.query(sqlQuery, arr);
+        return data.rows[0];
+      },
+    },
     //   planet: {
     //     type: PlanetType,
     //     args: { id: { type: GraphQLInt } },
