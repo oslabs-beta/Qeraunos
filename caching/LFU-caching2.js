@@ -128,7 +128,7 @@ LfuCache.prototype.set = function (key, value) {
     let node = this.keys[key];
     // update nodes value to new passed in value
     node.value = value;
-    this.updateNode(node);
+    // this.updateNode(node);
   }
   // check if current size of hashtable is less than the capacity constraint and insert a new node
   else if (this.size < this.capacity) {
