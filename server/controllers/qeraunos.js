@@ -28,6 +28,15 @@ const graphqlParser = (schema, body) => {
   }
   // Parse through AST to get Operation type (query or mutation). This will dictate which controller it goes through
   const parsed = parse(body).definitions[0];
+  const operation = parsed.operation;
+  // this will remove spaces and reference to mutation in body str
+  body = body.replace(/mutation|\s/g, '');
+  //this will clean up the body so that only the id is in the arg
+  if (operation === 'mutation') {
+    const id = body.split('(')[1].split(',')[0];
+    body = [body.split('(')[0], `(${id})`, body.split(')')[1]].join('');
+  }
+
   // console.log('PARSED: ', parsed);
   // grabs the field that the query is using. e.g people
   const field = parsed.selectionSet.selections[0].name.value; // string
@@ -50,6 +59,11 @@ const graphqlParser = (schema, body) => {
   // console.log('PARAMETERS STR: ', parameters);
   // checks if type if there are any arguments. this first one checks for an id if its first
   // if there is an argument of id, then it uses that inside the key along with type and parameters, if not, it just uses type and parameter
+  for (const field in fieldToType) {
+    if (body.includes(field)) {
+      body = body.replace(field, type);
+    }
+  }
   if (!parsed.selectionSet.selections[0].arguments[0]) {
     key = type + '.' + body;
   } else {
@@ -60,71 +74,66 @@ const graphqlParser = (schema, body) => {
     key = type + '.' + queryId + '.' + body;
   }
   console.log('QUERYKEY: ', key);
-  return key;
+  return { key, operation };
 };
 
 Qeraunos.prototype.query = async function (req, res, next) {
-  const keyword = graphqlParser(this.schema, req.body.query);
-  const operation = parse(req.body.query).definitions[0].operation;
+  const { key, operation } = graphqlParser(this.schema, req.body.query);
+  console.log('==========KEY==========', key);
   // check if its a mutation, if it is, pass over function to mutation
 
   try {
     if (operation === 'mutation') {
-      console.log('in query method, has mutation, pass over to mutation');
-      // check if query is a mutation type, if not, move on
-      if (operation !== 'mutation') {
-        console.log('in mutation method, does not have mutation, move on');
-        return next();
-      }
+      console.log(' has mutation, pass over to mutation');
       console.log('in mutation');
       // // need to loop through cache and check any key with type and id
-      // split keyword into its useful strings
-      const searchArr = keyword.split('.');
+      // split key into its useful strings
+      const searchArr = key.split('.');
       // this string holds the type of the graphql query
       const searchType = searchArr[0];
       // this string combines the type and the id to search the cache keys with
       const searchKey = searchArr[0] + '.' + searchArr[1];
       // this part of the string holds the actual graph ql query itself
       const graphqlQuery = searchArr[2];
-      // loop through cache and check to see if mutated data point is referenced in any of the keys
-      // if so, manually update that key with a new graphql query.
-      // also check for any multiple types held in brackets and update those as well since they will hold
-      // the individual data point in its value
       console.log('==========UPPERCUT==========');
       console.log(newLfu.keys);
-      for (const key in newLfu.keys) {
-        console.log('mutation searchKey: ', searchKey);
-        console.log('mutation key in cache: ', key);
-        console.log('mutation keyword: ', keyword);
-        if (key.includes(searchKey) || key.includes(`[${searchType}]`)) {
-          console.log('==========HIT==========');
-          console.log('searchkey: ', searchKey);
-          console.log('searchType: ', `[${searchType}]`);
-          await graphql({
-            schema: this.schema,
-            source: graphqlQuery,
-          });
-        }
-      }
       const data = await graphql({
         schema: this.schema,
         source: req.body.query,
       });
       res.locals.graphql = data;
       res.locals.response = 'UNCACHED';
+
+      // loop through cache and check to see if mutated data point is referenced in any of the keys
+      // if so, manually update that key with a new graphql query.
+      // also check for any multiple types held in brackets and update those as well since they will hold
+      // the individual data point in its value
+      for (const keys in newLfu.keys) {
+        console.log('mutation searchKey: ', searchKey);
+        console.log('mutation key in cache: ', key);
+        console.log('mutation key: ', key);
+        if (keys.includes(searchKey) || keys.includes(`[${searchType}]`)) {
+          console.log('==========HIT==========');
+          console.log('searchkey: ', searchKey);
+          console.log('searchType: ', `[${searchType}]`);
+          const updatedData = await graphql({
+            schema: this.schema,
+            source: graphqlQuery,
+          });
+          newLfu.set(keys, updatedData);
+        }
+      }
       // set new mutation in cache
       // do we need to do this?
-      newLfu.set(keyword, data);
+      newLfu.set(key, data);
       console.log('NEW CACHE OBJ IN MUTATION', newLfu.keys);
       return next();
     } else {
       console.log('In query');
       // check whether key exists in cache, if so return value from cache.
       // if not, send a graphQL query
-      if (newLfu.keys[keyword]) {
-        // console.log('newLfu.keys[key]: ', newLfu.keys[key]);
-        // console.log('in cache');
-        res.locals.graphql = newLfu.get(keyword);
+      if (newLfu.keys[key]) {
+        res.locals.graphql = newLfu.get(key);
         res.locals.response = 'Cached';
         console.log('OLD CACHE OBJ IN QUERY', newLfu.keys);
         return next();
@@ -134,9 +143,8 @@ Qeraunos.prototype.query = async function (req, res, next) {
           source: req.body.query,
         });
         res.locals.graphql = data;
-        // console.log('data', data);
         res.locals.response = 'Uncached';
-        newLfu.set(keyword, data);
+        newLfu.set(key, data);
         console.log('NEW CACHE OBJ IN QUERY', newLfu.keys);
         return next();
       }
@@ -148,14 +156,5 @@ Qeraunos.prototype.query = async function (req, res, next) {
     });
   }
 };
-
-// Qeraunos.prototype.mutation = async function (req, res, next) {
-
-// };
-
-// converts query from client into a unique key by removing extraneous symbols into a single string
-// const keyConverter = (query) => {
-//   return JSON.stringify(query).replace(/[\{\},\s_]/g, '');
-// };
 
 module.exports = { Qeraunos };
