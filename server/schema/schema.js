@@ -271,7 +271,9 @@ const RootMutation = new GraphQLObjectType({
         const sqlQuery = `UPDATE people p
         SET name = $2, mass = $3, hair_color = $4, skin_color = $5, eye_color = $6, birth_year = $7, gender = $8, species_id = $9, homeworld_id = $10, height = $11
         WHERE p._id = $1`;
-        const data = await db.query(sqlQuery, arr);
+        await db.query(sqlQuery, arr);
+        const data = await db.query(searchSQL, searchArr);
+        // console.log('======DATA ROWS=====', data.rows);
         return data.rows[0];
       },
     },
