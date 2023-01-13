@@ -1,21 +1,26 @@
 import React from 'react';
-
-// import whiteLogoSVG from '../resources/Qeraunos-Logo.svg';
-// import { ReactComponent as Logo } from '../resources/Qeraunos-Logo.svg';
+import { useNavigate } from 'react-router-dom';
+import { ReactComponent as Logo } from '../resources/qeraunos-logo.svg';
 
 function Home(props) {
-  const { enterSite } = props;
+  const { showNav, setShowNav } = props;
+  let navigate = useNavigate();
+
+  const enterSite = () => {
+    if (showNav === false) {
+      setShowNav(true);
+    }
+  };
 
   return (
     <div className="home">
-      <div className="home-logo">
-        {/* <img src={whiteLogoSVG} alt="Qeraunos Logo" className="logo" /> */}
-        {/* <whiteLogoSVG /> */}
-        {/* <Logo fill="white" /> */}
-        <h1>HOME</h1>
+      <div className="home-inner">
+        <Logo />
         <button
+          className="home-btn"
           onClick={(e) => {
             enterSite();
+            navigate('/demo');
           }}
         >
           Enter

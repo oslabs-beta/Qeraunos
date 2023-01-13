@@ -12,8 +12,6 @@ import {
 
 //importing styling and images
 import './stylesheets/styles.scss';
-import whiteLogo from './resources/logo-white.png';
-import blueLogo from './resources/logo-blue.png';
 
 //importing components
 import Demo from './pages/Demo';
@@ -26,18 +24,18 @@ import Installation from './pages/Installation';
 const App = () => {
   const [showNav, setShowNav] = useState(false);
 
-  let navigate = useNavigate();
-
   const enterSite = () => {
     if (showNav === false) {
       setShowNav(true);
       useNavigate('/demo');
+    } else {
+      setShowNav(false);
     }
   };
 
   const showNavBar = () => {
     if (showNav !== false) {
-      return <Navbar />;
+      return <Navbar enterSite={enterSite} />;
     }
   };
 
@@ -49,7 +47,16 @@ const App = () => {
         {showNavBar()}
         <div className="container">
           <Routes>
-            <Route path="/" element={<Home enterSite={enterSite} />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  enterSite={enterSite}
+                  showNav={showNav}
+                  setShowNav={setShowNav}
+                />
+              }
+            />
             <Route path="/demo" element={<Demo />} />
             <Route path="/team" element={<Team />} />
             <Route path="/installation" element={<Installation />} />

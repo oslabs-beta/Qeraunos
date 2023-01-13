@@ -1,6 +1,5 @@
 import React from 'react';
 import TeamMember from '../components/TeamMember';
-import placeholder from '../resources/team-placeholder.jpg';
 import TeamImage1 from '../resources/1.png';
 import TeamImage2 from '../resources/2.png';
 import TeamImage3 from '../resources/3.png';
@@ -17,7 +16,7 @@ function UserCards() {
     {
       name: 'Arthur Huynh',
       title: 'Software Engineer',
-      linkedIn: 'www.linkedin.com/in/arthurnhuynh',
+      linkedIn: 'https://www.linkedin.com/in/arthurnhuynh/',
       image: TeamImage2,
     },
     {
@@ -29,7 +28,7 @@ function UserCards() {
     {
       name: 'Jason Hwang',
       title: 'Software Engineer',
-      linkedIn: 'www.linkedin.com/in/jason-jh-hwang',
+      linkedIn: 'https://www.linkedin.com/in/jason-jh-hwang/',
       image: TeamImage1,
     },
   ];
