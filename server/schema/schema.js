@@ -24,12 +24,12 @@ const PersonType = new GraphQLObjectType({
     homeworld_id: { type: GraphQLInt },
     height: { type: GraphQLInt },
     homeworld: {
-      type: GraphQLString,
+      type: PlanetType,
       resolve: async (prevProps) => {
         const id = [prevProps.homeworld_id];
         const sqlQuery = 'SELECT p.* FROM planets p WHERE p._id = $1';
         const data = await db.query(sqlQuery, id);
-        return data.rows[0].name;
+        return data.rows[0];
       },
     },
   }),
