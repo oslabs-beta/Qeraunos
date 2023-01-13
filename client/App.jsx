@@ -1,6 +1,6 @@
-//importing structure
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+//importing structures
+import React, { useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import {
   RecoilRoot,
@@ -12,8 +12,6 @@ import {
 
 //importing styling and images
 import './stylesheets/styles.scss';
-import whiteLogo from './resources/logo-white.png';
-import blueLogo from './resources/logo-blue.png';
 
 //importing components
 import Demo from './pages/Demo';
@@ -24,16 +22,46 @@ import Navbar from './container/Navbar';
 import Installation from './pages/Installation';
 
 const App = () => {
+  const [showNav, setShowNav] = useState(false);
+
+  const enterSite = () => {
+    if (showNav === false) {
+      setShowNav(true);
+      useNavigate('/demo');
+    } else {
+      setShowNav(false);
+    }
+  };
+
+  const showNavBar = () => {
+    if (showNav !== false) {
+      return <Navbar enterSite={enterSite} />;
+    }
+  };
+
   return (
     <RecoilRoot>
-      <Navbar />
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/demo" element={<Demo />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/installation" element={<Installation />} />
-        </Routes>
+      <div>
+        {/* <Navbar /> */}
+
+        {showNavBar()}
+        <div className="container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  enterSite={enterSite}
+                  showNav={showNav}
+                  setShowNav={setShowNav}
+                />
+              }
+            />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/installation" element={<Installation />} />
+          </Routes>
+        </div>
       </div>
     </RecoilRoot>
   );

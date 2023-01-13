@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import whiteLogo from '../resources/logo-white.png';
+import { ReactComponent as Logo } from '../resources/qeraunos-logo.svg';
 
-function Navbar() {
+function Navbar(props) {
+  const { enterSite } = props;
   return (
     <nav className="nav">
       <div className="nav-logo">
-        <Link to="/">
-          <img src={whiteLogo} alt="Qeraunos Logo" className="logo" />
+        <Link to="/" onClick={() => enterSite()}>
+          <Logo className="logo" />
         </Link>
       </div>
       <div>
