@@ -1,4 +1,4 @@
-const LfuCache = require('../../caching/LFU-caching2');
+const LfuCache = require('../../caching/caching-algo');
 // const schema = require('../schema/schema');
 const { parse, visit, print, graphql } = require('graphql');
 const { query } = require('express');
