@@ -1,6 +1,6 @@
-const LfuCache = require('../../caching/LFU-caching2');
+const LfuCache = require('../../caching/caching-algo');
 // const schema = require('../schema/schema');
-const { parse, visit, graphql } = require('graphql');
+const { parse, visit, print, graphql } = require('graphql');
 const { query } = require('express');
 
 // builds qeraunos middleware and binds functions
@@ -27,7 +27,20 @@ const graphqlParser = (schema, body) => {
     fieldToType[key] = schema._queryType._fields[key].type;
   }
   // Parse through AST to get Operation type (query or mutation). This will dictate which controller it goes through
+  const AST = parse(body);
+  console.log('===================TOP OF AST============', AST);
   const parsed = parse(body).definitions[0];
+  // const visitor = (node, level, curr = 0) => {
+  //   if (level === curr) return;
+  //   console.log(`LEVEL ${curr} NODE:`, print(node));
+  //   console.log('CURRENT NODE', node);
+  //   console.log('NEXT NODE', node.selectionSet);
+
+  //   return visitor(node.selectionSet, level, ++curr);
+  // };
+
+  console.log('===========PRINTED AST==========', print(parsed.selectionSet));
+  console.log('============PARSE==========', parsed);
   const operation = parsed.operation;
   // this will remove spaces and reference to mutation in body str
   body = body.replace(/query|mutation|\s/g, '');
@@ -126,6 +139,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
       }
       // set new mutation in cache
       // do we need to do this?
+      console.log('============DATA===========', data);
       newLfu.set(key, data);
       console.log('NEW CACHE OBJ IN MUTATION', newLfu.keys);
       return next();
