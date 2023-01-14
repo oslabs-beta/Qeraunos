@@ -19,7 +19,6 @@ $foreground: #f5f5f5;
 body {
   margin: 0px;
   background-color: $black;
-  background-image: url('../resources/star-background.png');
   color: $black;
 }
 
@@ -51,6 +50,43 @@ p {
   margin-right: auto;
 }
 
+//HOME PAGE STYLING
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -75px 0 0 -75px;
+}
+
+.home-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.home-logo {
+  color: $white;
+  fill: green;
+  h1 {
+    color: $white;
+  }
+}
+
+.home-btn {
+  padding: 20px 130px;
+  font-size: 20px;
+  margin-top: 40px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 .main-display {
   display: flex;
   flex-direction: row;
@@ -58,6 +94,8 @@ p {
   align-items: flex-start;
   padding: 15px;
 }
+
+//Sidebar Styling
 
 .sidebar {
   border: 1px solid $foreground;
@@ -71,6 +109,30 @@ p {
   flex-direction: column;
   justify-content: center;
   background-color: $foreground;
+}
+
+.cb-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  input {
+    display: grid;
+    grid-template-columns: 25px 100px 25px 100px;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+  }
+  label {
+    margin-left: 10px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+  }
 }
 
 .dataVisualizer {
@@ -157,6 +219,9 @@ button:active {
   height: 250px;
   width: 300x;
   overflow-y: scroll;
+  background-color: #484848;
+  color: $white;
+  border-radius: 10px;
 }
 
 .nameResult {
@@ -210,9 +275,8 @@ button:active {
   box-shadow: $foreground 0px 2px 8px 0px;
 }
 
-.fa-linkedin {
-  background-color: white;
-  color: white;
+.linkedin-icon {
+  fill: #010e42;
 }
 
 //BACKGROUND
@@ -221,7 +285,7 @@ button:active {
   width: 1px;
   height: 1px;
   background: transparent;
-  animation: animStar 350s linear infinite;
+  animation: animStar 200s linear infinite;
   box-shadow: 779px 1331px #fff, 324px 42px #fff, 303px 586px #fff,
     1312px 276px #fff, 451px 625px #fff, 521px 1931px #fff, 1087px 1871px #fff,
     36px 1546px #fff, 132px 934px #fff, 1698px 901px #fff, 1418px 664px #fff,
@@ -589,7 +653,7 @@ button:active {
   width: 2px;
   height: 2px;
   background: transparent;
-  animation: animStar 400s linear infinite;
+  animation: animStar 250s linear infinite;
   box-shadow: 1448px 320px #fff, 1775px 1663px #fff, 332px 1364px #fff,
     878px 340px #fff, 569px 1832px #fff, 1422px 1684px #fff, 1946px 1907px #fff,
     121px 979px #fff, 1044px 1069px #fff, 463px 381px #fff, 423px 112px #fff,
@@ -707,7 +771,7 @@ button:active {
   width: 3px;
   height: 3px;
   background: transparent;
-  animation: animStar 450s linear infinite;
+  animation: animStar 300s linear infinite;
   box-shadow: 387px 1878px #fff, 760px 1564px #fff, 1487px 999px #fff,
     948px 1828px #fff, 1977px 1001px #fff, 1284px 1963px #fff, 656px 284px #fff,
     1268px 1635px #fff, 1820px 598px #fff, 642px 1900px #fff, 296px 57px #fff,
@@ -778,8 +842,4 @@ button:active {
   to {
     transform: translateY(-2000px);
   }
-}
-
-.star-field {
-  display: flex;
 }
