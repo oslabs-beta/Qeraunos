@@ -26,7 +26,7 @@ const Checkbox = () => {
     const queryTimeObj = await axios({
       url: 'http://localhost:8080/graphql',
       method: 'post',
-      data: {
+      body: {
         query: queryString,
       },
     })
