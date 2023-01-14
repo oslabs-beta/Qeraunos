@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const qeraunos = new Qeraunos(schema);
 
-type ServerError = {
+export type ServerError = {
   log: string;
   status?: number;
   message: { [err: string]: string };
