@@ -5,10 +5,6 @@ import '../stylesheets/styles.scss';
 
 const Metrics = () => {
   const { responseTime } = useResponseTime();
-
-  useEffect(() => {
-    console.log('responseTime length in Metrics', responseTime.length);
-  }, [responseTime]);
   let count = 0;
   const totalCache = responseTime.length - 1;
   responseTime.forEach((obj) => {
@@ -16,12 +12,16 @@ const Metrics = () => {
       count++;
     }
   });
-  console.log('count', count);
-  console.log('totalCache', totalCache);
-  console.log('response time', responseTime);
   const cacheMiss = totalCache - count;
   const hitRate = Math.floor((count / totalCache) * 100);
-  console.log('This is hitRate:', hitRate);
+
+  const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
 
   // creates data for doughnut for chartjs
   const doughnutData = {
@@ -34,15 +34,15 @@ const Metrics = () => {
         hoverOffset: 4,
         circumference: 180,
         rotation: -90,
-        cutout: '75%',
+        cutout: '85%',
       },
     ],
   };
 
   return (
     <div className='metrics-container'>
-      <div className='hit-rate'>{hitRate}</div>
-      <Doughnut data={doughnutData} width={100} height={100} />
+      <div className='hit-rate'>{`${hitRate}%`}</div>
+      <Doughnut className='doughnut' data={doughnutData} options={options} />
     </div>
   );
 };

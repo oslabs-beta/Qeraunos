@@ -279,6 +279,21 @@ button:active {
   fill: #010e42;
 }
 
+.metrics-container {
+  display: flex;
+  flex-direction: column;
+}
+.doughnut {
+  display: flex;
+  justify-content: center;
+}
+
+.hit-rate {
+  font-size: 5rem;
+  display: flex;
+  justify-content: center;
+}
+
 //BACKGROUND
 
 #stars {
