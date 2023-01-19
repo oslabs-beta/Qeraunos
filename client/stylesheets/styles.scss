@@ -288,7 +288,24 @@ button:active {
   justify-content: center;
 }
 
+.numbers-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .hit-rate {
+  font-size: 5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hits {
+  font-size: 5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.miss {
   font-size: 5rem;
   display: flex;
   justify-content: center;

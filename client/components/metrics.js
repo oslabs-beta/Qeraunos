@@ -41,7 +41,11 @@ const Metrics = () => {
 
   return (
     <div className='metrics-container'>
-      <div className='hit-rate'>{`${hitRate}%`}</div>
+      <div className='numbers-container'>
+        <div className='hits'>Cache Hits: {`${count}`}</div>
+        <div className='miss'>Cache Miss: {`${cacheMiss}`}</div>
+        <div className='hit-rate'>Hit Rate: {`${hitRate}%`}</div>
+      </div>
       <Doughnut className='doughnut' data={doughnutData} options={options} />
     </div>
   );
