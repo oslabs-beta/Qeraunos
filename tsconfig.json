@@ -8,6 +8,6 @@
     "sourceMap": true,
     "jsx": "react"
   },
-  "include": ["server/**/*", "caching/*"],
+  "include": ["server/**/*", "caching/*", "caching/LFU-caching-client"],
   "exclude": ["node_modules"]
 }

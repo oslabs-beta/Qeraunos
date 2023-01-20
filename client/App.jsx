@@ -2,6 +2,10 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
+//import it to create your intial cache
+import localforage from 'localforage';
+import Qeraunos from '../caching/LFU-caching-client';
+
 import {
   RecoilRoot,
   atom,
@@ -21,8 +25,27 @@ import Team from './pages/Team';
 import Navbar from './container/Navbar';
 import Installation from './pages/Installation';
 
+// const QeraunosLfuCache = function (capacity) {
+//   this.keys = {};
+//   this.frequency = {};
+//   this.capacity = capacity;
+//   this.minFrequency = 0;
+//   this.size = 0;
+// };
+
 const App = () => {
   const [showNav, setShowNav] = useState(false);
+  // localforage.setItem('qeraunos', 'HELLO WORLD');
+
+  //setting our initial empty cache first thing when you log in.
+  const cache = new Qeraunos(5);
+  localforage.setItem('Qeraunos', cache);
+  // console.log(cache);
+
+  // cache.set(1, 7);
+  // cache.set(2, 8);
+  // cache.set(3, 10000);
+  // console.log(`EXPECTING 7========`, cache.get(1));
 
   const enterSite = () => {
     if (showNav === false) {
