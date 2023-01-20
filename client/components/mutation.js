@@ -9,17 +9,16 @@ const Mutation = () => {
   const [input, setInput] = useState('INPUT');
 
   useEffect(() => {
-    const string = `{ mutation { person (${_id}, ${property}:"${input}"){ name mass hair_color}}}`;
+    const string = `mutation { updatePerson (${_id}, ${property}:"${input}"){ name mass hair_color}}`;
     setQueryString(string);
   }, [_id, property, input]);
 
   const setMutation = async () => {
     console.log('queryString', queryString);
-
-    await axios({
+    const mutateData = await axios({
       url: 'http://localhost:8080/graphql',
       method: 'post',
-      body: {
+      data: {
         query: queryString,
       },
     })

@@ -26,7 +26,7 @@ const Checkbox = () => {
     const queryTimeObj = await axios({
       url: 'http://localhost:8080/graphql',
       method: 'post',
-      body: {
+      data: {
         query: queryString,
       },
     })
@@ -60,62 +60,62 @@ const Checkbox = () => {
   };
 
   return (
-    <div className="checkboxContainer">
-      <div className="cb-header">
+    <div className='checkboxContainer'>
+      <div className='cb-header'>
         <h3>Request to 'People'</h3>
         <p>Select the fields you want to query:</p>
-        <div className="checkbox">
+        <div className='checkbox'>
           <input
-            type="checkbox"
-            id="_id"
-            name="_id"
-            value="_id"
+            type='checkbox'
+            id='_id'
+            name='_id'
+            value='_id'
             checked={_id}
             onChange={() => (_id ? set_id(false) : set_id(true))}
           />
-          <label htmlFor="_id"> ID</label>
+          <label htmlFor='_id'> ID</label>
         </div>
-        <div className="checkbox">
+        <div className='checkbox'>
           <input
-            type="checkbox"
-            id="name"
-            name="name"
-            value="name"
+            type='checkbox'
+            id='name'
+            name='name'
+            value='name'
             checked={name}
             onChange={() => (name ? setName(false) : setName(true))}
           />
-          <label htmlFor="name"> Name</label>
+          <label htmlFor='name'> Name</label>
         </div>
-        <div className="checkbox">
+        <div className='checkbox'>
           <input
-            type="checkbox"
-            id="mass"
-            name="mass"
-            value="mass"
+            type='checkbox'
+            id='mass'
+            name='mass'
+            value='mass'
             checked={mass}
             onChange={() => (mass ? setMass(false) : setMass(true))}
           />
-          <label htmlFor="mass"> Mass</label>
+          <label htmlFor='mass'> Mass</label>
         </div>
-        <div className="checkbox">
+        <div className='checkbox'>
           <input
-            type="checkbox"
-            id="hair_color"
-            name="hair_color"
-            value="hair_color"
+            type='checkbox'
+            id='hair_color'
+            name='hair_color'
+            value='hair_color'
             checked={hair_color}
             onChange={() =>
               hair_color ? setHair_color(false) : setHair_color(true)
             }
           />
-          <label htmlFor="hair_color"> Hair Color</label>
+          <label htmlFor='hair_color'> Hair Color</label>
         </div>
       </div>
       <div>
         <pre>{queryString}</pre>
       </div>
       <button
-        id="cb-button"
+        id='cb-button'
         onClick={(e) => {
           setTime();
         }}
@@ -124,7 +124,7 @@ const Checkbox = () => {
       </button>
       <div>
         <p>Query Results</p>
-        <pre className="queryResult"> {queryResult}</pre>
+        <pre className='queryResult'> {queryResult}</pre>
       </div>
     </div>
   );
