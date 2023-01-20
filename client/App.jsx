@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 
 //import it to create your intial cache
 import localforage from 'localforage';
-import Qeraunos from '../caching/LFU-caching-client';
+import LfuCache from '../caching/LFU-caching-client';
 
 import {
   RecoilRoot,
@@ -38,11 +38,14 @@ const App = () => {
   // localforage.setItem('qeraunos', 'HELLO WORLD');
 
   //setting our initial empty cache first thing when you log in.
-  const cache = new Qeraunos(5);
-  localforage.setItem('Qeraunos', cache);
+  const cache = new LfuCache(5);
+  localforage.setItem('LfuCache', cache);
   // console.log(cache);
 
-  // cache.set(1, 7);
+  cache.flow(
+    '{people { _id name mass hair_color}}',
+    'http://localhost:8080/graphql'
+  );
   // cache.set(2, 8);
   // cache.set(3, 10000);
   // console.log(`EXPECTING 7========`, cache.get(1));

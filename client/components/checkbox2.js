@@ -5,6 +5,7 @@ import '../stylesheets/styles.scss';
 
 //instructions to run client qeraunos caching.
 import localforage from 'localforage';
+import LfuCache from '../../caching/LFU-caching-client';
 
 const Checkbox = () => {
   const { responseTime, setResponseTime } = useResponseTime();
@@ -26,18 +27,8 @@ const Checkbox = () => {
     console.log(queryString);
     const startTime = Date.now();
 
-    //send the query string to qeraunos
-    //it will clean the string creating a key
-    //it will then check to see if that key exists
-    //if it exists send response back
-    //if not send to front end to invoke axios
-    //in front end
-    //it will send query to axios
-    //when we get the response back we send that response to qeraunos to set in cache.
-    //in qeraunos we reparse the query to a key
-    //store the new node
-    //create copy of existing cache
-    //set new cache
+    //send the query string to qeraunos with endpoint
+    LfuCache.set(queryString, 'http://localhost:8080/graphql', 1);
 
     const queryTimeObj = await axios({
       url: 'http://localhost:8080/graphql',

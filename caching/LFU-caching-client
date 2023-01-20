@@ -1,4 +1,24 @@
 const localforage = require('localforage');
+// import axios from 'axios';
+// const { parse, visit, graphql } = require('graphql');
+
+//it will clean the string creating a key
+//it will then check to see if that key exists
+//if it exists send response back
+//if not it will send request to graphQL
+//when we get the response back we send that response to qeraunos to set in cache.
+//store the new node
+//create copy of existing cache
+//set new cache
+
+//clean request to create a new key. WE MIGHT NOT NEED THIS AND JUST INCORPORATE IT DIRECTLY INTO THE FUNC BELOW
+function cleanQuery(body) {
+  //add code here
+  console.log('BODY============', body);
+
+  const cleaned = body.replace(/[^A-Z0-9]/gi, '');
+  return cleaned;
+}
 
 function LfuNode(key, value) {
   this.next = null;
@@ -31,49 +51,7 @@ const LfuCache = function (capacity) {
   this.size = 0;
 };
 
-// class LfuCache {
-//   constructor(capacity) {
-//     this.keys = {};
-//     this.frequency = {};
-//     this.capacity = capacity;
-//     this.minFrequency = 0;
-//     this.size = 0;
-//   }
-
-//   saveIDB = async function () {
-//     console.log('IN SAVEIDB!');
-//     let data = {
-//       keys: this.keys,
-//       frequency: this.frequency,
-//       capacity: this.capacity,
-//       minFrequency: this.minFrequency,
-//       size: this.size,
-//     };
-//     await localforage.setItem('qeraunos', data, (err, value) => {
-//       if (err) {
-//         return console.log(err);
-//       }
-//     });
-//   };
-// }
-
-// LfuCache.prototype.saveIDB = async function () {
-//   console.log('IN SAVEIDB!');
-//   let data = {
-//     keys: this.keys,
-//     frequency: this.frequency,
-//     capacity: this.capacity,
-//     minFrequency: this.minFrequency,
-//     size: this.size,
-//   };
-//   await localforage.setItem('qeraunos', data, (err, value) => {
-//     if (err) {
-//       return console.log(err);
-//     }
-//   });
-// };
-
-LfuCache.prototype.getIDB = async () => {
+LfuCache.prototype.getIDB = async function () {
   const item = await localforage.getItem('Qeraunos', (err, value) => {
     if (!value) {
       return false;
@@ -87,7 +65,7 @@ LfuCache.prototype.getIDB = async () => {
   });
 };
 
-LfuCache.prototype.setIDB = async () => {
+LfuCache.prototype.setIDB = async function () {
   const newCache = {
     keys: this.keys,
     frequency: this.frequency,
@@ -192,12 +170,15 @@ LfuCache.prototype.get = function (key) {
 
 // O(1) set function to set new node
 LfuCache.prototype.set = async function (key, value) {
-  //get the copy of IDB
-  this.getIDB();
-  // console.log(`IDB========`, IDB);
+  // //clean query first to get key
+  // const key = query.replace(/[^A-Z0-9]/gi, '');
+  // console.log('KEY: ', key);
+
+  // //get the copy of IDB
+  // this.getIDB();
+  // // console.log(`IDB========`, IDB);
 
   // check if node is already in hashtable
-
   if (this.keys[key]) {
     let node = this.keys[key];
     // update nodes value to new passed in value
@@ -220,39 +201,36 @@ LfuCache.prototype.set = async function (key, value) {
   }
 };
 
-// const myLFU = new LfuCache(3);
-// myLFU.set(1, 1);
-// console.log([myLFU.keys[1].key, myLFU.keys[1].value] == [1, 1]);
-// myLFU.set(2, 2);
-// console.log(myLFU);
-// myLFU.get(2);
-// console.log(myLFU);
-// myLFU.set(3, 3);
-// myLFU.get(3);
-// myLFU.get(3);
-// console.log(myLFU);
-// console.log(myLFU.set(4, 4));
-// myLFU.get(4);
-// myLFU.get(4);
-// myLFU.get(4);
-// myLFU.set(5, 5);
-// myLFU.get(5);
-// myLFU.get(5);
-// myLFU.get(5);
-// myLFU.get(5);
-// myLFU.set(6, 6);
-// console.log(myLFU);
-// console.log(myLFU.get(6));
-// console.log(myLFU);
+LfuCache.prototype.flow = async function (query, graphqlEndpoint) {
+  //clean query first to get key
+  const key = query.replace(/[^A-Z0-9]/gi, '');
+  console.log('KEY: ', key);
 
-// const newLFU = new LfuCache(3);
-// for (let i = 0; i < 3; i++) {
-//   newLFU.set(i, i);
-//   if (i === 0) continue;
-//   newLFU.set(i, i);
-// }
-// const deleteNode = newLFU.set(3, 3);
-// console.log(deleteNode);
+  //get the copy of IDB
+  this.getIDB();
+  // console.log(`IDB========`, IDB);
+  console.log('query:', query);
+
+  //invoke get passing in the key,
+  if (!this.get(key)) {
+    fetch(graphqlEndpoint, {
+      method: 'POST',
+      data: { query: `${query}` },
+    })
+      // .then((data) => data.json())
+      .then(function (response) {
+        console.log('RESPONSE from graphql=========', response);
+      });
+  } else {
+    const response = this.get(key);
+    return response;
+  }
+
+  //if it returns undefined we invoke graphql and get the new value
+  //we call set to set th enew value with they key
+
+  //if it returns with the value, then we return to the front end the value.
+};
 
 module.exports = LfuCache;
 // export default LfuCache;

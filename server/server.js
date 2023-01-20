@@ -3,7 +3,7 @@ exports.__esModule = true;
 var express = require('express');
 var path = require('path');
 var schema = require('./schema/schema');
-var Qeraunos = require('./controllers/qeraunos-client').Qeraunos;
+var Qeraunos = require('./controllers/qeraunos').Qeraunos;
 var app = express();
 var PORT = 3000;
 require('dotenv').config();
@@ -11,6 +11,7 @@ var qeraunos = new Qeraunos(schema);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../client')));
+
 app.use('/graphql', qeraunos.query, function (req, res) {
   return res.status(200).send(res.locals);
 });
