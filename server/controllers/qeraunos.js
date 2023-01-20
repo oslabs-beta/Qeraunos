@@ -89,6 +89,7 @@ var graphqlParser = function (schema, body) {
     var operation = parsed.operation;
     // this will remove spaces and reference to mutation in body str
     body = body.replace(/query|mutation|\s/g, '');
+    console.log('parser', body);
     //this will clean up the body so that only the id is in the arg
     if (operation === 'mutation') {
         var id = body.split('(')[1].split(',')[0];
@@ -101,11 +102,12 @@ var graphqlParser = function (schema, body) {
     var type = fieldToType[field].toString();
     // checks if type if there are any arguments. this first one checks for an id if its first
     // if there is an argument of id, then it uses that inside the key along with type and parameters, if not, it just uses type and parameter
-    for (var field_1 in fieldToType) {
-        if (body.includes(field_1)) {
-            body = body.replace(field_1, type);
-        }
-    }
+    // for (const field in fieldToType) {
+    //   if (body.includes(field)) {
+    //     body = body.replace(field, type);
+    //   }
+    // }
+    console.log('no field body', body);
     if (!parsed.selectionSet.selections[0].arguments[0]) {
         key = type + '.' + body;
     }
@@ -122,10 +124,13 @@ var keyParser = function (key) {
     var searchArr = key.split('.');
     // this string holds the type of the graphql query
     var searchType = searchArr[0];
+    console.log('searchType', searchType);
     // this string combines the type and the id to search the cache keys with
     var searchKey = searchArr[0] + '.' + searchArr[1];
+    console.log('searchkey', searchKey);
     // this part of the string holds the actual graph ql query itself
-    var graphqlQuery = searchArr[2];
+    var graphqlQuery = searchArr[searchArr.length - 1];
+    console.log('graphqlquery', graphqlQuery);
     return { searchType: searchType, searchKey: searchKey, graphqlQuery: graphqlQuery };
 };
 Qeraunos.prototype.query = function (req, res, next) {
@@ -188,6 +193,7 @@ Qeraunos.prototype.query = function (req, res, next) {
                     if (!(_f in _d)) return [3 /*break*/, 12];
                     keys = _f;
                     graphqlQuery = keyParser(keys).graphqlQuery;
+                    console.log('graphqlQuery before updates', graphqlQuery);
                     if (!(keys.includes(searchKey) || keys.includes("[".concat(searchType, "]")))) return [3 /*break*/, 12];
                     return [4 /*yield*/, graphql({
                             schema: this.schema,

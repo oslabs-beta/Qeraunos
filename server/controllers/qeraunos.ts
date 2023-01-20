@@ -61,6 +61,7 @@ const graphqlParser = (schema: any, body: string) => {
   const operation: string = parsed.operation;
   // this will remove spaces and reference to mutation in body str
   body = body.replace(/query|mutation|\s/g, '');
+  console.log('parser', body);
   //this will clean up the body so that only the id is in the arg
   if (operation === 'mutation') {
     const id: string = body.split('(')[1].split(',')[0];
@@ -73,11 +74,12 @@ const graphqlParser = (schema: any, body: string) => {
   const type: string = fieldToType[field].toString();
   // checks if type if there are any arguments. this first one checks for an id if its first
   // if there is an argument of id, then it uses that inside the key along with type and parameters, if not, it just uses type and parameter
-  for (const field in fieldToType) {
-    if (body.includes(field)) {
-      body = body.replace(field, type);
-    }
-  }
+  // for (const field in fieldToType) {
+  //   if (body.includes(field)) {
+  //     body = body.replace(field, type);
+  //   }
+  // }
+  console.log('no field body', body);
   if (!parsed.selectionSet.selections[0].arguments[0]) {
     key = type + '.' + body;
   } else {
@@ -94,11 +96,14 @@ const keyParser = (key: string) => {
   const searchArr: string[] = key.split('.');
   // this string holds the type of the graphql query
   const searchType: string = searchArr[0];
+  console.log('searchType', searchType)
   // this string combines the type and the id to search the cache keys with
   const searchKey: string = searchArr[0] + '.' + searchArr[1];
+  console.log('searchkey', searchKey)
   // this part of the string holds the actual graph ql query itself
-  const graphqlQuery: string = searchArr[2];
-  return {searchType, searchKey, graphqlQuery};
+  const graphqlQuery: string = searchArr[searchArr.length-1];
+  console.log('graphqlquery', graphqlQuery);
+  return { searchType, searchKey, graphqlQuery };
 };
 
 Qeraunos.prototype.query = async function (
@@ -121,19 +126,19 @@ Qeraunos.prototype.query = async function (
       res.locals.response = 'UNCACHED';
 
       if (this.hasRedis) {
-        let {searchType, searchKey} = keyParser(key);
+        let { searchType, searchKey } = keyParser(key);
         const dataType = await this.client.scan(0, 'MATCH', `${searchType}`);
         const dataKeys = await this.client.scan(0, 'MATCH', `${searchKey}`);
-        //combines the two redis queries for single id and multiples into one array 
-        const totalKeys = dataType.keys.concat(dataKeys.keys)
+        //combines the two redis queries for single id and multiples into one array
+        const totalKeys = dataType.keys.concat(dataKeys.keys);
         console.log('This is data in redis', dataType.keys);
-        for (let i = 0; i < totalKeys.length; i++){
-            let {graphqlQuery} = keyParser(totalKeys[i])
-            const updatedData: object = await graphql({
-              schema: this.schema,
-              source: graphqlQuery,
-            });
-            this.client.set(totalKeys.keys[i], updatedData)
+        for (let i = 0; i < totalKeys.length; i++) {
+          let { graphqlQuery } = keyParser(totalKeys[i]);
+          const updatedData: object = await graphql({
+            schema: this.schema,
+            source: graphqlQuery,
+          });
+          this.client.set(totalKeys.keys[i], updatedData);
         }
         return next();
       }
@@ -141,9 +146,10 @@ Qeraunos.prototype.query = async function (
       // if so, manually update that key with a new graphql query.
       // also check for any multiple types held in brackets and update those as well since they will hold
       // the individual data point in its value
-      const {searchType, searchKey} = keyParser(key);
+      const { searchType, searchKey } = keyParser(key);
       for (const keys in newCache.keys) {
-        let {graphqlQuery} = keyParser(keys);
+        let { graphqlQuery } = keyParser(keys);
+        console.log('graphqlQuery before updates', graphqlQuery)
         if (keys.includes(searchKey) || keys.includes(`[${searchType}]`)) {
           const updatedData: object = await graphql({
             schema: this.schema,
