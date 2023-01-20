@@ -1,15 +1,60 @@
 import { Request, Response, NextFunction } from 'express';
 const CachingAlgo = require('../../caching/caching-algo');
 // const schema = require('../schema/schema');
-const { parse, visit, graphql } = require('graphql');
+const { parse, graphql } = require('graphql');
 const { query } = require('express');
+const redis = require('redis');
 
 // builds qeraunos middleware and binds functions
-function Qeraunos(schema: any) {
+function Qeraunos(
+  schema: any,
+  redisHost?: string,
+  redisPort?: string,
+  redisPwd?: string
+) {
   this.schema = schema;
   this.query = this.query.bind(this);
-  // this.mutation = this.mutation.bind(this);
+  this.client = redis.createClient({
+    socket: {
+      host: redisHost,
+      port: redisPort,
+    },
+    password: redisPwd,
+  });
+
+  this.redisHost = redisHost;
+  this.redisPort = redisPort;
+  this.redisPwd = redisPwd;
+  this.hasRedis = false;
+  (() => {
+    if (this.redisHost && this.redisPort && this.redisPwd) {
+      this.client.connect().then(() => {
+        this.hasRedis = true;
+        console.log('Using Redis cache');
+      });
+    } else {
+      console.log('Using standard Qeraunos cache');
+    }
+  })();
 }
+
+// Qeraunos.prototype.createRedisClient = function(){
+//   client : redis.createClient({
+//    socket: {
+//        host: this.redisHost,
+//        port: this.redisPort
+//    },
+//    password: this.redisPwd
+// });
+
+// client.on('error', err => {
+//    console.log('Error ' + err);
+// });
+// }
+
+// client.on('error', err => {
+//     console.log('Error ' + err);
+// });
 
 const newCache = new CachingAlgo(100);
 
@@ -29,19 +74,7 @@ const graphqlParser = (schema: any, body: string) => {
   }
   // Parse through AST to get Operation type (query or mutation). This will dictate which controller it goes through
   const AST: object = parse(body);
-  // console.log('===================TOP OF AST============', AST);
   const parsed: { [key: string]: any } = parse(body).definitions[0];
-  // const visitor = (node, level, curr = 0) => {
-  //   if (level === curr) return;
-  //   console.log(`LEVEL ${curr} NODE:`, print(node));
-  //   console.log('CURRENT NODE', node);
-  //   console.log('NEXT NODE', node.selectionSet);
-
-  //   return visitor(node.selectionSet, level, ++curr);
-  // };
-
-  // console.log('===========PRINTED AST==========', print(parsed.selectionSet));
-  // console.log('============PARSE==========', parsed);
   const operation: string = parsed.operation;
   // this will remove spaces and reference to mutation in body str
   body = body.replace(/query|mutation|\s/g, '');
@@ -50,15 +83,10 @@ const graphqlParser = (schema: any, body: string) => {
     const id: string = body.split('(')[1].split(',')[0];
     body = [body.split('(')[0], `(${id})`, body.split(')')[1]].join('');
   }
-
-  // console.log('PARSED: ', parsed);
   // grabs the field that the query is using. e.g people
   const field: string = parsed.selectionSet.selections[0].name.value; // string
-  // console.log('FIELD: ', field);
   // finds the correct type based on the field type pair
-  // console.log('FIELD', fieldToType[field]);
   const type: string = fieldToType[field].toString();
-  // console.log('TYPE: ', type);
   // grabs all the parameters in the query search and stores in an array.
   // *** THIS MAY NOT BE NEEDED IF USING BODY AS A UNIQUER ***
   // const parametersArr:[] =
@@ -94,6 +122,9 @@ const graphqlParser = (schema: any, body: string) => {
 };
 
 Qeraunos.prototype.query = async function (
+  // if (this.redisHost){
+  //   //implementing cache using redis
+  // }
   req: Request,
   res: Response,
   next: NextFunction
@@ -102,10 +133,19 @@ Qeraunos.prototype.query = async function (
     this.schema,
     req.body.query
   );
+  // console.log('about to hit redis');
+  // const redisData = await this.client.get('test');
+  // console.log('after redis hit', redisData);
   // console.log('==========KEY==========', key);
   // check if its a mutation, if it is, pass over function to mutation
 
   try {
+    if (this.hasRedis) {
+      console.log('THis is this.client', this.client);
+      console.log('this is this.redisHost', this.redisHost);
+      console.log('this is this.hasRedis', this.hasRedis);
+      console.log('redis condition met');
+    }
     if (operation === 'mutation') {
       // console.log(' has mutation, pass over to mutation');
       // console.log('in mutation');
@@ -148,8 +188,8 @@ Qeraunos.prototype.query = async function (
       }
       // set new mutation in cache
       // do we need to do this?
-      // console.log('============DATA===========', data);
-      newCache.set(key, data);
+      console.log('============DATA===========', data);
+      // newCache.set(key, data);
       // console.log('NEW CACHE OBJ IN MUTATION', newCache.keys);
       return next();
     } else {
@@ -159,7 +199,7 @@ Qeraunos.prototype.query = async function (
       if (newCache.keys[key]) {
         res.locals.graphql = newCache.get(key);
         res.locals.response = 'Cached';
-        // console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
+        console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
         return next();
       } else {
         const data: object = await graphql({
@@ -169,7 +209,7 @@ Qeraunos.prototype.query = async function (
         res.locals.graphql = data;
         res.locals.response = 'Uncached';
         newCache.set(key, data);
-        // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
+        console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
         return next();
       }
     }
