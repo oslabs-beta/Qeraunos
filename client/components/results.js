@@ -6,9 +6,9 @@ function Results() {
   const uncached = responseTime[responseTime.length - 1].lastUncached;
   const cached = responseTime[responseTime.length - 1].lastCached;
 
-  console.log('responseTime last el: ', responseTime[responseTime.length - 1]);
-  console.log('UNCACHED MS ', uncached);
-  console.log('CACHED MS ', cached);
+  // console.log('responseTime last el: ', responseTime[responseTime.length - 1]);
+  // console.log('UNCACHED MS ', uncached);
+  // console.log('CACHED MS ', cached);
 
   // if (
   //   responseTime[responseTime.length - 1].lastUncached[0] !== 'N/A'
