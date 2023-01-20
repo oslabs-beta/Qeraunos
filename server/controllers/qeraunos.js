@@ -135,14 +135,14 @@ var keyParser = function (key) {
 };
 Qeraunos.prototype.query = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, key, operation, data, _b, searchType_1, searchKey_1, dataType, dataKeys, totalKeys, i, graphqlQuery, updatedData, _c, searchType, searchKey, _d, _e, _f, _i, keys, graphqlQuery, updatedData, data, err_1;
+        var _a, key, operation, data, _b, searchType_1, searchKey_1, dataType, dataKeys, totalKeys, i, graphqlQuery, updatedData, _c, searchType, searchKey, _d, _e, _f, _i, keys, graphqlQuery, updatedData, received, data, err_1;
         return __generator(this, function (_g) {
             switch (_g.label) {
                 case 0:
                     _a = graphqlParser(this.schema, req.body.query), key = _a.key, operation = _a.operation;
                     _g.label = 1;
                 case 1:
-                    _g.trys.push([1, 18, , 19]);
+                    _g.trys.push([1, 19, , 20]);
                     if (!(operation === 'mutation')) return [3 /*break*/, 14];
                     return [4 /*yield*/, graphql({
                             schema: this.schema,
@@ -154,7 +154,7 @@ Qeraunos.prototype.query = function (req, res, next) {
                     res.locals.response = 'UNCACHED';
                     if (!this.hasRedis) return [3 /*break*/, 9];
                     _b = keyParser(key), searchType_1 = _b.searchType, searchKey_1 = _b.searchKey;
-                    return [4 /*yield*/, this.client.scan(0, 'MATCH', "".concat(searchType_1))];
+                    return [4 /*yield*/, this.client.scan(0, 'MATCH', "[".concat(searchType_1, "]"))];
                 case 3:
                     dataType = _g.sent();
                     return [4 /*yield*/, this.client.scan(0, 'MATCH', "".concat(searchKey_1))];
@@ -173,7 +173,7 @@ Qeraunos.prototype.query = function (req, res, next) {
                         })];
                 case 6:
                     updatedData = _g.sent();
-                    this.client.set(totalKeys.keys[i], updatedData);
+                    this.client.set("".concat(totalKeys[i]), JSON.stringify(updatedData));
                     _g.label = 7;
                 case 7:
                     i++;
@@ -208,30 +208,54 @@ Qeraunos.prototype.query = function (req, res, next) {
                     return [3 /*break*/, 10];
                 case 13: return [2 /*return*/, next()];
                 case 14:
-                    if (!newCache.keys[key]) return [3 /*break*/, 15];
-                    res.locals.graphql = newCache.get(key);
-                    res.locals.response = 'Cached';
-                    console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
-                    return [2 /*return*/, next()];
-                case 15: return [4 /*yield*/, graphql({
-                        schema: this.schema,
-                        source: req.body.query
-                    })];
+                    if (!this.hasRedis) return [3 /*break*/, 16];
+                    return [4 /*yield*/, this.client.get(key)];
+                case 15:
+                    received = _g.sent();
+                    if (received) {
+                        res.locals.graphql = JSON.parse(received);
+                        res.locals.response = 'Cached';
+                        return [2 /*return*/, next()];
+                    }
+                    _g.label = 16;
                 case 16:
+                    // check whether key exists in cache, if so return value from cache.
+                    // if not, send a graphQL query
+                    if (newCache.keys[key]) {
+                        res.locals.graphql = newCache.get(key);
+                        res.locals.response = 'Cached';
+                        // console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
+                        return [2 /*return*/, next()];
+                    }
+                    return [4 /*yield*/, graphql({
+                            schema: this.schema,
+                            source: req.body.query
+                        })];
+                case 17:
                     data = _g.sent();
                     res.locals.graphql = data;
                     res.locals.response = 'Uncached';
-                    newCache.set(key, data);
-                    console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
+                    // check if using redis or custom cache and set accordingly
+                    if (this.hasRedis) {
+                        console.log('key', key);
+                        console.log('data', data.data);
+                        console.log('hit redis cache');
+                        this.client.set("".concat(key), JSON.stringify(data));
+                        console.log('set data in redis');
+                    }
+                    else {
+                        newCache.set(key, data);
+                    }
+                    // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
                     return [2 /*return*/, next()];
-                case 17: return [3 /*break*/, 19];
-                case 18:
+                case 18: return [3 /*break*/, 20];
+                case 19:
                     err_1 = _g.sent();
                     return [2 /*return*/, next({
                             log: 'Express error handler caught unknown middleware error in qeraunos controller',
                             message: { err: 'An error occurred in qeraunos controller' }
                         })];
-                case 19: return [2 /*return*/];
+                case 20: return [2 /*return*/];
             }
         });
     });

@@ -21,8 +21,7 @@ var redis = require('redis');
 //   await client.connect();
 // })();
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
-// const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
-var qeraunos = new Qeraunos(schema);
+var qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', express.static(path.resolve(__dirname, '../client')));

@@ -96,12 +96,12 @@ const keyParser = (key: string) => {
   const searchArr: string[] = key.split('.');
   // this string holds the type of the graphql query
   const searchType: string = searchArr[0];
-  console.log('searchType', searchType)
+  console.log('searchType', searchType);
   // this string combines the type and the id to search the cache keys with
   const searchKey: string = searchArr[0] + '.' + searchArr[1];
-  console.log('searchkey', searchKey)
+  console.log('searchkey', searchKey);
   // this part of the string holds the actual graph ql query itself
-  const graphqlQuery: string = searchArr[searchArr.length-1];
+  const graphqlQuery: string = searchArr[searchArr.length - 1];
   console.log('graphqlquery', graphqlQuery);
   return { searchType, searchKey, graphqlQuery };
 };
@@ -127,7 +127,7 @@ Qeraunos.prototype.query = async function (
 
       if (this.hasRedis) {
         let { searchType, searchKey } = keyParser(key);
-        const dataType = await this.client.scan(0, 'MATCH', `${searchType}`);
+        const dataType = await this.client.scan(0, 'MATCH', `[${searchType}]`);
         const dataKeys = await this.client.scan(0, 'MATCH', `${searchKey}`);
         //combines the two redis queries for single id and multiples into one array
         const totalKeys = dataType.keys.concat(dataKeys.keys);
@@ -138,7 +138,7 @@ Qeraunos.prototype.query = async function (
             schema: this.schema,
             source: graphqlQuery,
           });
-          this.client.set(totalKeys.keys[i], updatedData);
+          this.client.set(`${totalKeys[i]}`, JSON.stringify(updatedData));
         }
         return next();
       }
@@ -149,7 +149,7 @@ Qeraunos.prototype.query = async function (
       const { searchType, searchKey } = keyParser(key);
       for (const keys in newCache.keys) {
         let { graphqlQuery } = keyParser(keys);
-        console.log('graphqlQuery before updates', graphqlQuery)
+        console.log('graphqlQuery before updates', graphqlQuery);
         if (keys.includes(searchKey) || keys.includes(`[${searchType}]`)) {
           const updatedData: object = await graphql({
             schema: this.schema,
@@ -161,24 +161,41 @@ Qeraunos.prototype.query = async function (
       return next();
       // QUERY CONDITION
     } else {
+      if (this.hasRedis) {
+        const received = await this.client.get(key);
+        if (received) {
+          res.locals.graphql = JSON.parse(received);
+          res.locals.response = 'Cached';
+          return next();
+        }
+      }
       // check whether key exists in cache, if so return value from cache.
       // if not, send a graphQL query
       if (newCache.keys[key]) {
         res.locals.graphql = newCache.get(key);
         res.locals.response = 'Cached';
-        console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
-        return next();
-      } else {
-        const data: object = await graphql({
-          schema: this.schema,
-          source: req.body.query,
-        });
-        res.locals.graphql = data;
-        res.locals.response = 'Uncached';
-        newCache.set(key, data);
-        console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
+        // console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
         return next();
       }
+      // send a graphql request if caches were not hit
+      const data: any = await graphql({
+        schema: this.schema,
+        source: req.body.query,
+      });
+      res.locals.graphql = data;
+      res.locals.response = 'Uncached';
+      // check if using redis or custom cache and set accordingly
+      if (this.hasRedis) {
+        console.log('key', key);
+        console.log('data', data.data);
+        console.log('hit redis cache');
+        this.client.set(`${key}`, JSON.stringify(data));
+        console.log('set data in redis');
+      } else {
+        newCache.set(key, data);
+      }
+      // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
+      return next();
     }
   } catch (err) {
     return next({
