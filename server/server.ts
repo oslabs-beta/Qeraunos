@@ -6,9 +6,26 @@ const { Qeraunos } = require('./controllers/qeraunos');
 const app = express();
 const PORT = 3000;
 require('dotenv').config();
+const redis = require('redis');
 
-const qeraunos = new Qeraunos(schema);
+// let client: any;
+// (async () => {
+//   client = redis.createClient({
+//     socket: {
+//       host: '127.0.0.1',
+//       port: '6379',
+//     },
+//     password: 'codesmith',
+//   });
 
+//   client.on('error', (error: any) => console.error(`Error : ${error}`));
+
+//   await client.connect();
+// })();
+
+//pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
+const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
+// const qeraunos = new Qeraunos(schema);
 export type ServerError = {
   log: string;
   status?: number;
@@ -16,7 +33,38 @@ export type ServerError = {
 };
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.resolve(__dirname, '../client')));
+app.use('/', express.static(path.resolve(__dirname, '../client')));
+
+// async function cacheData(req: Request, res: Response, next: NextFunction) {
+//   const string = req.params.string;
+//   let results;
+//   try {
+//     const cacheResults = await client.get(string);
+//     if (cacheResults) {
+//       results = JSON.parse(cacheResults);
+//       res.send({
+//         fromCache: true,
+//         data: results,
+//       });
+//     } else {
+//       next();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(404);
+//   }
+// }
+
+// app.use(
+//   '/redis/:string',
+//   cacheData
+//   // (req: Request, res: Response) => {
+//   //   console.log('hit');
+//   //   // const data = client.get('test');
+//   //   console.log('in redis test');
+//   //   return res.status(200).send('hello');
+//   // }
+// );
 
 app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
   return res.status(200).send(res.locals);
