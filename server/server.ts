@@ -24,8 +24,8 @@ const redis = require('redis');
 // })();
 
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
-const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
-// const qeraunos = new Qeraunos(schema);
+// const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
+const qeraunos = new Qeraunos(schema);
 export type ServerError = {
   log: string;
   status?: number;
