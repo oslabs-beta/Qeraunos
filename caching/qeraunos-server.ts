@@ -1,7 +1,17 @@
-const localforage = require('localforage');
-const axios = require('axios');
+type DLLType = {
+  freqCount: number;
+  head: NodeType | null;
+  tail: NodeType | null;
+};
+type NodeType = {
+  next: NodeType | null;
+  prev: NodeType | null;
+  key: string;
+  value: object;
+  freqCount: number;
+};
 
-function LfuNode(key, value) {
+function serverNode(this: any, key: string, value: object) {
   this.next = null;
   this.prev = null;
   this.key = key;
@@ -9,7 +19,7 @@ function LfuNode(key, value) {
   this.freqCount = 1;
 }
 
-function LfuDLL(freqCount) {
+function serverDLL(freqCount: number) {
   // stores frequency count to reference the correct key in frequency hashmap within LfuCache
   this.freqCount = freqCount;
   this.head = null;
@@ -24,7 +34,7 @@ function LfuDLL(freqCount) {
 //Search = O(1)
 //Setting = O(1)
 //Deleteing = O(1)
-const LfuCache = function (capacity) {
+const LfuCache = function (capacity: number) {
   this.keys = {};
   this.frequency = {};
   this.capacity = capacity;
@@ -32,35 +42,9 @@ const LfuCache = function (capacity) {
   this.size = 0;
 };
 
-LfuCache.prototype.getIDB = async function () {
-  const item = await localforage.getItem('LfuCache', (err, value) => {
-    if (!value) {
-      return false;
-    } else {
-      this.keys = value.keys;
-      this.frequency = value.frequency;
-      this.capacity = value.capacity;
-      this.minFrequency = value.minFrequency;
-      this.size = value.size;
-    }
-  });
-};
-
-LfuCache.prototype.setIDB = async function () {
-  console.log(`in SETIDB, this ===========`, this);
-  const newCache = {
-    keys: this.keys,
-    frequency: this.frequency,
-    capacity: this.capacity,
-    minFrequency: this.minFrequency,
-    size: this.size,
-  };
-  localforage.setItem('LfuCache', this);
-};
-
 // this function removes the tail of the DLL which is also the least recently used node
 //This is the LRU aspect of the LFU/LRU cache
-LfuCache.prototype.removeAtTail = function (DLL) {
+LfuCache.prototype.removeAtTail = function (DLL: DLLType): NodeType {
   // delete the tail node from hashtable
   const deleted = this.keys[DLL.tail.key];
   delete this.keys[DLL.tail.key];
@@ -80,12 +64,12 @@ LfuCache.prototype.removeAtTail = function (DLL) {
 
 //If (key, value) doesn't exist in the cache, use this method to insert into cache
 // creates a frequency list if not already existing and inserts a new node into it
-LfuCache.prototype.addNode = async function (key, value) {
-  let node = new LfuNode(key, value);
+LfuCache.prototype.addNode = function (key: string, value: object): void {
+  let node: NodeType = new (serverNode as any)(key, value);
   // place node into hashtable
   this.keys[key] = node;
   // check if frequency of 1 exists already, if not, create a new list with freq of 1
-  if (!this.frequency[1]) this.frequency[1] = new LfuDLL(1);
+  if (!this.frequency[1]) this.frequency[1] = new (serverDLL as any)(1);
   // insert the new into the freq list using helper function
   this.insertAtHead(node, this.frequency[1]);
   this.minFrequency = 1;
@@ -94,8 +78,11 @@ LfuCache.prototype.addNode = async function (key, value) {
 
 // inserts a new node at the head
 //freqList is needed so that we keep track of where this node is within this.frequency hashtable
-LfuCache.prototype.insertAtHead = function (newNode, freqList) {
-  let head = freqList.head;
+LfuCache.prototype.insertAtHead = function (
+  newNode: NodeType,
+  freqList: DLLType
+): void {
+  let head: NodeType = freqList.head;
   // if there are no nodes in freq list, head and tail of list are the new node
   if (head === null) {
     freqList.head = newNode;
@@ -111,8 +98,8 @@ LfuCache.prototype.insertAtHead = function (newNode, freqList) {
 };
 
 // updates node when get is used and it's in the cache
-LfuCache.prototype.updateNode = function (node) {
-  let freq = node.freqCount;
+LfuCache.prototype.updateNode = function (node: NodeType): void {
+  let freq: number = node.freqCount;
   node.freqCount = freq + 1;
   // removes node from frequency list using helper function
   this.removeNode(node, this.frequency[freq]);
@@ -121,7 +108,7 @@ LfuCache.prototype.updateNode = function (node) {
     this.minFrequency = node.freqCount;
   // if the frequency at the nodes freqCount does not exist in the hash table, set the freq hashtable with a new linked list at that freqCount
   if (!this.frequency[node.freqCount])
-    this.frequency[node.freqCount] = new LfuDLL(node.freqCount);
+    this.frequency[node.freqCount] = new (serverDLL as any)(node.freqCount);
   // resets node so that it doesn't reference previous list
   node.next = null;
   node.prev = null;
@@ -130,9 +117,12 @@ LfuCache.prototype.updateNode = function (node) {
 };
 
 // removes node from linked freq list
-LfuCache.prototype.removeNode = function (newNode, freqList) {
-  let prev = newNode.prev;
-  let next = newNode.next;
+LfuCache.prototype.removeNode = function (
+  newNode: NodeType,
+  freqList: DLLType
+): void {
+  let prev: NodeType = newNode.prev;
+  let next: NodeType = newNode.next;
   if (prev) prev.next = next;
   if (next) next.prev = prev;
   // check if newNode is either at the head or tail, and set the head or tail of freq list accordingly
@@ -141,20 +131,23 @@ LfuCache.prototype.removeNode = function (newNode, freqList) {
 };
 
 // O(1) get function to get node from key
-LfuCache.prototype.get = function (key) {
+LfuCache.prototype.get = function (key: string): object {
   if (!this.keys[key]) return undefined;
   // get, update, return the nodes value
-  let node = this.keys[key];
+  let node: NodeType = this.keys[key];
   //updates node --> see comments for method above
   this.updateNode(node);
   return node.value;
 };
 
 // O(1) set function to set new node
-LfuCache.prototype.set = async function (key, value) {
+LfuCache.prototype.set = function (
+  key: string,
+  value: object
+): NodeType | void {
   // check if node is already in hashtable
   if (this.keys[key]) {
-    let node = this.keys[key];
+    let node: NodeType = this.keys[key];
     // update nodes value to new passed in value
     node.value = value;
     // this.updateNode(node);
@@ -166,47 +159,12 @@ LfuCache.prototype.set = async function (key, value) {
   // otherwise if size is greater than or equal to capacity, and the input capacity is greater than 0,
   else if (this.size >= this.capacity && this.capacity > 0) {
     // remove the least frequently occurring data from the tail, and if there are multiple in this frequency, remove the least recently used one
-    let leastFreqNode = this.frequency[this.minFrequency];
+    let leastFreqNode: NodeType = this.frequency[this.minFrequency];
     //this keeps track of the removed node and returns it
-    const removed = this.removeAtTail(leastFreqNode);
+    const removed: NodeType = this.removeAtTail(leastFreqNode);
     // after removing the tail to make room, add the new node
     this.addNode(key, value);
     return removed;
-  }
-};
-
-//This flow function organizes all of the steps required
-LfuCache.prototype.flow = async function (queryString, graphqlEndpoint) {
-  //This cleans up the query string to create a unique ID to store in the cache
-  const key = queryString.replace(/[^A-Z0-9]/gi, '');
-
-  //this will get a copy of the cache in IDB and set the current object to that copy of the full cache.
-  this.getIDB();
-
-  //Reviews the cache to see if the item is in cache. If it is not it will then send the request to GraphQL to get the value.
-  if (!this.get(key)) {
-    const queryTimeObj = await axios({
-      url: graphqlEndpoint,
-      method: 'post',
-      data: {
-        query: queryString,
-      },
-    });
-    // From that response, we can then set the data in the cache copy.
-    const data = queryTimeObj.data.graphql.data;
-    console.log('DATA in FLOW:', data);
-
-    this.set(key, data);
-
-    //This replaces the updated cache to IDB
-    this.setIDB();
-
-    //return to the front end the response.
-    return { data, response: 'Uncached' };
-  } else {
-    //will get the value from the cached item and send the response back to the front end.
-    const data = this.get(key);
-    return { data, response: 'Cached' };
   }
 };
 

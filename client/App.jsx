@@ -2,10 +2,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
-//import it to create your intial cache
-import localforage from 'localforage';
-import LfuCache from '../caching/LFU-caching-client';
-
 import {
   RecoilRoot,
   atom,
@@ -71,10 +67,10 @@ const App = () => {
         {/* <Navbar /> */}
 
         {showNavBar()}
-        <div className="container">
+        <div className='container'>
           <Routes>
             <Route
-              path="/"
+              path='/'
               element={
                 <Home
                   enterSite={enterSite}
@@ -83,9 +79,9 @@ const App = () => {
                 />
               }
             />
-            <Route path="/demo" element={<Demo />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/installation" element={<Installation />} />
+            <Route path='/demo' element={<Demo />} />
+            <Route path='/team' element={<Team />} />
+            <Route path='/installation' element={<Installation />} />
           </Routes>
         </div>
       </div>

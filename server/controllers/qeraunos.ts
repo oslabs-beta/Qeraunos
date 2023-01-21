@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-const CachingAlgo = require('../../caching/caching-algo');
-// const schema = require('../schema/schema');
+const CachingAlgo = require('../../caching/qeraunos-server');
 const { parse, graphql } = require('graphql');
 const { query } = require('express');
 const redis = require('redis');
@@ -19,27 +18,23 @@ function Qeraunos(
       host: redisHost,
       port: redisPort,
     },
-    // password: redisPwd,
+    password: redisPwd,
   });
 
   this.redisHost = redisHost;
   this.redisPort = redisPort;
-  // this.redisPwd = redisPwd;
+  this.redisPwd = redisPwd;
   this.hasRedis = false;
   (() => {
-    // put pwd in conditional as well?
     if (this.redisHost && this.redisPort) {
       this.client.connect().then(() => {
         this.hasRedis = true;
-        console.log('Using Redis cache');
       });
     } else {
-      console.log('Using standard Qeraunos cache');
+      this.qeraunosCache = new CachingAlgo(100);
     }
   })();
 }
-
-const newCache = new CachingAlgo(100);
 
 // // GraphQL Parser to traverse AST and gather all info to create unique key for cache
 const graphqlParser = (schema: any, body: string) => {
@@ -61,7 +56,6 @@ const graphqlParser = (schema: any, body: string) => {
   const operation: string = parsed.operation;
   // this will remove spaces and reference to mutation in body str
   body = body.replace(/query|mutation|\s/g, '');
-  console.log('parser', body);
   //this will clean up the body so that only the id is in the arg
   if (operation === 'mutation') {
     const id: string = body.split('(')[1].split(',')[0];
@@ -95,13 +89,10 @@ const keyParser = (key: string) => {
   const searchArr: string[] = key.split('.');
   // this string holds the type of the graphql query
   const searchType: string = searchArr[0];
-  console.log('searchType', searchType);
   // this string combines the type and the id to search the cache keys with
   const searchKey: string = searchArr[0] + '.' + searchArr[1];
-  console.log('searchkey', searchKey);
   // this part of the string holds the actual graph ql query itself
   const graphqlQuery: string = searchArr[searchArr.length - 1];
-  console.log('graphqlquery', graphqlQuery);
   return { searchType, searchKey, graphqlQuery };
 };
 
@@ -130,7 +121,6 @@ Qeraunos.prototype.query = async function (
         const dataKeys = await this.client.scan(0, 'MATCH', `${searchKey}`);
         //combines the two redis queries for single id and multiples into one array
         const totalKeys = dataType.keys.concat(dataKeys.keys);
-        console.log('This is data in redis', dataType.keys);
         for (let i = 0; i < totalKeys.length; i++) {
           let { graphqlQuery } = keyParser(totalKeys[i]);
           const updatedData: object = await graphql({
@@ -146,15 +136,14 @@ Qeraunos.prototype.query = async function (
       // also check for any multiple types held in brackets and update those as well since they will hold
       // the individual data point in its value
       const { searchType, searchKey } = keyParser(key);
-      for (const keys in newCache.keys) {
+      for (const keys in this.qeraunosCache.keys) {
         let { graphqlQuery } = keyParser(keys);
-        console.log('graphqlQuery before updates', graphqlQuery);
         if (keys.includes(searchKey) || keys.includes(`[${searchType}]`)) {
           const updatedData: object = await graphql({
             schema: this.schema,
             source: graphqlQuery,
           });
-          newCache.set(keys, updatedData);
+          this.qeraunosCache.set(keys, updatedData);
         }
       }
       return next();
@@ -170,10 +159,9 @@ Qeraunos.prototype.query = async function (
       }
       // check whether key exists in cache, if so return value from cache.
       // if not, send a graphQL query
-      if (newCache.keys[key]) {
-        res.locals.graphql = newCache.get(key);
+      if (this.qeraunosCache.keys[key]) {
+        res.locals.graphql = this.qeraunosCache.get(key);
         res.locals.response = 'Cached';
-        // console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
         return next();
       }
       // send a graphql request if caches were not hit
@@ -185,15 +173,10 @@ Qeraunos.prototype.query = async function (
       res.locals.response = 'Uncached';
       // check if using redis or custom cache and set accordingly
       if (this.hasRedis) {
-        console.log('key', key);
-        console.log('data', data.data);
-        console.log('hit redis cache');
         this.client.set(`${key}`, JSON.stringify(data));
-        console.log('set data in redis');
       } else {
-        newCache.set(key, data);
+        this.qeraunosCache.set(key, data);
       }
-      // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
       return next();
     }
   } catch (err) {
