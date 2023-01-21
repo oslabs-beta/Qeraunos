@@ -7,6 +7,7 @@ const app = express();
 const PORT = 3000;
 require('dotenv').config();
 const redis = require('redis');
+const expressGraphQL = require('express-graphql').graphqlHTTP;
 
 // let client: any;
 // (async () => {
@@ -70,6 +71,15 @@ app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
   return res.status(200).send(res.locals);
 });
 
+app.use(
+  '/graphql-front',
+  //Queranos.checkCache --> if found return res.status(200).send(res.data)
+  //if not found --> explicitly call from DB and cache from there
+  expressGraphQL({
+    schema: schema,
+    graphiql: true,
+  })
+);
 // app.use('/graphql', qeraunos.mutations, (req, res) => {
 //   return res.status(200).send(res.locals);
 // });

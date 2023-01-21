@@ -8,6 +8,7 @@ var app = express();
 var PORT = 3000;
 require('dotenv').config();
 var redis = require('redis');
+var expressGraphQL = require('express-graphql').graphqlHTTP;
 // let client: any;
 // (async () => {
 //   client = redis.createClient({
@@ -58,6 +59,13 @@ app.use('/', express.static(path.resolve(__dirname, '../client')));
 app.use('/graphql', qeraunos.query, function (req, res) {
     return res.status(200).send(res.locals);
 });
+app.use('/graphql-front', 
+//Queranos.checkCache --> if found return res.status(200).send(res.data)
+//if not found --> explicitly call from DB and cache from there
+expressGraphQL({
+    schema: schema,
+    graphiql: true
+}));
 // app.use('/graphql', qeraunos.mutations, (req, res) => {
 //   return res.status(200).send(res.locals);
 // });

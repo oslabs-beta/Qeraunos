@@ -79,7 +79,6 @@ const graphqlParser = (schema: any, body: string) => {
   //     body = body.replace(field, type);
   //   }
   // }
-  console.log('no field body', body);
   if (!parsed.selectionSet.selections[0].arguments[0]) {
     key = type + '.' + body;
   } else {
