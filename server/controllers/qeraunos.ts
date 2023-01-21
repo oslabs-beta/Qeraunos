@@ -1,14 +1,42 @@
 import { Request, Response, NextFunction } from 'express';
 const CachingAlgo = require('../../caching/caching-algo');
 // const schema = require('../schema/schema');
-const { parse, visit, graphql } = require('graphql');
+const { parse, graphql } = require('graphql');
 const { query } = require('express');
+const redis = require('redis');
 
 // builds qeraunos middleware and binds functions
-function Qeraunos(schema: any) {
+function Qeraunos(
+  schema: any,
+  redisHost?: string,
+  redisPort?: string,
+  redisPwd?: string
+) {
   this.schema = schema;
   this.query = this.query.bind(this);
-  // this.mutation = this.mutation.bind(this);
+  this.client = redis.createClient({
+    socket: {
+      host: redisHost,
+      port: redisPort,
+    },
+    // password: redisPwd,
+  });
+
+  this.redisHost = redisHost;
+  this.redisPort = redisPort;
+  // this.redisPwd = redisPwd;
+  this.hasRedis = false;
+  (() => {
+    // put pwd in conditional as well?
+    if (this.redisHost && this.redisPort) {
+      this.client.connect().then(() => {
+        this.hasRedis = true;
+        console.log('Using Redis cache');
+      });
+    } else {
+      console.log('Using standard Qeraunos cache');
+    }
+  })();
 }
 
 const newCache = new CachingAlgo(100);
@@ -29,68 +57,53 @@ const graphqlParser = (schema: any, body: string) => {
   }
   // Parse through AST to get Operation type (query or mutation). This will dictate which controller it goes through
   const AST: object = parse(body);
-  // console.log('===================TOP OF AST============', AST);
   const parsed: { [key: string]: any } = parse(body).definitions[0];
-  // const visitor = (node, level, curr = 0) => {
-  //   if (level === curr) return;
-  //   console.log(`LEVEL ${curr} NODE:`, print(node));
-  //   console.log('CURRENT NODE', node);
-  //   console.log('NEXT NODE', node.selectionSet);
-
-  //   return visitor(node.selectionSet, level, ++curr);
-  // };
-
-  // console.log('===========PRINTED AST==========', print(parsed.selectionSet));
-  // console.log('============PARSE==========', parsed);
   const operation: string = parsed.operation;
   // this will remove spaces and reference to mutation in body str
   body = body.replace(/query|mutation|\s/g, '');
+  console.log('parser', body);
   //this will clean up the body so that only the id is in the arg
   if (operation === 'mutation') {
     const id: string = body.split('(')[1].split(',')[0];
+    // need to refactor this
     body = [body.split('(')[0], `(${id})`, body.split(')')[1]].join('');
   }
-
-  // console.log('PARSED: ', parsed);
   // grabs the field that the query is using. e.g people
   const field: string = parsed.selectionSet.selections[0].name.value; // string
-  // console.log('FIELD: ', field);
   // finds the correct type based on the field type pair
-  // console.log('FIELD', fieldToType[field]);
   const type: string = fieldToType[field].toString();
-  // console.log('TYPE: ', type);
-  // grabs all the parameters in the query search and stores in an array.
-  // *** THIS MAY NOT BE NEEDED IF USING BODY AS A UNIQUER ***
-  // const parametersArr:[] =
-  //   parsed.selectionSet.selections[0].selectionSet.selections;
-  // console.log('PARAMETERS ARR: ', parametersArr);
-  // let parameters: any[] = [];
-  // parametersArr.forEach((elem:any) => {
-  //   parameters.push(elem.name.value);
-  // });
-  // console.log('PARAMETERS: ', parameters);
-  // joins the array into a singular string to use as part of the key
-  // const parameterStr:string = parameters.join('');
-  //  ********* */
-  // console.log('PARAMETERS STR: ', parameters);
   // checks if type if there are any arguments. this first one checks for an id if its first
   // if there is an argument of id, then it uses that inside the key along with type and parameters, if not, it just uses type and parameter
-  for (const field in fieldToType) {
-    if (body.includes(field)) {
-      body = body.replace(field, type);
-    }
-  }
+  // for (const field in fieldToType) {
+  //   if (body.includes(field)) {
+  //     body = body.replace(field, type);
+  //   }
+  // }
+  console.log('no field body', body);
   if (!parsed.selectionSet.selections[0].arguments[0]) {
     key = type + '.' + body;
   } else {
     // may need to loop through arguments to find _id or id then grab the value
     // possible that user may not set id and select based on other parameters
     queryId = parsed.selectionSet.selections[0].arguments[0].value.value;
-    // console.log('QUERYID: ', queryId);
     key = type + '.' + queryId + '.' + body;
   }
-  // console.log('QUERYKEY: ', key);
   return { key, operation };
+};
+
+const keyParser = (key: string) => {
+  // split key into its useful strings
+  const searchArr: string[] = key.split('.');
+  // this string holds the type of the graphql query
+  const searchType: string = searchArr[0];
+  console.log('searchType', searchType);
+  // this string combines the type and the id to search the cache keys with
+  const searchKey: string = searchArr[0] + '.' + searchArr[1];
+  console.log('searchkey', searchKey);
+  // this part of the string holds the actual graph ql query itself
+  const graphqlQuery: string = searchArr[searchArr.length - 1];
+  console.log('graphqlquery', graphqlQuery);
+  return { searchType, searchKey, graphqlQuery };
 };
 
 Qeraunos.prototype.query = async function (
@@ -102,24 +115,9 @@ Qeraunos.prototype.query = async function (
     this.schema,
     req.body.query
   );
-  // console.log('==========KEY==========', key);
-  // check if its a mutation, if it is, pass over function to mutation
 
   try {
     if (operation === 'mutation') {
-      // console.log(' has mutation, pass over to mutation');
-      // console.log('in mutation');
-      // // need to loop through cache and check any key with type and id
-      // split key into its useful strings
-      const searchArr: string[] = key.split('.');
-      // this string holds the type of the graphql query
-      const searchType: string = searchArr[0];
-      // this string combines the type and the id to search the cache keys with
-      const searchKey: string = searchArr[0] + '.' + searchArr[1];
-      // this part of the string holds the actual graph ql query itself
-      const graphqlQuery: string = searchArr[2];
-      // console.log('==========UPPERCUT==========');
-      // console.log(newCache.keys);
       const data: object = await graphql({
         schema: this.schema,
         source: req.body.query,
@@ -127,18 +125,32 @@ Qeraunos.prototype.query = async function (
       res.locals.graphql = data;
       res.locals.response = 'UNCACHED';
 
+      if (this.hasRedis) {
+        let { searchType, searchKey } = keyParser(key);
+        const dataType = await this.client.scan(0, 'MATCH', `[${searchType}]`);
+        const dataKeys = await this.client.scan(0, 'MATCH', `${searchKey}`);
+        //combines the two redis queries for single id and multiples into one array
+        const totalKeys = dataType.keys.concat(dataKeys.keys);
+        console.log('This is data in redis', dataType.keys);
+        for (let i = 0; i < totalKeys.length; i++) {
+          let { graphqlQuery } = keyParser(totalKeys[i]);
+          const updatedData: object = await graphql({
+            schema: this.schema,
+            source: graphqlQuery,
+          });
+          this.client.set(`${totalKeys[i]}`, JSON.stringify(updatedData));
+        }
+        return next();
+      }
       // loop through cache and check to see if mutated data point is referenced in any of the keys
       // if so, manually update that key with a new graphql query.
       // also check for any multiple types held in brackets and update those as well since they will hold
       // the individual data point in its value
+      const { searchType, searchKey } = keyParser(key);
       for (const keys in newCache.keys) {
-        // console.log('mutation searchKey: ', searchKey);
-        // console.log('mutation key in cache: ', key);
-        // console.log('mutation key: ', key);
+        let { graphqlQuery } = keyParser(keys);
+        console.log('graphqlQuery before updates', graphqlQuery);
         if (keys.includes(searchKey) || keys.includes(`[${searchType}]`)) {
-          // console.log('==========HIT==========');
-          // console.log('searchkey: ', searchKey);
-          // console.log('searchType: ', `[${searchType}]`);
           const updatedData: object = await graphql({
             schema: this.schema,
             source: graphqlQuery,
@@ -146,14 +158,17 @@ Qeraunos.prototype.query = async function (
           newCache.set(keys, updatedData);
         }
       }
-      // set new mutation in cache
-      // do we need to do this?
-      // console.log('============DATA===========', data);
-      newCache.set(key, data);
-      // console.log('NEW CACHE OBJ IN MUTATION', newCache.keys);
       return next();
+      // QUERY CONDITION
     } else {
-      // console.log('In query');
+      if (this.hasRedis) {
+        const received = await this.client.get(key);
+        if (received) {
+          res.locals.graphql = JSON.parse(received);
+          res.locals.response = 'Cached';
+          return next();
+        }
+      }
       // check whether key exists in cache, if so return value from cache.
       // if not, send a graphQL query
       if (newCache.keys[key]) {
@@ -161,17 +176,26 @@ Qeraunos.prototype.query = async function (
         res.locals.response = 'Cached';
         // console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
         return next();
-      } else {
-        const data: object = await graphql({
-          schema: this.schema,
-          source: req.body.query,
-        });
-        res.locals.graphql = data;
-        res.locals.response = 'Uncached';
-        newCache.set(key, data);
-        // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
-        return next();
       }
+      // send a graphql request if caches were not hit
+      const data: any = await graphql({
+        schema: this.schema,
+        source: req.body.query,
+      });
+      res.locals.graphql = data;
+      res.locals.response = 'Uncached';
+      // check if using redis or custom cache and set accordingly
+      if (this.hasRedis) {
+        console.log('key', key);
+        console.log('data', data.data);
+        console.log('hit redis cache');
+        this.client.set(`${key}`, JSON.stringify(data));
+        console.log('set data in redis');
+      } else {
+        newCache.set(key, data);
+      }
+      // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
+      return next();
     }
   } catch (err) {
     return next({
