@@ -1,4 +1,11 @@
 /*!
+    localForage -- Offline Storage, Improved
+    Version 1.10.0
+    https://localforage.github.io/localForage
+    (c) 2013-2017 Mozilla, Apache License 2.0
+*/
+
+/*!
  * @kurkle/color v0.3.1
  * https://github.com/kurkle/color#readme
  * (c) 2022 Jukka Kurkela

@@ -7,6 +7,9 @@ import '../stylesheets/styles.scss';
 import localforage from 'localforage';
 import LfuCache from '../../caching/LFU-caching-client';
 
+const cache = new LfuCache(5);
+localforage.setItem('LfuCache', cache);
+
 const Checkbox = () => {
   const { responseTime, setResponseTime } = useResponseTime();
   const [queryString, setQueryString] = useState('');
@@ -28,24 +31,17 @@ const Checkbox = () => {
     const startTime = Date.now();
 
     //send the query string to qeraunos with endpoint
-    LfuCache.set(queryString, 'http://localhost:8080/graphql', 1);
 
-    const queryTimeObj = await axios({
-      url: 'http://localhost:8080/graphql',
-      method: 'post',
-      data: {
-        query: queryString,
-      },
-    })
+    const queryTimeObj = await cache
+      .flow(queryString, 'http://localhost:8080/graphql')
       .then(function (response) {
         console.log('RESPONSE', response);
-        setqueryResult(
-          JSON.stringify(response.data.graphql.data.people, null, 2)
-        );
+        setqueryResult(JSON.stringify(response, null, 2));
+        console.log(`response.response`, response.response);
 
         const obj = {
           ...responseTime[responseTime.length - 1],
-          cached: response.data.response,
+          cached: response.response,
           resTime: Date.now() - startTime,
         };
         if (response.data.response === 'Cached') {

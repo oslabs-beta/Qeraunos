@@ -38,14 +38,14 @@ const App = () => {
   // localforage.setItem('qeraunos', 'HELLO WORLD');
 
   //setting our initial empty cache first thing when you log in.
-  const cache = new LfuCache(5);
-  localforage.setItem('LfuCache', cache);
-  // console.log(cache);
+  // const cache = new LfuCache(5);
+  // localforage.setItem('LfuCache', cache);
+  // // console.log(cache);
 
-  cache.flow(
-    '{people { _id name mass hair_color}}',
-    'http://localhost:8080/graphql'
-  );
+  // cache.flow(
+  //   '{people { _id name mass hair_color}}',
+  //   'http://localhost:8080/graphql'
+  // );
   // cache.set(2, 8);
   // cache.set(3, 10000);
   // console.log(`EXPECTING 7========`, cache.get(1));

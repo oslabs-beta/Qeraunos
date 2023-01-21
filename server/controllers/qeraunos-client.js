@@ -24,7 +24,6 @@ function Qeraunos(schema) {
 // });
 
 const newCache = new CachingAlgo(100);
-// newCache.saveIDB();
 
 // // GraphQL Parser to traverse AST and gather all info to create unique key for cache
 const graphqlParser = (schema, body) => {
@@ -107,10 +106,24 @@ const graphqlParser = (schema, body) => {
 };
 
 Qeraunos.prototype.query = async function (req, res, next) {
-  const { key, operation } = graphqlParser(this.schema, req.body.query);
+  // console.log('in qeruanos query =========== ', req.body);
+
+  // const { key, operation } = graphqlParser(this.schema, req.body.query);
+  // console.log('in qeruanos query =========== ', req.body.query);
   // console.log('==========KEY==========', key);
   // check if its a mutation, if it is, pass over function to mutation
+  try {
+    const data = await graphql({
+      schema: this.schema,
+      source: req.body.query,
+    });
+    res.locals.graphql = data;
+    // res.locals.response = 'UNCACHED';
+    // console.log(`DATA ==========`, data);
 
+    return next();
+
+    /*
   try {
     if (operation === 'mutation') {
       // console.log(' has mutation, pass over to mutation');
@@ -138,13 +151,9 @@ Qeraunos.prototype.query = async function (req, res, next) {
       // also check for any multiple types held in brackets and update those as well since they will hold
       // the individual data point in its value
       for (const keys in newCache.keys) {
-        // console.log('mutation searchKey: ', searchKey);
-        // console.log('mutation key in cache: ', key);
-        // console.log('mutation key: ', key);
+       
         if (keys.includes(searchKey) || keys.includes(`[${searchType}]`)) {
-          // console.log('==========HIT==========');
-          // console.log('searchkey: ', searchKey);
-          // console.log('searchType: ', `[${searchType}]`);
+     
           const updatedData = await graphql({
             schema: this.schema,
             source: graphqlQuery,
@@ -154,7 +163,6 @@ Qeraunos.prototype.query = async function (req, res, next) {
       }
       // set new mutation in cache
       // do we need to do this?
-      // console.log('============DATA===========', data);
       newCache.set(key, data);
       // console.log('NEW CACHE OBJ IN MUTATION', newCache.keys);
       return next();
@@ -179,6 +187,7 @@ Qeraunos.prototype.query = async function (req, res, next) {
         return next();
       }
     }
+    */
   } catch (err) {
     return next({
       log: 'Express error handler caught unknown middleware error in qeraunos controller',
