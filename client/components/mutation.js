@@ -3,18 +3,42 @@ import axios from 'axios';
 
 const Mutation = () => {
   const [queryString, setQueryString] = useState('');
-  const [queryResult, setQueryResult] = useState('');
+  const [previewString, setPreviewString] = useState('');
+  const [previewResult, setPreviewResult] = useState('PENDING PREVIEW');
+  const [queryResult, setQueryResult] = useState('PENDING MUTATION');
   const [_id, set_id] = useState('ID');
   const [property, setProperty] = useState('PROPERTY');
   const [input, setInput] = useState('INPUT');
 
   useEffect(() => {
-    const string = `mutation { updatePerson (${_id}, ${property}:"${input}"){ name mass hair_color}}`;
-    setQueryString(string);
+    const mutationString = `mutation { updatePerson (${_id}, ${property}:"${input}"){ _id, name, mass, hair_color}}`;
+    const pString = `{person (${_id}){_id, name, mass, hair_color}}`;
+    setPreviewString(pString);
+    setQueryString(mutationString);
   }, [_id, property, input]);
 
   const setMutation = async () => {
     console.log('queryString', queryString);
+    const previewData = await axios({
+      url: 'http://localhost:8080/graphql',
+      method: 'post',
+      data: {
+        query: previewString,
+      },
+    })
+      .then(function (response) {
+        console.log('RESPONSE', response);
+        setPreviewResult(
+          JSON.stringify(response.data.graphql.data.person, null, 2)
+        );
+        console.log('PREVIEW RESULTS: ', previewResult);
+
+        return previewResult;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     const mutateData = await axios({
       url: 'http://localhost:8080/graphql',
       method: 'post',
@@ -25,8 +49,9 @@ const Mutation = () => {
       .then(function (response) {
         console.log('RESPONSE', response);
         setQueryResult(
-          JSON.stringify(response.data.graphql.data.people, null, 2)
+          JSON.stringify(response.data.graphql.data.updatePerson, null, 2)
         );
+        console.log('MUTATION RESULTS: ', queryResult);
 
         return queryResult;
       })
@@ -45,10 +70,10 @@ const Mutation = () => {
         <option value='' disabled selected>
           Select a name
         </option>
-        <option value='id:89'>TEST 89</option>
-        {/* <option value='id: 1'>Luke Skywalker</option>
+        <option value='id: 89'>TEST89</option>
+        <option value='id: 1'>Luke Skywalker</option>
         <option value='id: 2'>C-3PO</option>
-        <option value='id: 3'>R2-D2</option> */}
+        <option value='id: 3'>R2-D2</option>
       </select>
       <select
         name='edit'
@@ -66,6 +91,7 @@ const Mutation = () => {
         type='text'
         id='input'
         name='input'
+        placeholder='Input Change'
         onChange={(e) => setInput(e.target.value)}
       ></input>
 
@@ -78,7 +104,14 @@ const Mutation = () => {
         Run Mutation
       </button>
 
-      <pre className='nameResult'>Insert Name Here</pre>
+      <div>
+        <p>Before Mutation:</p>
+        <pre className='nameResult'>{previewResult}</pre>
+      </div>
+      <div>
+        <p>After Mutation:</p>
+        <pre className='nameResult'>{queryResult}</pre>
+      </div>
     </div>
   );
 };

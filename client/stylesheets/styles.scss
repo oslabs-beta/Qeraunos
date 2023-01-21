@@ -225,8 +225,13 @@ button:active {
 }
 
 .nameResult {
-  height: 250px;
+  padding-left: 20px;
+  padding-top: 20px;
+  height: 140px;
   width: 300x;
+  background-color: #484848;
+  color: $white;
+  border-radius: 10px;
 }
 
 //TEAM MEMBER CARD
