@@ -27,7 +27,6 @@ const Checkbox = () => {
   }, [_id, name, mass, hair_color]);
 
   const setTime = async () => {
-    console.log(queryString);
     const startTime = Date.now();
 
     //send the query string to qeraunos with endpoint
@@ -35,16 +34,14 @@ const Checkbox = () => {
     const queryTimeObj = await cache
       .flow(queryString, 'http://localhost:8080/graphql')
       .then(function (response) {
-        console.log('RESPONSE', response);
         setqueryResult(JSON.stringify(response, null, 2));
-        console.log(`response.response`, response.response);
 
         const obj = {
           ...responseTime[responseTime.length - 1],
           cached: response.response,
           resTime: Date.now() - startTime,
         };
-        if (response.data.response === 'Cached') {
+        if (response.response === 'Cached') {
           obj.lastCached = obj.resTime;
         } else {
           obj.lastUncached = obj.resTime;

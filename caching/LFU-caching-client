@@ -202,11 +202,11 @@ LfuCache.prototype.flow = async function (queryString, graphqlEndpoint) {
     this.setIDB();
 
     //return to the front end the response.
-    return { data, response: 'uncached' };
+    return { data, response: 'Uncached' };
   } else {
     //will get the value from the cached item and send the response back to the front end.
     const data = this.get(key);
-    return { data, response: 'cached' };
+    return { data, response: 'Cached' };
   }
 };
 

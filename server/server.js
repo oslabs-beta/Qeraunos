@@ -8,19 +8,6 @@ var app = express();
 var PORT = 3000;
 require('dotenv').config();
 var redis = require('redis');
-// let client: any;
-// (async () => {
-//   client = redis.createClient({
-//     socket: {
-//       host: '127.0.0.1',
-//       port: '6379',
-//     },
-//     password: 'codesmith',
-//   });
-//   client.on('error', (error: any) => console.error(`Error : ${error}`));
-//   await client.connect();
-// })();
-//pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
 var qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
