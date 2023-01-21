@@ -5,10 +5,10 @@ import '../stylesheets/styles.scss';
 
 //instructions to run client qeraunos caching.
 import localforage from 'localforage';
-import LfuCache from '../../caching/LFU-caching-client';
+import qeraunosClient from '../../caching/qeraunos-client';
 
-const cache = new LfuCache(5);
-localforage.setItem('LfuCache', cache);
+const cache = new qeraunosClient(100);
+localforage.setItem('Qeraunos', cache);
 
 const Checkbox = () => {
   const { responseTime, setResponseTime } = useResponseTime();

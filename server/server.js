@@ -8,59 +8,23 @@ var app = express();
 var PORT = 3000;
 require('dotenv').config();
 var redis = require('redis');
-// let client: any;
-// (async () => {
-//   client = redis.createClient({
-//     socket: {
-//       host: '127.0.0.1',
-//       port: '6379',
-//     },
-//     password: 'codesmith',
-//   });
-//   client.on('error', (error: any) => console.error(`Error : ${error}`));
-//   await client.connect();
-// })();
+var expressGraphQL = require('express-graphql').graphqlHTTP;
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
 // const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
 var qeraunos = new Qeraunos(schema);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', express.static(path.resolve(__dirname, '../client')));
-// async function cacheData(req: Request, res: Response, next: NextFunction) {
-//   const string = req.params.string;
-//   let results;
-//   try {
-//     const cacheResults = await client.get(string);
-//     if (cacheResults) {
-//       results = JSON.parse(cacheResults);
-//       res.send({
-//         fromCache: true,
-//         data: results,
-//       });
-//     } else {
-//       next();
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(404);
-//   }
-// }
-// app.use(
-//   '/redis/:string',
-//   cacheData
-//   // (req: Request, res: Response) => {
-//   //   console.log('hit');
-//   //   // const data = client.get('test');
-//   //   console.log('in redis test');
-//   //   return res.status(200).send('hello');
-//   // }
-// );
 app.use('/graphql', qeraunos.query, function (req, res) {
     return res.status(200).send(res.locals);
 });
-// app.use('/graphql', qeraunos.mutations, (req, res) => {
-//   return res.status(200).send(res.locals);
-// });
+app.use('/graphql-front', 
+//Queranos.checkCache --> if found return res.status(200).send(res.data)
+//if not found --> explicitly call from DB and cache from there
+expressGraphQL({
+    schema: schema,
+    graphiql: true
+}));
 // 404 error handler
 app.use(function (req, res) {
     console.error('Server.js 404');

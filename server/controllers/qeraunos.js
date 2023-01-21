@@ -36,8 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var CachingAlgo = require('../../caching/caching-algo');
-// const schema = require('../schema/schema');
+var CachingAlgo = require('../../caching/qeraunos-server');
 var _a = require('graphql'), parse = _a.parse, graphql = _a.graphql;
 var query = require('express').query;
 var redis = require('redis');
@@ -50,26 +49,24 @@ function Qeraunos(schema, redisHost, redisPort, redisPwd) {
         socket: {
             host: redisHost,
             port: redisPort
-        }
+        },
+        password: redisPwd
     });
     this.redisHost = redisHost;
     this.redisPort = redisPort;
-    // this.redisPwd = redisPwd;
+    this.redisPwd = redisPwd;
     this.hasRedis = false;
     (function () {
-        // put pwd in conditional as well?
         if (_this.redisHost && _this.redisPort) {
             _this.client.connect().then(function () {
                 _this.hasRedis = true;
-                console.log('Using Redis cache');
             });
         }
         else {
-            console.log('Using standard Qeraunos cache');
+            _this.qeraunosCache = new CachingAlgo(100);
         }
     })();
 }
-var newCache = new CachingAlgo(100);
 // // GraphQL Parser to traverse AST and gather all info to create unique key for cache
 var graphqlParser = function (schema, body) {
     // this keeps a dictionary of all the fields in users schema as key and has its corresponding type as a value
@@ -89,7 +86,6 @@ var graphqlParser = function (schema, body) {
     var operation = parsed.operation;
     // this will remove spaces and reference to mutation in body str
     body = body.replace(/query|mutation|\s/g, '');
-    console.log('parser', body);
     //this will clean up the body so that only the id is in the arg
     if (operation === 'mutation') {
         var id = body.split('(')[1].split(',')[0];
@@ -107,7 +103,6 @@ var graphqlParser = function (schema, body) {
     //     body = body.replace(field, type);
     //   }
     // }
-    console.log('no field body', body);
     if (!parsed.selectionSet.selections[0].arguments[0]) {
         key = type + '.' + body;
     }
@@ -124,13 +119,10 @@ var keyParser = function (key) {
     var searchArr = key.split('.');
     // this string holds the type of the graphql query
     var searchType = searchArr[0];
-    console.log('searchType', searchType);
     // this string combines the type and the id to search the cache keys with
     var searchKey = searchArr[0] + '.' + searchArr[1];
-    console.log('searchkey', searchKey);
     // this part of the string holds the actual graph ql query itself
     var graphqlQuery = searchArr[searchArr.length - 1];
-    console.log('graphqlquery', graphqlQuery);
     return { searchType: searchType, searchKey: searchKey, graphqlQuery: graphqlQuery };
 };
 Qeraunos.prototype.query = function (req, res, next) {
@@ -161,7 +153,6 @@ Qeraunos.prototype.query = function (req, res, next) {
                 case 4:
                     dataKeys = _g.sent();
                     totalKeys = dataType.keys.concat(dataKeys.keys);
-                    console.log('This is data in redis', dataType.keys);
                     i = 0;
                     _g.label = 5;
                 case 5:
@@ -181,7 +172,7 @@ Qeraunos.prototype.query = function (req, res, next) {
                 case 8: return [2 /*return*/, next()];
                 case 9:
                     _c = keyParser(key), searchType = _c.searchType, searchKey = _c.searchKey;
-                    _d = newCache.keys;
+                    _d = this.qeraunosCache.keys;
                     _e = [];
                     for (_f in _d)
                         _e.push(_f);
@@ -193,7 +184,6 @@ Qeraunos.prototype.query = function (req, res, next) {
                     if (!(_f in _d)) return [3 /*break*/, 12];
                     keys = _f;
                     graphqlQuery = keyParser(keys).graphqlQuery;
-                    console.log('graphqlQuery before updates', graphqlQuery);
                     if (!(keys.includes(searchKey) || keys.includes("[".concat(searchType, "]")))) return [3 /*break*/, 12];
                     return [4 /*yield*/, graphql({
                             schema: this.schema,
@@ -201,7 +191,7 @@ Qeraunos.prototype.query = function (req, res, next) {
                         })];
                 case 11:
                     updatedData = _g.sent();
-                    newCache.set(keys, updatedData);
+                    this.qeraunosCache.set(keys, updatedData);
                     _g.label = 12;
                 case 12:
                     _i++;
@@ -221,10 +211,9 @@ Qeraunos.prototype.query = function (req, res, next) {
                 case 16:
                     // check whether key exists in cache, if so return value from cache.
                     // if not, send a graphQL query
-                    if (newCache.keys[key]) {
-                        res.locals.graphql = newCache.get(key);
+                    if (this.qeraunosCache.keys[key]) {
+                        res.locals.graphql = this.qeraunosCache.get(key);
                         res.locals.response = 'Cached';
-                        // console.log('OLD CACHE OBJ IN QUERY', newCache.keys[key].value.data);
                         return [2 /*return*/, next()];
                     }
                     return [4 /*yield*/, graphql({
@@ -237,16 +226,11 @@ Qeraunos.prototype.query = function (req, res, next) {
                     res.locals.response = 'Uncached';
                     // check if using redis or custom cache and set accordingly
                     if (this.hasRedis) {
-                        console.log('key', key);
-                        console.log('data', data.data);
-                        console.log('hit redis cache');
                         this.client.set("".concat(key), JSON.stringify(data));
-                        console.log('set data in redis');
                     }
                     else {
-                        newCache.set(key, data);
+                        this.qeraunosCache.set(key, data);
                     }
-                    // console.log('NEW CACHE OBJ IN QUERY', newCache.keys);
                     return [2 /*return*/, next()];
                 case 18: return [3 /*break*/, 20];
                 case 19:
