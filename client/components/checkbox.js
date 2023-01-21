@@ -13,9 +13,9 @@ const Checkbox = () => {
   const [hair_color, setHair_color] = useState(true);
 
   useEffect(() => {
-    const string = `{people { ${_id ? '_id' : ''}${name ? ' name' : ''}${
+    const string = `{people { ${_id ? '_id' : ''},${name ? ' name' : ''},${
       mass ? ' mass' : ''
-    }${hair_color ? ' hair_color' : ''}}}`;
+    },${hair_color ? ' hair_color' : ''}}}`;
     setQueryString(string);
   }, [_id, name, mass, hair_color]);
 
