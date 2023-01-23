@@ -34,7 +34,7 @@ function serverDLL(freqCount: number) {
 //Search = O(1)
 //Setting = O(1)
 //Deleteing = O(1)
-const LfuCache = function (capacity: number) {
+const QeraunosServer = function (capacity: number) {
   this.keys = {};
   this.frequency = {};
   this.capacity = capacity;
@@ -44,7 +44,7 @@ const LfuCache = function (capacity: number) {
 
 // this function removes the tail of the DLL which is also the least recently used node
 //This is the LRU aspect of the LFU/LRU cache
-LfuCache.prototype.removeAtTail = function (DLL: DLLType): NodeType {
+QeraunosServer.prototype.removeAtTail = function (DLL: DLLType): NodeType {
   // delete the tail node from hashtable
   const deleted = this.keys[DLL.tail.key];
   delete this.keys[DLL.tail.key];
@@ -64,7 +64,7 @@ LfuCache.prototype.removeAtTail = function (DLL: DLLType): NodeType {
 
 //If (key, value) doesn't exist in the cache, use this method to insert into cache
 // creates a frequency list if not already existing and inserts a new node into it
-LfuCache.prototype.addNode = function (key: string, value: object): void {
+QeraunosServer.prototype.addNode = function (key: string, value: object): void {
   let node: NodeType = new (serverNode as any)(key, value);
   // place node into hashtable
   this.keys[key] = node;
@@ -78,7 +78,7 @@ LfuCache.prototype.addNode = function (key: string, value: object): void {
 
 // inserts a new node at the head
 //freqList is needed so that we keep track of where this node is within this.frequency hashtable
-LfuCache.prototype.insertAtHead = function (
+QeraunosServer.prototype.insertAtHead = function (
   newNode: NodeType,
   freqList: DLLType
 ): void {
@@ -98,7 +98,7 @@ LfuCache.prototype.insertAtHead = function (
 };
 
 // updates node when get is used and it's in the cache
-LfuCache.prototype.updateNode = function (node: NodeType): void {
+QeraunosServer.prototype.updateNode = function (node: NodeType): void {
   let freq: number = node.freqCount;
   node.freqCount = freq + 1;
   // removes node from frequency list using helper function
@@ -117,7 +117,7 @@ LfuCache.prototype.updateNode = function (node: NodeType): void {
 };
 
 // removes node from linked freq list
-LfuCache.prototype.removeNode = function (
+QeraunosServer.prototype.removeNode = function (
   newNode: NodeType,
   freqList: DLLType
 ): void {
@@ -131,7 +131,7 @@ LfuCache.prototype.removeNode = function (
 };
 
 // O(1) get function to get node from key
-LfuCache.prototype.get = function (key: string): object {
+QeraunosServer.prototype.get = function (key: string): object {
   if (!this.keys[key]) return undefined;
   // get, update, return the nodes value
   let node: NodeType = this.keys[key];
@@ -141,7 +141,7 @@ LfuCache.prototype.get = function (key: string): object {
 };
 
 // O(1) set function to set new node
-LfuCache.prototype.set = function (
+QeraunosServer.prototype.set = function (
   key: string,
   value: object
 ): NodeType | void {
@@ -168,4 +168,4 @@ LfuCache.prototype.set = function (
   }
 };
 
-module.exports = LfuCache;
+module.exports = QeraunosServer;

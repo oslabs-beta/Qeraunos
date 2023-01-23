@@ -31,7 +31,7 @@ function clientNode(this: any, key: string, value: object) {
 }
 
 function clientDLL(freqCount: number) {
-  // stores frequency count to reference the correct key in frequency hashmap within qeraunos
+  // stores frequency count to reference the correct key in frequency hashmap within Qeraunos
   this.freqCount = freqCount;
   this.head = null;
   this.tail = null;
@@ -45,7 +45,7 @@ function clientDLL(freqCount: number) {
 //Search = O(1)
 //Setting = O(1)
 //Deleteing = O(1)
-const qeraunos = function (capacity: number) {
+const Qeraunos = function (capacity: number) {
   this.keys = {};
   this.frequency = {};
   this.capacity = capacity;
@@ -53,12 +53,12 @@ const qeraunos = function (capacity: number) {
   this.size = 0;
 };
 
-function qeraunosClient(capacity: number) {
-  this.cache = new (qeraunos as any)(capacity);
+function QeraunosClient(capacity: number) {
+  this.cache = new (Qeraunos as any)(capacity);
   localforage.setItem('Qeraunos', this.cache);
 }
 
-qeraunos.prototype.getIDB = async function () {
+Qeraunos.prototype.getIDB = async function () {
   await localforage.getItem('Qeraunos', (err: any, value: IDBType) => {
     if (!value) {
       return false;
@@ -72,7 +72,7 @@ qeraunos.prototype.getIDB = async function () {
   });
 };
 
-qeraunos.prototype.setIDB = async function () {
+Qeraunos.prototype.setIDB = async function () {
   const newCache = {
     keys: this.keys,
     frequency: this.frequency,
@@ -85,7 +85,7 @@ qeraunos.prototype.setIDB = async function () {
 
 // this function removes the tail of the DLL which is also the least recently used node
 //This is the LRU aspect of the LFU/LRU cache
-qeraunos.prototype.removeAtTail = function (
+Qeraunos.prototype.removeAtTail = function (
   DLL: ClientDLLType
 ): ClientNodeType {
   // delete the tail node from hashtable
@@ -107,7 +107,7 @@ qeraunos.prototype.removeAtTail = function (
 
 //If (key, value) doesn't exist in the cache, use this method to insert into cache
 // creates a frequency list if not already existing and inserts a new node into it
-qeraunos.prototype.addNode = function (key: string, value: object): void {
+Qeraunos.prototype.addNode = function (key: string, value: object): void {
   let node: ClientNodeType = new (clientNode as any)(key, value);
   // place node into hashtable
   this.keys[key] = node;
@@ -121,7 +121,7 @@ qeraunos.prototype.addNode = function (key: string, value: object): void {
 
 // inserts a new node at the head
 //freqList is needed so that we keep track of where this node is within this.frequency hashtable
-qeraunos.prototype.insertAtHead = function (
+Qeraunos.prototype.insertAtHead = function (
   newNode: ClientNodeType,
   freqList: ClientDLLType
 ): void {
@@ -141,7 +141,7 @@ qeraunos.prototype.insertAtHead = function (
 };
 
 // updates node when get is used and it's in the cache
-qeraunos.prototype.updateNode = function (node: ClientNodeType): void {
+Qeraunos.prototype.updateNode = function (node: ClientNodeType): void {
   let freq: number = node.freqCount;
   node.freqCount = freq + 1;
   // removes node from frequency list using helper function
@@ -160,7 +160,7 @@ qeraunos.prototype.updateNode = function (node: ClientNodeType): void {
 };
 
 // removes node from linked freq list
-qeraunos.prototype.removeNode = function (
+Qeraunos.prototype.removeNode = function (
   newNode: ClientNodeType,
   freqList: ClientDLLType
 ): void {
@@ -174,7 +174,7 @@ qeraunos.prototype.removeNode = function (
 };
 
 // O(1) get function to get node from key
-qeraunos.prototype.get = function (key: string): object {
+Qeraunos.prototype.get = function (key: string): object {
   if (!this.keys[key]) return undefined;
   // get, update, return the nodes value
   let node: ClientNodeType = this.keys[key];
@@ -184,7 +184,7 @@ qeraunos.prototype.get = function (key: string): object {
 };
 
 // O(1) set function to set new node
-qeraunos.prototype.set = function (
+Qeraunos.prototype.set = function (
   key: string,
   value: object
 ): ClientNodeType | void {
@@ -212,7 +212,7 @@ qeraunos.prototype.set = function (
 };
 
 //This flow function organizes all of the steps required
-qeraunosClient.prototype.query = async function (
+QeraunosClient.prototype.query = async function (
   queryString: string,
   graphqlEndpoint: string
 ) {
@@ -248,4 +248,4 @@ qeraunosClient.prototype.query = async function (
   }
 };
 
-module.exports = qeraunosClient;
+module.exports = QeraunosClient;

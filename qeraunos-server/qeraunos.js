@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var QeraunosCache = require('../../caching/qeraunos-server');
+var QeraunosCache = require('/qeraunos-server');
 var _a = require('graphql'), parse = _a.parse, graphql = _a.graphql;
 var redis = require('redis');
 // builds qeraunos middleware and binds functions

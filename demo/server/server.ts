@@ -12,6 +12,7 @@ const expressGraphQL = require('express-graphql').graphqlHTTP;
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
 // const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
 const qeraunos = new Qeraunos(schema);
+qeraunos.setSize(100);
 
 type ServerError = {
   log: string;

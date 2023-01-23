@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-const CachingAlgo = require('../../caching/qeraunos-server');
+const QeraunosCache = require('../../caching/qeraunos-server');
 const { parse, graphql } = require('graphql');
-const { query } = require('express');
 const redis = require('redis');
 
 // builds qeraunos middleware and binds functions
@@ -30,12 +29,13 @@ function Qeraunos(
       this.client.connect().then(() => {
         this.hasRedis = true;
       });
-    } else {
-      this.qeraunosCache = new CachingAlgo(100);
-    }
+    } 
   })();
 }
 
+Qeraunos.prototype.setSize = function(capacity:number = 1000){
+  this.qeraunosCache = new QeraunosCache(capacity);
+}
 // // GraphQL Parser to traverse AST and gather all info to create unique key for cache
 const graphqlParser = (schema: any, body: string) => {
   // this keeps a dictionary of all the fields in users schema as key and has its corresponding type as a value
