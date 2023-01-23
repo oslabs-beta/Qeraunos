@@ -1,19 +1,20 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
-import { useResponseTime } from '../useResponseTimeState.js';
+import { useResponseTimesClient } from '../../CustomHooks/useResponseTimeStateClient.js';
 
-function LineChart() {
+function LineChart2() {
   const labels = [];
-  const { responseTime } = useResponseTime();
-  for (let i = 0; i < responseTime.length; i++) {
+  const { responseTimesClient, setResponseTimesClient } =
+    useResponseTimesClient();
+  for (let i = 0; i < responseTimesClient.length; i++) {
     if (i === 0) {
       labels.push('');
     } else {
-      labels.push(responseTime[i].cached);
+      labels.push(responseTimesClient[i].cached);
     }
   }
-  const times = responseTime.map((e) => {
+  const times = responseTimesClient.map((e) => {
     return e.resTime;
   });
 
@@ -33,4 +34,4 @@ function LineChart() {
   return <Line data={chartResData} width={600} height={200} />;
 }
 
-export default LineChart;
+export default LineChart2;

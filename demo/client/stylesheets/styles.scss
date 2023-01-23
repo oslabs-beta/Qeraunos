@@ -32,6 +32,10 @@ h6 {
   color: $black;
 }
 
+.h1-white {
+  color: $white;
+}
+
 p {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
@@ -89,13 +93,35 @@ p {
 }
 .main-display {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
   padding: 15px;
+  h1 {
+    color: white;
+    text-align: center;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
 }
 
 //Sidebar Styling
+
+.dataVisualizer {
+  border: 1px solid $foreground;
+  border-radius: 10px;
+  padding: 50px;
+  margin: 15px;
+  flex-grow: 1;
+  min-width: 50%;
+  max-width: 50%;
+  min-height: 40vw;
+  box-shadow: $foreground 0px 2px 8px 0px;
+  background-color: $foreground;
+}
 
 .sidebar {
   border: 1px solid $foreground;
@@ -103,10 +129,12 @@ p {
   padding: 50px;
   margin: 15px;
   flex-grow: 0;
-  min-height: 40vw;
+  min-height: 40%;
+  max-height: 40%;
   box-shadow: $foreground 0px 2px 8px 0px;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   background-color: $foreground;
 }
@@ -135,15 +163,33 @@ p {
   }
 }
 
-.dataVisualizer {
-  border: 1px solid $foreground;
-  border-radius: 10px;
-  padding: 50px;
-  margin: 15px;
-  flex-grow: 1;
-  min-height: 40vw;
-  box-shadow: $foreground 0px 2px 8px 0px;
-  background-color: $foreground;
+.dropdown-op {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .dropdown {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+
+    select {
+      width: 100%;
+      padding: 10px;
+      font-family: 'Montserrat', sans-serif;
+    }
+  }
+  input {
+    padding: 10px;
+    width: 100%;
+  }
+  label {
+    margin-left: 10px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+  }
 }
 
 button {
@@ -217,7 +263,8 @@ button:active {
 
 .queryResult {
   height: 250px;
-  width: 300x;
+  max-width: 500px;
+  width: 100%;
   overflow-y: scroll;
   background-color: #484848;
   color: $white;
@@ -228,7 +275,8 @@ button:active {
   padding-left: 20px;
   padding-top: 20px;
   height: 140px;
-  width: 300x;
+  max-width: 500px;
+  width: 100%;
   background-color: #484848;
   color: $white;
   border-radius: 10px;
@@ -284,40 +332,52 @@ button:active {
   fill: #010e42;
 }
 
+//METRICS CONTAINER STYLING
+
 .metrics-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  margin: 15px;
 }
 .doughnut {
   display: flex;
   justify-content: center;
+  margin: 15px;
 }
 
 .numbers-container {
   display: flex;
   justify-content: space-evenly;
+  flex-direction: column;
+  margin: 15px;
+  margin-right: 50px;
 }
 
-.hit-rate {
-  font-size: 5rem;
-  display: flex;
-  justify-content: center;
-}
-
+.hit-rate,
+.miss,
 .hits {
-  font-size: 5rem;
-  display: flex;
-  justify-content: center;
-}
-
-.miss {
-  font-size: 5rem;
+  font-size: 1.5rem;
   display: flex;
   justify-content: center;
 }
 
 //BACKGROUND
 
+.root-div {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  // justify-content: space-evenly;
+  // align-content: center;
+}
+
+.star-field {
+  width: 100vh;
+  // display: grid;
+  // justify-content: space-evenly;
+  // align-content: center;
+  place-self: center;
+}
 #stars {
   width: 1px;
   height: 1px;

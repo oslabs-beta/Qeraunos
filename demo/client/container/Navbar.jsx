@@ -15,7 +15,16 @@ function Navbar(props) {
         <ul>
           <li>
             <NavLink activeClassName="active" to="/demo" value="Demo">
-              Demo
+              Demo Server
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              activeClassName="active"
+              to="/demo-client"
+              value="DemoClient"
+            >
+              Demo Client
             </NavLink>
           </li>
           <li>

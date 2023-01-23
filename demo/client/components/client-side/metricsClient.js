@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useResponseTime } from '../useResponseTimeState';
+import { useResponseTimesClient } from '../../CustomHooks/useResponseTimeStateClient';
 import { Doughnut } from 'react-chartjs-2';
-import '../stylesheets/styles.scss';
+import '../../stylesheets/styles.scss';
 
-const Metrics = () => {
-  const { responseTime } = useResponseTime();
+const MetricsClient = () => {
+  const { responseTimesClient, setResponseTimesClient } =
+    useResponseTimesClient();
   let count = 0;
-  const totalCache = responseTime.length - 1;
-  responseTime.forEach((obj) => {
+  const totalCache = responseTimesClient.length - 1;
+  responseTimesClient.forEach((obj) => {
     if (obj.cached === 'Cached') {
       count++;
     }
@@ -41,14 +42,17 @@ const Metrics = () => {
 
   return (
     <div className="metrics-container">
+      <h1>Cache Statistics</h1>
       <div className="numbers-container">
         <div className="hits">Cache Hits: {`${count}`}</div>
         <div className="miss">Cache Miss: {`${cacheMiss}`}</div>
         <div className="hit-rate">Hit Rate: {`${hitRate}%`}</div>
       </div>
-      <Doughnut className="doughnut" data={doughnutData} options={options} />
+      <div>
+        <Doughnut className="doughnut" data={doughnutData} options={options} />
+      </div>
     </div>
   );
 };
 
-export default Metrics;
+export default MetricsClient;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useResponseTime } from '../useResponseTimeState.js';
+import { useResponseTime } from '../../CustomHooks/useResponseTimeState.js';
 
 function Results() {
   const { responseTime } = useResponseTime();
