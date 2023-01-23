@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-const QeraunosCache = require('../../caching/qeraunos-server');
+const QeraunosCache = require('./qeraunos-server');
 const { parse, graphql } = require('graphql');
 const redis = require('redis');
 
