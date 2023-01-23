@@ -29,13 +29,13 @@ function Qeraunos(
       this.client.connect().then(() => {
         this.hasRedis = true;
       });
-    } 
+    }
   })();
 }
 
-Qeraunos.prototype.setSize = function(capacity:number = 1000){
+Qeraunos.prototype.setSize = function (capacity: number = 1000) {
   this.qeraunosCache = new QeraunosCache(capacity);
-}
+};
 // // GraphQL Parser to traverse AST and gather all info to create unique key for cache
 const graphqlParser = (schema: any, body: string) => {
   // this keeps a dictionary of all the fields in users schema as key and has its corresponding type as a value
@@ -187,4 +187,4 @@ Qeraunos.prototype.query = async function (
   }
 };
 
-module.exports = { Qeraunos };
+module.exports = Qeraunos;
