@@ -3,7 +3,7 @@ exports.__esModule = true;
 var express = require('express');
 var path = require('path');
 var schema = require('./schema/schema');
-var Qeraunos = require('./controllers/qeraunos').Qeraunos;
+var Qeraunos = require('@qeraunos/server').Qeraunos;
 var app = express();
 var PORT = 3000;
 require('dotenv').config();
@@ -12,6 +12,7 @@ var expressGraphQL = require('express-graphql').graphqlHTTP;
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
 // const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
 var qeraunos = new Qeraunos(schema);
+qeraunos.setSize(100);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', express.static(path.resolve(__dirname, '../client')));

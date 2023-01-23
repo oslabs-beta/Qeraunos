@@ -1,5 +1,5 @@
 import React from 'react';
-import Checkbox from '../components/checkbox2';
+import Checkbox from '../components/checkbox';
 import Mutation from '../components/mutation';
 import '../stylesheets/styles.scss';
 

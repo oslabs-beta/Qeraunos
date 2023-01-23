@@ -44,7 +44,7 @@ function clientNode(key, value) {
     this.freqCount = 1;
 }
 function clientDLL(freqCount) {
-    // stores frequency count to reference the correct key in frequency hashmap within qeraunos
+    // stores frequency count to reference the correct key in frequency hashmap within Qeraunos
     this.freqCount = freqCount;
     this.head = null;
     this.tail = null;
@@ -57,18 +57,18 @@ function clientDLL(freqCount) {
 //Search = O(1)
 //Setting = O(1)
 //Deleteing = O(1)
-var qeraunos = function (capacity) {
+var Qeraunos = function (capacity) {
     this.keys = {};
     this.frequency = {};
     this.capacity = capacity;
     this.minFrequency = 0;
     this.size = 0;
 };
-function qeraunosClient(capacity) {
-    this.cache = new qeraunos(capacity);
+function QeraunosClient(capacity) {
+    this.cache = new Qeraunos(capacity);
     localforage.setItem('Qeraunos', this.cache);
 }
-qeraunos.prototype.getIDB = function () {
+Qeraunos.prototype.getIDB = function () {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
@@ -92,7 +92,7 @@ qeraunos.prototype.getIDB = function () {
         });
     });
 };
-qeraunos.prototype.setIDB = function () {
+Qeraunos.prototype.setIDB = function () {
     return __awaiter(this, void 0, void 0, function () {
         var newCache;
         return __generator(this, function (_a) {
@@ -110,7 +110,7 @@ qeraunos.prototype.setIDB = function () {
 };
 // this function removes the tail of the DLL which is also the least recently used node
 //This is the LRU aspect of the LFU/LRU cache
-qeraunos.prototype.removeAtTail = function (DLL) {
+Qeraunos.prototype.removeAtTail = function (DLL) {
     // delete the tail node from hashtable
     var deleted = this.keys[DLL.tail.key];
     delete this.keys[DLL.tail.key];
@@ -130,7 +130,7 @@ qeraunos.prototype.removeAtTail = function (DLL) {
 };
 //If (key, value) doesn't exist in the cache, use this method to insert into cache
 // creates a frequency list if not already existing and inserts a new node into it
-qeraunos.prototype.addNode = function (key, value) {
+Qeraunos.prototype.addNode = function (key, value) {
     var node = new clientNode(key, value);
     // place node into hashtable
     this.keys[key] = node;
@@ -144,7 +144,7 @@ qeraunos.prototype.addNode = function (key, value) {
 };
 // inserts a new node at the head
 //freqList is needed so that we keep track of where this node is within this.frequency hashtable
-qeraunos.prototype.insertAtHead = function (newNode, freqList) {
+Qeraunos.prototype.insertAtHead = function (newNode, freqList) {
     var head = freqList.head;
     // if there are no nodes in freq list, head and tail of list are the new node
     if (head === null) {
@@ -160,7 +160,7 @@ qeraunos.prototype.insertAtHead = function (newNode, freqList) {
     freqList.head = newNode;
 };
 // updates node when get is used and it's in the cache
-qeraunos.prototype.updateNode = function (node) {
+Qeraunos.prototype.updateNode = function (node) {
     var freq = node.freqCount;
     node.freqCount = freq + 1;
     // removes node from frequency list using helper function
@@ -178,7 +178,7 @@ qeraunos.prototype.updateNode = function (node) {
     this.insertAtHead(node, this.frequency[node.freqCount]);
 };
 // removes node from linked freq list
-qeraunos.prototype.removeNode = function (newNode, freqList) {
+Qeraunos.prototype.removeNode = function (newNode, freqList) {
     var prev = newNode.prev;
     var next = newNode.next;
     if (prev)
@@ -192,7 +192,7 @@ qeraunos.prototype.removeNode = function (newNode, freqList) {
         freqList.tail = prev;
 };
 // O(1) get function to get node from key
-qeraunos.prototype.get = function (key) {
+Qeraunos.prototype.get = function (key) {
     if (!this.keys[key])
         return undefined;
     // get, update, return the nodes value
@@ -202,7 +202,7 @@ qeraunos.prototype.get = function (key) {
     return node.value;
 };
 // O(1) set function to set new node
-qeraunos.prototype.set = function (key, value) {
+Qeraunos.prototype.set = function (key, value) {
     // check if node is already in hashtable
     if (this.keys[key]) {
         var node = this.keys[key];
@@ -226,7 +226,7 @@ qeraunos.prototype.set = function (key, value) {
     }
 };
 //This flow function organizes all of the steps required
-qeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
+QeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
     return __awaiter(this, void 0, void 0, function () {
         var key, queryTimeObj, data, data;
         return __generator(this, function (_a) {
@@ -258,4 +258,4 @@ qeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
         });
     });
 };
-module.exports = qeraunos;
+module.exports = QeraunosClient;
