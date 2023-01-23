@@ -258,4 +258,4 @@ qeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
         });
     });
 };
-module.exports = qeraunos;
+module.exports = qeraunosClient;
