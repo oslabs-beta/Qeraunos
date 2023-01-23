@@ -1,0 +1,32 @@
+{
+  "name": "@qeraunos/client",
+  "version": "1.1.2",
+  "description": "lightweight client-side caching solution for GraphQL",
+  "main": "qeraunos-client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oslabs-beta/Qeraunos.git"
+  },
+  "keywords": [
+    "graphql",
+    "cache",
+    "lightweight",
+    "localforage",
+    "qeraunos",
+    "client-side",
+    "caching"
+  ],
+  "author": "Qeraunos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oslabs-beta/Qeraunos/issues"
+  },
+  "homepage": "https://github.com/oslabs-beta/Qeraunos#readme",
+  "dependencies": {
+    "axios": "^1.2.1",
+    "localforage": "^1.10.0"
+  }
+}
