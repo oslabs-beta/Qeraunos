@@ -44,7 +44,7 @@ function clientNode(key, value) {
     this.freqCount = 1;
 }
 function clientDLL(freqCount) {
-    // stores frequency count to reference the correct key in frequency hashmap within qeraunosClient
+    // stores frequency count to reference the correct key in frequency hashmap within qeraunos
     this.freqCount = freqCount;
     this.head = null;
     this.tail = null;
@@ -57,14 +57,18 @@ function clientDLL(freqCount) {
 //Search = O(1)
 //Setting = O(1)
 //Deleteing = O(1)
-var qeraunosClient = function (capacity) {
+var qeraunos = function (capacity) {
     this.keys = {};
     this.frequency = {};
     this.capacity = capacity;
     this.minFrequency = 0;
     this.size = 0;
 };
-qeraunosClient.prototype.getIDB = function () {
+function qeraunosClient(capacity) {
+    this.cache = new qeraunos(capacity);
+    localforage.setItem('Qeraunos', this.cache);
+}
+qeraunos.prototype.getIDB = function () {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
@@ -88,7 +92,7 @@ qeraunosClient.prototype.getIDB = function () {
         });
     });
 };
-qeraunosClient.prototype.setIDB = function () {
+qeraunos.prototype.setIDB = function () {
     return __awaiter(this, void 0, void 0, function () {
         var newCache;
         return __generator(this, function (_a) {
@@ -106,7 +110,7 @@ qeraunosClient.prototype.setIDB = function () {
 };
 // this function removes the tail of the DLL which is also the least recently used node
 //This is the LRU aspect of the LFU/LRU cache
-qeraunosClient.prototype.removeAtTail = function (DLL) {
+qeraunos.prototype.removeAtTail = function (DLL) {
     // delete the tail node from hashtable
     var deleted = this.keys[DLL.tail.key];
     delete this.keys[DLL.tail.key];
@@ -126,7 +130,7 @@ qeraunosClient.prototype.removeAtTail = function (DLL) {
 };
 //If (key, value) doesn't exist in the cache, use this method to insert into cache
 // creates a frequency list if not already existing and inserts a new node into it
-qeraunosClient.prototype.addNode = function (key, value) {
+qeraunos.prototype.addNode = function (key, value) {
     var node = new clientNode(key, value);
     // place node into hashtable
     this.keys[key] = node;
@@ -140,7 +144,7 @@ qeraunosClient.prototype.addNode = function (key, value) {
 };
 // inserts a new node at the head
 //freqList is needed so that we keep track of where this node is within this.frequency hashtable
-qeraunosClient.prototype.insertAtHead = function (newNode, freqList) {
+qeraunos.prototype.insertAtHead = function (newNode, freqList) {
     var head = freqList.head;
     // if there are no nodes in freq list, head and tail of list are the new node
     if (head === null) {
@@ -156,7 +160,7 @@ qeraunosClient.prototype.insertAtHead = function (newNode, freqList) {
     freqList.head = newNode;
 };
 // updates node when get is used and it's in the cache
-qeraunosClient.prototype.updateNode = function (node) {
+qeraunos.prototype.updateNode = function (node) {
     var freq = node.freqCount;
     node.freqCount = freq + 1;
     // removes node from frequency list using helper function
@@ -174,7 +178,7 @@ qeraunosClient.prototype.updateNode = function (node) {
     this.insertAtHead(node, this.frequency[node.freqCount]);
 };
 // removes node from linked freq list
-qeraunosClient.prototype.removeNode = function (newNode, freqList) {
+qeraunos.prototype.removeNode = function (newNode, freqList) {
     var prev = newNode.prev;
     var next = newNode.next;
     if (prev)
@@ -188,7 +192,7 @@ qeraunosClient.prototype.removeNode = function (newNode, freqList) {
         freqList.tail = prev;
 };
 // O(1) get function to get node from key
-qeraunosClient.prototype.get = function (key) {
+qeraunos.prototype.get = function (key) {
     if (!this.keys[key])
         return undefined;
     // get, update, return the nodes value
@@ -198,7 +202,7 @@ qeraunosClient.prototype.get = function (key) {
     return node.value;
 };
 // O(1) set function to set new node
-qeraunosClient.prototype.set = function (key, value) {
+qeraunos.prototype.set = function (key, value) {
     // check if node is already in hashtable
     if (this.keys[key]) {
         var node = this.keys[key];
@@ -222,7 +226,7 @@ qeraunosClient.prototype.set = function (key, value) {
     }
 };
 //This flow function organizes all of the steps required
-qeraunosClient.prototype.flow = function (queryString, graphqlEndpoint) {
+qeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
     return __awaiter(this, void 0, void 0, function () {
         var key, queryTimeObj, data, data;
         return __generator(this, function (_a) {
@@ -230,8 +234,8 @@ qeraunosClient.prototype.flow = function (queryString, graphqlEndpoint) {
                 case 0:
                     key = queryString.replace(/[^A-Z0-9]/gi, '');
                     //this will get a copy of the cache in IDB and set the current object to that copy of the full cache.
-                    this.getIDB();
-                    if (!!this.get(key)) return [3 /*break*/, 2];
+                    this.cache.getIDB();
+                    if (!!this.cache.get(key)) return [3 /*break*/, 2];
                     return [4 /*yield*/, axios({
                             url: graphqlEndpoint,
                             method: 'post',
@@ -242,16 +246,16 @@ qeraunosClient.prototype.flow = function (queryString, graphqlEndpoint) {
                 case 1:
                     queryTimeObj = _a.sent();
                     data = queryTimeObj.data.graphql.data;
-                    this.set(key, data);
+                    this.cache.set(key, data);
                     //This replaces the updated cache to IDB
-                    this.setIDB();
+                    this.cache.setIDB();
                     //return to the front end the response.
                     return [2 /*return*/, { data: data, response: 'Uncached' }];
                 case 2:
-                    data = this.get(key);
+                    data = this.cache.get(key);
                     return [2 /*return*/, { data: data, response: 'Cached' }];
             }
         });
     });
 };
-module.exports = qeraunosClient;
+module.exports = qeraunos;
