@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useResponseTime } from '../useResponseTimeState.js';
-import axios from 'axios';
 import '../stylesheets/styles.scss';
 
 //instructions to run client qeraunos caching.
-import localforage from 'localforage';
-import qeraunosClient from '../../caching/qeraunos-client';
+import qeraunosClient from '../../../qeraunos-client/qeraunos-client';
 
-const cache = new qeraunosClient(100);
-localforage.setItem('Qeraunos', cache);
+const qeraunos = new qeraunosClient(100);
 
 const Checkbox = () => {
   const { responseTime, setResponseTime } = useResponseTime();
@@ -31,8 +28,8 @@ const Checkbox = () => {
 
     //send the query string to qeraunos with endpoint
 
-    const queryTimeObj = await cache
-      .flow(queryString, 'http://localhost:8080/graphql')
+    const queryTimeObj = await qeraunos
+      .query(queryString, 'http://localhost:8080/graphql')
       .then(function (response) {
         console.log('RESPONSE: ', response);
         setqueryResult(JSON.stringify(response, null, 2));
