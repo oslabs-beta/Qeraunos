@@ -3,7 +3,7 @@ import { useResponseTime } from '../useResponseTimeState.js';
 import '../stylesheets/styles.scss';
 
 //instructions to run client qeraunos caching.
-import qeraunosClient from '../../../qeraunos-client/qeraunos-client';
+import qeraunosClient from '@qeraunos/client';
 
 const qeraunos = new qeraunosClient(100);
 
