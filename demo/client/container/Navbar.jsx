@@ -14,26 +14,38 @@ function Navbar(props) {
       <div>
         <ul>
           <li>
-            <NavLink to="/about" activeClassName="active" value="About">
+            <NavLink
+              to="/about"
+              value="About"
+              style={({ active }) => (active ? active : undefined)}
+            >
               About
             </NavLink>
           </li>
           <li>
-            <NavLink activeClassName="active" to="/demo" value="Demo">
+            <NavLink
+              to="/demo"
+              value="Demo"
+              style={({ active }) => (active ? active : undefined)}
+            >
               Demo Server
             </NavLink>
           </li>
           <li>
             <NavLink
-              activeClassName="active"
               to="/demo-client"
               value="DemoClient"
+              style={({ active }) => (active ? active : undefined)}
             >
               Demo Client
             </NavLink>
           </li>
           <li>
-            <NavLink to="/team" activeClassName="active" value="team">
+            <NavLink
+              to="/team"
+              value="team"
+              style={({ active }) => (active ? active : undefined)}
+            >
               Team
             </NavLink>
           </li>

@@ -27,8 +27,8 @@ const App = () => {
 
   const enterSite = () => {
     if (showNav === false) {
+      navigate('/about');
       setShowNav(true);
-      // navigate('/about');
     } else {
       setShowNav(false);
     }

@@ -13,9 +13,9 @@ function About() {
           Qeraunos is a custom built middleware cache based on a mix of LFU and
           LRU eviction policies that adds the ability to cache GraphQL queries
           and mutations. With Qeraunos you have the option to either implement
-          it utilizing client side or server side caching.{' '}
+          it utilizing client side or server side caching.
         </p>
-        <h2>How Qeraunos works</h2>
+        <h2>How it works</h2>
         <p>
           Qeraunos can be implemented on both the client side and server side,
           utilizing our custom caching algorithm to effectively store GraphQL
@@ -26,7 +26,7 @@ function About() {
           complexity of O(1) for insertion, deletion, and lookup. On the client
           side, we employed LocalForage to provide faster access and larger
           storage capacity alongside our algorithm to bring query speeds down to
-          under 1ms, an average decrease of around 99.8%. In fact, it’s so fast,
+          under 1ms, an average decrease of around 99.8%. In fact, it's so fast,
           we thought it was an error when we saw a response time of 0ms.
           However, at this time, client side caching does not support mutations.
         </p>
@@ -38,64 +38,75 @@ function About() {
           has the additional capability to cache mutations as well. With each
           mutation you make, every associated item in the cache will be updated
           with the new values from the mutation. Our custom key generator uses
-          GraphQL’s AST to parse through queries and join together data in a
+          GraphQL's AST to parse through queries and join together data in a
           meaningful way that allows for advanced queries such as mutations.
         </p>
         <p>
           Additionally, since Redis is a popular database to use for caching, we
           integrated full Redis compatibility in Qeraunos on the server side.
           However, if you do choose to use Redis to cache your GraphQL queries,
-          please take note that it’s not nearly as fast as ours since it clocks
+          please take note that it's not nearly as fast as ours since it clocks
           in at approximately 20ms, for an average decrease of around 96%. It
           does have the benefit of a larger storage space solution if you need
           to scale though.
         </p>
 
         <h2>Features</h2>
-        <p>
-          <ul>
-            <li>
-              Client Side caching abilities harnessing the power of IndexedDB
-              through Local Forage
-            </li>
-            <li>
-              Server Side caching abilities with our custom cache, or with the
-              option to add Redis to extend your server side caching capacity.{' '}
-            </li>
-            <li>Caching mutations on server-side caching. </li>
-            <li>Efficient design with O(1) insertion, deletion, and lookup</li>
-          </ul>
-        </p>
+        <ul>
+          <li>
+            Client side caching abilities harnessing the power of IndexedDB
+            through localForage
+          </li>
+          <li>
+            Server side caching abilities with our custom cache, or with the
+            option to add Redis to extend your server side caching capacity
+          </li>
+          <li>Caching mutations on server side</li>
+          <li>Efficient design with O(1) insertion, deletion, and lookup</li>
+        </ul>
+
         <h2>Installation Guide</h2>
         <h3>Server Side Caching Installation</h3>
         <ol>
           <li>
-            Run <code>npm i @qeraunos/server</code> in your terminal.
+            Install Qeraunos from npm <br />
+            <code>npm install @qeraunos/server</code>
           </li>
           <li>
-            Import Qeraunos into your express server file. It should look like
-            this:
+            Import Qeraunos into your server file. <br />
+            <code> const Qeraunos = require('@qeraunos/server');</code>
           </li>
           <li>
-            Create an instance of Qeraunos by inputting just your schema if
-            you’re not using redis. Below your instance, set what size you’d
-            want your cache to be by calling qeraunos.setSize(desired Number).
-            Skip step 4.
+            If not using Redis, create an instance of Qeraunos by inputting just
+            your schema if you're not using redis. Below your instance, set what
+            size you'd want your cache to be by calling qeraunos.setSize. Then
+            skip step 4. <br />
+            <code>
+              const qeraunos = new Qeraunos(schema); qeraunos.setSize(num);
+            </code>
           </li>
           <li>
-            If you want to use your redis database as your cache, create an
-            instance of qeraunos by passing in your schema, redis host, redis
-            port, and redis password respectively.
+            If using Redis, create an instance of qeraunos by passing in your
+            schema, redis host, redis port, and redis password respectively,
+            like below. <br />
+            <code>
+              const qeraunos = new Qeraunos(schema, RedisHost, RedisPort,
+              RedisPassword);
+            </code>
           </li>
           <li>
-            On your express server file for your graphql endpoint of “/graphql”,
-            simply put in qeraunos.query as your middleware and return
-            res.locals back to your front end.{' '}
+            On your server file for your graphQL endpoint of "/graphql", simply
+            put in qeraunos.query as your middleware and return res.locals back
+            to your front end like this. <br />
+            <code>
+              app.use&#40;'/graphql', qeraunos.query, &#40;req: Request, res:
+              Response &#41; =&gt; &#123; return
+              res.status(200).send(res.locals);&#125; &#41;
+            </code>
           </li>
           <li>
-            You’re set to go and you should find your response times drastically
-            reduced for cached queries. Enjoy impressing your fellow software
-            engineers with a cached implementation of GraphQL!
+            You're set to go and should find your query reponse times
+            drastically reduced for cached queries!
           </li>
         </ol>
 
@@ -134,10 +145,6 @@ function About() {
             To access the cache, open the console on your browser and navigate
             to Application -> Storage -> IndexedDB -> localforage ->
             keyvaluepairs.
-          </li>
-          <li>
-            You’re set to go and you should find your response times drastically
-            reduced for cached queries.
           </li>
         </ol>
       </div>
