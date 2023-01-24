@@ -15,6 +15,12 @@ function About() {
           and mutations. With Qeraunos you have the option to either implement
           it utilizing client side or server side caching.
         </p>
+        <p>
+          For more complete documentation see our
+          <a href="https://github.com/oslabs-beta/Qeraunos" target="blank">
+            &nbsp;Github.
+          </a>
+        </p>
         <h2>How it works</h2>
         <p>
           Qeraunos can be implemented on both the client side and server side,
