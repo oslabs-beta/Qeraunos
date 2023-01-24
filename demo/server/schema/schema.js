@@ -157,13 +157,6 @@ const RootMutation = new GraphQLObjectType({
         return prevProps.rows[0];
       },
     },
-    //   deletePerson: {
-    //     type: PersonType,
-    //     args: { id: { type: GraphQLInt } },
-    //     resolve: async (parent, args) => {
-    //
-    //     },
-    //   },
     updatePerson: {
       type: PersonType,
       args: {
@@ -231,61 +224,14 @@ const RootMutation = new GraphQLObjectType({
           height,
         ];
 
-        // const sqlSearch = `SELECT * FROM people WHERE _id = $1`;
-        // let prevProps = await db.query(sqlSearch, [args.id]);
-        // prevProps = prevProps.rows[0];
-        // console.log('prevProps', prevProps);
-        // const sqlQuery = `UPDATE people p
-        // SET name = COALESCE($2, $3), mass = COALESCE($4, $5),
-        // hair_color = COALESCE($6, $7),
-        // skin_color = COALESCE($8, $9),
-        // eye_color = COALESCE($10, $11),
-        // birth_year = COALESCE($12, $13),
-        // gender = COALESCE($14, $15),
-        // species_id = COALESCE($16, $17),
-        // homeworld_id = COALESCE($18, $19),
-        // height = COALESCE($20, $21)
-        // WHERE p._id = $1`;
-        // const arr = [
-        //   args.id,
-        //   args.name,
-        //   prevProps.name,
-        //   args.mass,
-        //   prevProps.mass,
-        //   args.hair_color,
-        //   prevProps.hair_color,
-        //   args.skin_color,
-        //   prevProps.skin_color,
-        //   args.eye_color,
-        //   prevProps.eye_color,
-        //   args.birth_year,
-        //   args.gender,
-        //   prevProps.gender,
-        //   args.species_id,
-        //   prevProps.species_id,
-        //   args.homeworld_id,
-        //   prevProps.homeworld_id,
-        //   args.height,
-        //   prevProps.height,
-        // ];
         const sqlQuery = `UPDATE people p
         SET name = $2, mass = $3, hair_color = $4, skin_color = $5, eye_color = $6, birth_year = $7, gender = $8, species_id = $9, homeworld_id = $10, height = $11
         WHERE p._id = $1`;
         await db.query(sqlQuery, arr);
         const data = await db.query(searchSQL, searchArr);
-        // console.log('======DATA ROWS=====', data.rows);
         return data.rows[0];
       },
     },
-    //   planet: {
-    //     type: PlanetType,
-    //     args: { id: { type: GraphQLInt } },
-    //     resolve: async (parents, args) => {
-    //       const sqlQuery = `SELECT * FROM planets WHERE _id=${args.id}`;
-    //       const data = await db.query(sqlQuery);
-    //       return data.rows[0];
-    //     },
-    //   },
   },
 });
 
