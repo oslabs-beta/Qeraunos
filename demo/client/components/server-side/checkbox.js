@@ -117,7 +117,7 @@ const Checkbox = () => {
       >
         Run Query
       </button>
-      <div>
+      <div className="queryResultContainer">
         <p>Query Results</p>
         <pre className="queryResult"> {queryResult}</pre>
       </div>
