@@ -1,0 +1,50 @@
+// navbar styling
+
+.nav {
+  background-color: inherit;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 2rem;
+  padding: 0 1rem;
+  margin-right: 50px;
+  box-shadow: rgba(197, 197, 198, 0.1) 0px 10px 10px -10px;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 18px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+
+    li.active {
+      text-decoration: underline;
+    }
+
+    li:hover {
+      background-color: #484848;
+    }
+  }
+
+  .active {
+    text-decoration: underline;
+  }
+}
+
+.nav-logo {
+  padding: 7px;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+}

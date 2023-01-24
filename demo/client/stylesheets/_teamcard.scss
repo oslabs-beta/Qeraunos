@@ -1,0 +1,48 @@
+//TEAM MEMBER CARD
+.team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.member-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 50px;
+  margin: 15px;
+  box-shadow: #f5f5f5 0px 2px 8px 0px;
+  background-color: inherit;
+  color: #f5f5f5;
+  h1,
+  h2,
+  h3,
+  p {
+    color: white;
+    text-align: center;
+  }
+  h1 {
+    margin-top: 50px;
+    font-size: 20px;
+  }
+  h2 {
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  h3 {
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+.member-pic {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: #f5f5f5 0px 2px 8px 0px;
+}
+
+.linkedin-icon {
+  fill: #010e42;
+}
