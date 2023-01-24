@@ -63,7 +63,7 @@ const Mutation = () => {
   return (
     <div>
       <p>Mutations</p>
-      <div>
+      <div className="queryVisualizer">
         <pre>{queryString}</pre>
       </div>
       <div className="dropdown-op">
@@ -116,7 +116,7 @@ const Mutation = () => {
         Run Mutation
       </button>
 
-      <div>
+      <div className="mutation-container">
         <p>Before Mutation:</p>
         <pre className="nameResult">{previewResult}</pre>
       </div>

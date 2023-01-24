@@ -1,9 +1,9 @@
 import React from 'react';
 import TeamMember from '../components/TeamMember';
-import TeamImage1 from '../resources/1.png';
-import TeamImage2 from '../resources/2.png';
-import TeamImage3 from '../resources/3.png';
-import TeamImage4 from '../resources/4.png';
+import ArthurHuynh from '../resources/ArthurHuynh.jpg';
+import DennisCheung from '../resources/DennisCheung.jpg';
+import JasonHwang from '../resources/JasonHwang.jpg';
+import AmritRamos from '../resources/AmritRamos.jpg';
 
 function UserCards() {
   const team = [
@@ -11,25 +11,25 @@ function UserCards() {
       name: 'Amrit Kaur Ramos',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/amrit-ramos-2103a879/',
-      image: TeamImage4,
+      image: AmritRamos,
     },
     {
       name: 'Arthur Huynh',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/arthurnhuynh/',
-      image: TeamImage2,
+      image: ArthurHuynh,
     },
     {
       name: 'Dennis Cheung',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/denniskhcheung/',
-      image: TeamImage3,
+      image: DennisCheung,
     },
     {
       name: 'Jason Hwang',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/jason-jh-hwang/',
-      image: TeamImage1,
+      image: JasonHwang,
     },
   ];
 
