@@ -228,14 +228,16 @@ Qeraunos.prototype.set = function (key, value) {
 //This flow function organizes all of the steps required
 QeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
     return __awaiter(this, void 0, void 0, function () {
-        var key, queryTimeObj, data, data;
+        var key, data, queryTimeObj;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     key = queryString.replace(/[^A-Z0-9]/gi, '');
                     //this will get a copy of the cache in IDB and set the current object to that copy of the full cache.
+                    console.log('Qeraunos:', Qeraunos);
                     this.cache.getIDB();
-                    if (!!this.cache.get(key)) return [3 /*break*/, 2];
+                    data = this.cache.get(key);
+                    if (!!data) return [3 /*break*/, 2];
                     return [4 /*yield*/, axios({
                             url: graphqlEndpoint,
                             method: 'post',
@@ -245,14 +247,19 @@ QeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
                         })];
                 case 1:
                     queryTimeObj = _a.sent();
+                    // From that response, we can then set the data in the cache copy.
                     data = queryTimeObj.data.data;
                     this.cache.set(key, data);
+                    console.log('CACHE @ set method:', this.cache);
                     //This replaces the updated cache to IDB
                     this.cache.setIDB();
+                    console.log('CACHE @ setIDB:', this.cache);
                     //return to the front end the response.
                     return [2 /*return*/, { data: data, response: 'Uncached' }];
                 case 2:
-                    data = this.cache.get(key);
+                    //will get the value from the cached item and send the response back to the front end.
+                    this.cache.setIDB();
+                    console.log('CACHED RESPONSE:', this.cache);
                     return [2 /*return*/, { data: data, response: 'Cached' }];
             }
         });
