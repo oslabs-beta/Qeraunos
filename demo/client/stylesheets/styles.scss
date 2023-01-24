@@ -2,7 +2,6 @@
 @import './background';
 @import './dataVisualizer';
 @import './navbar';
-@import './metrics';
 @import './teamcard';
 
 $black: #1f1f1f;
@@ -98,22 +97,6 @@ p {
   font-size: 20px;
   margin-top: 40px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-}
-.main-display {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
-  padding: 15px;
-  h1 {
-    color: white;
-    text-align: center;
-  }
-}
-
-.main {
-  display: flex;
-  flex-direction: row;
 }
 
 button {
