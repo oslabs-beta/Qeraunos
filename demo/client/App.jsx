@@ -23,11 +23,9 @@ import About from './pages/About';
 
 const App = () => {
   const [showNav, setShowNav] = useState(false);
-  const navigate = useNavigate();
 
   const enterSite = () => {
     if (showNav === false) {
-      navigate('/about');
       setShowNav(true);
     } else {
       setShowNav(false);
