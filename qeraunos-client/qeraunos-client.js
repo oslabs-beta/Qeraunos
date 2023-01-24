@@ -234,7 +234,6 @@ QeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
                 case 0:
                     key = queryString.replace(/[^A-Z0-9]/gi, '');
                     //this will get a copy of the cache in IDB and set the current object to that copy of the full cache.
-                    console.log('Qeraunos:', Qeraunos);
                     this.cache.getIDB();
                     data = this.cache.get(key);
                     if (!!data) return [3 /*break*/, 2];
@@ -250,16 +249,13 @@ QeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
                     // From that response, we can then set the data in the cache copy.
                     data = queryTimeObj.data.data;
                     this.cache.set(key, data);
-                    console.log('CACHE @ set method:', this.cache);
                     //This replaces the updated cache to IDB
                     this.cache.setIDB();
-                    console.log('CACHE @ setIDB:', this.cache);
                     //return to the front end the response.
                     return [2 /*return*/, { data: data, response: 'Uncached' }];
                 case 2:
                     //will get the value from the cached item and send the response back to the front end.
                     this.cache.setIDB();
-                    console.log('CACHED RESPONSE:', this.cache);
                     return [2 /*return*/, { data: data, response: 'Cached' }];
             }
         });
