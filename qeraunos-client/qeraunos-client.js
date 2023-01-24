@@ -245,7 +245,7 @@ QeraunosClient.prototype.query = function (queryString, graphqlEndpoint) {
                         })];
                 case 1:
                     queryTimeObj = _a.sent();
-                    data = queryTimeObj.data.graphql.data;
+                    data = queryTimeObj.data.data;
                     this.cache.set(key, data);
                     //This replaces the updated cache to IDB
                     this.cache.setIDB();

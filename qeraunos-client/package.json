@@ -1,6 +1,6 @@
 {
   "name": "@qeraunos/client",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "lightweight client-side caching solution for GraphQL",
   "main": "qeraunos-client.js",
   "scripts": {

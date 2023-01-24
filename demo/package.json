@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/oslabs-beta/Qeraunos#readme",
   "dependencies": {
-    "@qeraunos/client": "^1.1.4",
-    "@qeraunos/server": "^1.0.2",
+    "@qeraunos/client": "^1.1.5",
+    "@qeraunos/server": "^1.0.4",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",
     "axios": "^1.2.1",
