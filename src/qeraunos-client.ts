@@ -223,7 +223,8 @@ QeraunosClient.prototype.query = async function (
   this.cache.getIDB();
 
   //Reviews the cache to see if the item is in cache. If it is not it will then send the request to GraphQL to get the value.
-  if (!this.cache.get(key)) {
+  let data = this.cache.get(key);
+  if (!data) {
     const queryTimeObj = await axios({
       url: graphqlEndpoint,
       method: 'post',
@@ -232,7 +233,7 @@ QeraunosClient.prototype.query = async function (
       },
     });
     // From that response, we can then set the data in the cache copy.
-    const data = queryTimeObj.data.data;
+    data = queryTimeObj.data.data;
 
     this.cache.set(key, data);
 
@@ -243,7 +244,7 @@ QeraunosClient.prototype.query = async function (
     return { data, response: 'Uncached' };
   } else {
     //will get the value from the cached item and send the response back to the front end.
-    const data = this.cache.get(key);
+    this.cache.setIDB();
     return { data, response: 'Cached' };
   }
 };
