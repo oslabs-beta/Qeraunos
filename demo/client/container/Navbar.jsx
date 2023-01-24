@@ -14,6 +14,11 @@ function Navbar(props) {
       <div>
         <ul>
           <li>
+            <NavLink to="/about" activeClassName="active" value="About">
+              About
+            </NavLink>
+          </li>
+          <li>
             <NavLink activeClassName="active" to="/demo" value="Demo">
               Demo Server
             </NavLink>
@@ -30,15 +35,6 @@ function Navbar(props) {
           <li>
             <NavLink to="/team" activeClassName="active" value="team">
               Team
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/installation"
-              activeClassName="active"
-              value="installation"
-            >
-              Installation
             </NavLink>
           </li>
         </ul>

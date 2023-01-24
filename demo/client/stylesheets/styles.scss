@@ -3,6 +3,7 @@
 @import './dataVisualizer';
 @import './navbar';
 @import './teamcard';
+@import './installation';
 
 $black: #1f1f1f;
 $light-grey: #b0b0b0;
@@ -43,9 +44,11 @@ h6 {
   color: black;
 }
 
-p {
+p,
+li {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
+  padding: 5px;
 }
 
 .container {
