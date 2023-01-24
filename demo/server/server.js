@@ -3,19 +3,24 @@ exports.__esModule = true;
 var express = require('express');
 var path = require('path');
 var schema = require('./schema/schema');
-var Qeraunos = require('@qeraunos/server');
+var Qeraunos = require('./qeraunos.js');
 var app = express();
 var PORT = 3000;
 require('dotenv').config();
-var redis = require('redis');
 var expressGraphQL = require('express-graphql').graphqlHTTP;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/', express.static(path.resolve(__dirname, '../client')));
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
 // const qeraunos = new Qeraunos(schema, '127.0.0.1', '6379');
 var qeraunos = new Qeraunos(schema);
 qeraunos.setSize(100);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/', express.static(path.resolve(__dirname, '../client')));
+// setInterval(() => {
+//   qeraunos = new Qeraunos(schema); 
+//   qeraunos.setSize(100)
+//   console.log("this is hitting every 10 seconds")
+//   console.log('This is new qeraunos instance', qeraunos.qeraunosCache)
+// }, 10*1000)
 app.use('/graphql', qeraunos.query, function (req, res) {
     return res.status(200).send(res.locals);
 });
@@ -26,6 +31,9 @@ expressGraphQL({
     schema: schema,
     graphiql: true
 }));
+// // deletes cache and spins up a new instance
+// app.use('/clearCache', qeraunos.query, (req: Request, res: Response) => {
+// });
 // 404 error handler
 app.use(function (req, res) {
     console.error('Server.js 404');
