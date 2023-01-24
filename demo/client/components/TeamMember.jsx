@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as Linkedin } from '../resources/linkedin-icon.svg';
+import { ReactComponent as Linkedin } from '../resources/icons/linkedin-icon.svg';
 
 function TeamMember(props) {
   const { name, title, linkedIn, image } = props;
