@@ -11,7 +11,7 @@ Qeraunos is a custom built middleware cache based on a mix of LFU and LRU evicti
 - Caching mutations on server side
 - Efficient design with O(1) insertion, deletion, and lookup
 
-See more complete documentation at https://qeraunos.com and https://github.com/oslabs-beta/Qeraunos.
+For more complete documentation see https://qeraunos.com and https://github.com/oslabs-beta/Qeraunos.
 
 ## Prerequisites
 

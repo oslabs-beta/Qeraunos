@@ -145,11 +145,62 @@ const qeraunos = new qeraunosClient(size);
 - Axios
 
 ## Roadmap
+**Upcoming planned features for Client Side Caching:**
+- Improving efficiency of caching system so that values of database are more dynamically stored. Right now, each specific query is its own key, even when id is the same. 
+- Ability to cache mutations
+
+**Upcoming planned features for Server Side Caching:**
+- Current mutation queries require a comma at the end of each listed field in order to update the cached queries. Need to clean up the key parser to remove this requirement
+- Need to persist standard caching database. Currently, data is wiped out when server is killed
+- Resolve N+1 graphql query problem. Calling a query with multiple fields that are object types leads to too many queries to the database from the server
+- Improve efficiency of caching system so that values of database are more dynamically stored. Currently, each specific query is its own key even when id is the same
+- Query parser doesn’t account for fragments, alias, operation name, or directives 
+- Cache only works for POST requests and needs to account for GraphQL GET requests too
+- Improve caching algorithm to remove items that have been in the cache too long if their frequency is overly large
 
 ## Contributing
 
+We are constantly trying to improve our code so we actively welcome all pull requests! If you're interested, please follow the steps below. 
+1. Fork Qeraunos
+2. Pull down our dev branch with command 
+```
+git pull origin dev
+```
+3. Create your own Feature Branch with the command 
+```
+git checkout -b <yourFeatureName>
+```
+4. Add your changes with the command 
+```
+git add .
+```
+5. Stage and commit your changes with the command 
+```
+git commit -m "<your comment>"
+```
+6. Merge your branch with the dev branch locally with the command 
+```
+git merge dev
+```
+7. Resolve any merge conflicts
+8. Push up your branch with the command 
+```
+git push origin <your feature branch name>
+```
+9. Open a pull request
+10. Don't forget to star this repo! We look forward to your contributions!
+
 ## License
+
+Distributed under the MIT License. See LICENSE.txt for more information.
 
 ## Contact
 
+Visit our [website](https://qeraunos.com) to contact the team!
+
 ## Author
+
+- Amrit Ramos
+- Arthur Huynh
+- Dennis Cheung
+- Jason Hwang
