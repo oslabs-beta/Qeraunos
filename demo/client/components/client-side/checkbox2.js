@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useResponseTime } from '../useResponseTimeState.js';
-import axios from 'axios';
-import '../stylesheets/styles.scss';
+import { useResponseTimesClient } from '../../CustomHooks/useResponseTimeStateClient';
+import '../../stylesheets/styles.scss';
+
+//instructions to run client qeraunos caching.
+import qeraunosClient from '@qeraunos/client';
+
+const qeraunos = new qeraunosClient(100);
 
 const Checkbox = () => {
-  const { responseTime, setResponseTime } = useResponseTime();
+  const { responseTimesClient, setResponseTimesClient } =
+    useResponseTimesClient();
   const [queryString, setQueryString] = useState('');
   const [queryResult, setqueryResult] = useState('');
   const [_id, set_id] = useState(true);
@@ -20,28 +25,21 @@ const Checkbox = () => {
   }, [_id, name, mass, hair_color]);
 
   const setTime = async () => {
-    console.log(queryString);
     const startTime = Date.now();
 
-    const queryTimeObj = await axios({
-      url: 'http://localhost:8080/graphql',
-      method: 'post',
-      data: {
-        query: queryString,
-      },
-    })
+    //send the query string to qeraunos with endpoint
+
+    const queryTimeObj = await qeraunos
+      .query(queryString, 'http://localhost:8080/graphql-front')
       .then(function (response) {
-        console.log('RESPONSE', response);
-        setqueryResult(
-          JSON.stringify(response.data.graphql.data.people, null, 2)
-        );
+        setqueryResult(JSON.stringify(response, null, 2));
 
         const obj = {
-          ...responseTime[responseTime.length - 1],
-          cached: response.data.response,
+          ...responseTimesClient[responseTimesClient.length - 1],
+          cached: response.response,
           resTime: Date.now() - startTime,
         };
-        if (response.data.response === 'Cached') {
+        if (response.response === 'Cached') {
           obj.lastCached = obj.resTime;
         } else {
           obj.lastUncached = obj.resTime;
@@ -52,70 +50,66 @@ const Checkbox = () => {
         console.log(error);
       });
 
-    // console.log(testQueryTime);
-    // const newResponseTime = testQueryTime - startTime;
-    // console.log(newResponseTime);
-    setResponseTime([...responseTime, queryTimeObj]);
-    // console.log(responseTime);
+    setResponseTimesClient([...responseTimesClient, queryTimeObj]);
   };
 
   return (
-    <div className='checkboxContainer'>
-      <div className='cb-header'>
+    <div className="checkboxContainer">
+      <div className="cb-header">
         <h3>Request to 'People'</h3>
         <p>Select the fields you want to query:</p>
-        <div className='checkbox'>
+        <div className="checkbox">
           <input
-            type='checkbox'
-            id='_id'
-            name='_id'
-            value='_id'
+            type="checkbox"
+            id="_id"
+            name="_id"
+            value="_id"
             checked={_id}
             onChange={() => (_id ? set_id(false) : set_id(true))}
           />
-          <label htmlFor='_id'> ID</label>
+          <label htmlFor="_id"> ID</label>
         </div>
-        <div className='checkbox'>
+        <div className="checkbox">
           <input
-            type='checkbox'
-            id='name'
-            name='name'
-            value='name'
+            type="checkbox"
+            id="name"
+            name="name"
+            value="name"
             checked={name}
             onChange={() => (name ? setName(false) : setName(true))}
           />
-          <label htmlFor='name'> Name</label>
+          <label htmlFor="name"> Name</label>
         </div>
-        <div className='checkbox'>
+        <div className="checkbox">
           <input
-            type='checkbox'
-            id='mass'
-            name='mass'
-            value='mass'
+            type="checkbox"
+            id="mass"
+            name="mass"
+            value="mass"
             checked={mass}
             onChange={() => (mass ? setMass(false) : setMass(true))}
           />
-          <label htmlFor='mass'> Mass</label>
+          <label htmlFor="mass"> Mass</label>
         </div>
-        <div className='checkbox'>
+        <div className="checkbox">
           <input
-            type='checkbox'
-            id='hair_color'
-            name='hair_color'
-            value='hair_color'
+            type="checkbox"
+            id="hair_color"
+            name="hair_color"
+            value="hair_color"
             checked={hair_color}
             onChange={() =>
               hair_color ? setHair_color(false) : setHair_color(true)
             }
           />
-          <label htmlFor='hair_color'> Hair Color</label>
+          <label htmlFor="hair_color"> Hair Color</label>
         </div>
       </div>
       <div>
         <pre>{queryString}</pre>
       </div>
       <button
-        id='cb-button'
+        id="cb-button"
         onClick={(e) => {
           setTime();
         }}
@@ -124,7 +118,7 @@ const Checkbox = () => {
       </button>
       <div>
         <p>Query Results</p>
-        <pre className='queryResult'> {queryResult}</pre>
+        <pre className="queryResult"> {queryResult}</pre>
       </div>
     </div>
   );

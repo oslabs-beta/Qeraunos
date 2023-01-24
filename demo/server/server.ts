@@ -2,7 +2,7 @@ const express = require('express');
 import { Request, Response, NextFunction } from 'express';
 const path = require('path');
 const schema = require('./schema/schema');
-const {Qeraunos} = require('@qeraunos/server');
+const Qeraunos = require('@qeraunos/server');
 const app = express();
 const PORT = 3000;
 require('dotenv').config();

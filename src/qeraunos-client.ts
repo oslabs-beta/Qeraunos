@@ -232,7 +232,7 @@ QeraunosClient.prototype.query = async function (
       },
     });
     // From that response, we can then set the data in the cache copy.
-    const data = queryTimeObj.data.graphql.data;
+    const data = queryTimeObj.data.data;
 
     this.cache.set(key, data);
 
