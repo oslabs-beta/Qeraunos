@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../container/Sidebar';
-import DataVisualizer from '../container/dataVisualizerServer';
+import DataVisualizer from '../container/DataVisualizerServer';
 
 function Demo() {
   return (
