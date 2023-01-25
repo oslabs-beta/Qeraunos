@@ -6,8 +6,10 @@
   "scripts": {
     "start": "NODE_ENV=production nodemon ./server/server.js",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot --progress --color \" \"nodemon ./server/server.js\"",
-    "build": "NODE_ENV=production webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "NODE_ENV=production webpack --config ./webpack.config.js",
+    "dev:hot": "NODE_ENV=development nodemon ./server/server.js & webpack-dev-server --open --hot",
+    "docker-dev:hot": "docker-compose -f docker-compose-dev-hot.yml up",
+    "test": "NODE_ENV=test jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -70,6 +72,7 @@
     "@types/react-dom": "^17.0.11",
     "babel-loader": "^9.1.0",
     "css-loader": "^6.7.2",
+    "jest": "^29.4.0",
     "sass": "^1.56.1",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
