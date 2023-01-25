@@ -19,6 +19,9 @@ qeraunos.setSize(100);
 app.use('/graphql', qeraunos.query, function (req, res) {
     return res.status(200).send(res.locals);
 });
+app.use('/clearCache', qeraunos.setSize(100), function (req, res) {
+    return res.status(200).send("cleared");
+});
 app.use('/graphql-front', 
 //Queranos.checkCache --> if found return res.status(200).send(res.data)
 //if not found --> explicitly call from DB and cache from there

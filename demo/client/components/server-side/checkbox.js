@@ -54,6 +54,13 @@ const Checkbox = () => {
     setResponseTime([...responseTime, queryTimeObj]);
   };
 
+  // const resetCache = async() => {
+  //   await axios({
+  //     url: 'http://qeraunos.com/clearCache',
+  //     method: 'get',
+  //   }).then((res)=> console.log(res))
+  // }
+
   return (
     <div className='checkboxContainer'>
       <div className='cb-header'>
@@ -117,6 +124,11 @@ const Checkbox = () => {
       >
         Run Query
       </button>
+      {/* <button
+      id='clear-button'
+      onClick={(e) => {
+        resetCache();
+      }}>Clear Cache</button> */}
       <div className='queryResultContainer'>
         <p>Query Results</p>
         <pre className='queryResult'> {queryResult}</pre>

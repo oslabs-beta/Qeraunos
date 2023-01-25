@@ -28,6 +28,10 @@ app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
   return res.status(200).send(res.locals);
 });
 
+app.use('/clearCache', qeraunos.setSize(100), (req: Request, res: Response) => {
+  return res.status(200).send("cleared");
+})
+
 app.use(
   '/graphql-front',
   //Queranos.checkCache --> if found return res.status(200).send(res.data)
