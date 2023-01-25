@@ -20,7 +20,6 @@ const Checkbox = () => {
   }, [_id, name, mass, hair_color]);
 
   const setTime = async () => {
-    console.log(queryString);
     const startTime = Date.now();
 
     const queryTimeObj = await axios({
@@ -31,7 +30,6 @@ const Checkbox = () => {
       },
     })
       .then(function (response) {
-        console.log('RESPONSE', response);
         setqueryResult(
           JSON.stringify(response.data.graphql.data.people, null, 2)
         );
@@ -49,7 +47,7 @@ const Checkbox = () => {
         return obj;
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
       });
     setResponseTime([...responseTime, queryTimeObj]);
   };
