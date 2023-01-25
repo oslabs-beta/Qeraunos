@@ -30,7 +30,7 @@ const Checkbox = () => {
     //send the query string to qeraunos with endpoint
 
     const queryTimeObj = await qeraunos
-      .query(queryString, 'http://localhost:8080/graphql-front')
+      .query(queryString, 'http://localhost:3000/graphql-front')
       .then(function (response) {
         setqueryResult(JSON.stringify(response, null, 2));
 
