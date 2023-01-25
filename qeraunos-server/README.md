@@ -1,12 +1,9 @@
 # Qeraunos Server Side Caching
 
-1. [Overview](#overview)
-2. [How it works](#how-it-works)
-3. [Demo](#demo)
-4. [Prerequisites](#prerequisites)
-5. [Getting Started](#getting-started)
-6. [Contributing](#contributing)
-7. [Authors](#author)
+1. [Prerequisites](#prerequisites)
+2. [Getting Started](#getting-started)
+3. [Contributing](#contributing)
+4. [Authors](#authors)
 
 Qeraunos, a lightweight GraphQL caching algorithm to meet your GraphQL caching needs.
 
