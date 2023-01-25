@@ -15,7 +15,7 @@ Qeraunos is a custom built middleware cache based on a mix of LFU and LRU evicti
 - Caching mutations on server side
 - Efficient design with O(1) insertion, deletion, and lookup
 
-For more complete documentation see http://qeraunos.com and https://github.com/oslabs-beta/Qeraunos.
+For more complete documentation see our [website](http://qeraunos.com) and our [GitHub](https://github.com/oslabs-beta/Qeraunos).
 
 ## Prerequisites
 
@@ -28,35 +28,44 @@ For more complete documentation see http://qeraunos.com and https://github.com/o
 **Server Side Caching Installation**
 
 1. Install Qeraunos from npm.
-   ```
+   ```js
    npm install @qeraunos/server
    ```
 2. Import Qeraunos into your server file.
-   ```
+   ```js
    const Qeraunos = require('@qeraunos/server');
    ```
-3. If not using Redis, create an instance of Qeraunos by inputting just your schema if you're not using redis. Below your instance, set what size you'd want your cache to be by calling qeraunos.setSize. Then skip step 4.
+3. Import all your GraphQL schemas into one file like so.
 
+   ```js
+   const schema = require('./schema/schema');
    ```
+
+4. If not using Redis, create an instance of Qeraunos by inputting just your schema if you're not using redis. Below your instance, set what size you'd want your cache to be by calling qeraunos.setSize. Then skip step 4.
+
+   ```js
    const qeraunos = new Qeraunos(schema);
    qeraunos.setSize(num);
    ```
 
-4. If using Redis, create an instance of qeraunos by passing in your schema, redis host, redis port, and redis password respectively, like below.
+5. If using Redis, create an instance of qeraunos by passing in your schema, redis host, redis port, and redis password respectively, like below.
 
-   ```
+   ```js
    const qeraunos = new Qeraunos(schema, RedisHost, RedisPort, RedisPassword);
    ```
 
-5. On your server file for your graphQL endpoint of "/graphql", simply put in qeraunos.query as your middleware and return res.locals back to your front end like this.
+6. On your server file for your graphQL endpoint of "/graphql", simply put in qeraunos.query as your middleware and return res.locals back to your front end like this.
 
-   ```
+   ```js
    app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
      return res.status(200).send(res.locals);
-     });
+   });
    ```
 
-6. You're set to go and should find your query reponse times drastically reduced for cached queries!
+7. Overall, your server file might look something like this.
+<p align="left"><img src="./resources/server-file-ex.png" width="500"/></p>
+
+8. You're set to go and should find your query response times drastically reduced for cached queries!
 
 ## Contributing
 
@@ -68,7 +77,7 @@ Qeraunos is [MIT-licensed](https://github.com/oslabs-beta/Qeraunos/blob/dev/LICE
 
 ## Authors
 
-- Amrit Ramos |
+- Amrit Ramos
 - Arthur Huynh
 - Dennis Cheung
 - Jason Hwang
