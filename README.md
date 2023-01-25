@@ -39,6 +39,7 @@ Please visit our website [Qeraunos](https://qeraunos.com) to see a demonstration
 After entering our site, you will be met with our server side demonstration with the ability to run GraphQL queries and mutations with our interactive sidebar utilizing the Star Wars API.
 
 **Server-Side Queries**
+
 Select the fields you would like to query and a preview of the GraphQL query will be shown below. 
 
 Click the “Run Query” button to see the GraphQL query result. The metrics on the right will show the uncached response time populated on the graph and a cache hit/miss result will be logged to the statistics below. A cache miss will be logged the first time a unique query is run indicating that the query was not found in our cache and will be stored. 
@@ -46,6 +47,7 @@ Click the “Run Query” button to see the GraphQL query result. The metrics on
 If the “Run Query” button is pressed again with the same query, you will notice that the response time has been lowered dramatically as we have a cache hit, indicating that the query data was stored in our cache instead of having to query our database.
 
 **Server-Side Mutations**
+
 To mutate data stored in our cache and database, select a name and property to mutate and input the updated data. Our responsive string builder will format the request into a GraphQL mutation request.
 
 Click on “Run Mutation” to send the request for our database and cache to be updated. The data before and after the mutation will be shown below.
@@ -53,6 +55,7 @@ Click on “Run Mutation” to send the request for our database and cache to be
 To test if the mutated data is stored in our cache, simply run a query with the mutated property selected to see the updated data in our cache.
 
 **Client-side Queries**
+
 While our client-side demonstration looks identical to the server-side, it utilizes LocalForage and IndexedDB to retrieve data even faster! Simply click on the Demo Client tab to get started.
 
 Select the fields you would like to query and a preview of the GraphQL query will be shown below. 
@@ -200,7 +203,7 @@ Visit our [website](https://qeraunos.com) to contact the team!
 
 ## Author
 
-- Amrit Ramos
-- Arthur Huynh
-- Dennis Cheung
-- Jason Hwang
+- Amrit Ramos | [Github](https://github.com/amritvela) | [LinkedIn](https://www.linkedin.com/in/amrit-ramos-2103a879/)
+- Arthur Huynh | [Github](https://github.com/arthurynh) | [LinkedIn](https://www.linkedin.com/in/arthurnhuynh/)
+- Dennis Cheung | [Github](https://github.com/Dennis-JS) | [LinkedIn](https://www.linkedin.com/in/denniskhcheung/)
+- Jason Hwang | [Github](https://github.com/hwangja1019) | [LinkedIn](https://www.linkedin.com/in/jason-jh-hwang/)
