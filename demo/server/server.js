@@ -11,7 +11,7 @@ require('dotenv').config();
 var expressGraphQL = require('express-graphql').graphqlHTTP;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/', express.static(path.resolve(__dirname, '../client')));
+app.use('/', express.static(path.resolve(__dirname, '../build')));
 //pass in graphQL schema (mandatory) as well as Redis acct info (optional if you want to use Redis)
 // const qeraunos = new Qeraunos(schema, RedisHost, RedisPort, RedisPassword);
 var qeraunos = new Qeraunos(schema);
