@@ -9,9 +9,13 @@ import MetricsClient from '../components/client-side/metricsClient';
 const DataVisualizer2 = () => {
   return (
     <div className="dataVisualizer">
-      <LineChart2 />
-      <ResultsClient />
-      <MetricsClient />
+      <div>
+        <LineChart2 />
+      </div>
+      <div className="dataVisualizer-bottom">
+        <ResultsClient />
+        <MetricsClient />
+      </div>
     </div>
   );
 };

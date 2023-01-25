@@ -19,7 +19,7 @@ import Home from './pages/Home';
 import DemoClient from './pages/DemoClient';
 import Team from './pages/Team';
 import Navbar from './container/Navbar';
-import Installation from './pages/Installation';
+import About from './pages/About';
 
 const App = () => {
   const [showNav, setShowNav] = useState(false);
@@ -27,7 +27,6 @@ const App = () => {
   const enterSite = () => {
     if (showNav === false) {
       setShowNav(true);
-      useNavigate('/demo-server');
     } else {
       setShowNav(false);
     }
@@ -55,10 +54,10 @@ const App = () => {
                 />
               }
             />
+            <Route path="/about" element={<About />} />
             <Route path="/demo" element={<Demo />} />
             <Route path="/demo-client" element={<DemoClient />} />
             <Route path="/team" element={<Team />} />
-            <Route path="/installation" element={<Installation />} />
           </Routes>
         </div>
       </div>

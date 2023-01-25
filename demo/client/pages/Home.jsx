@@ -20,7 +20,7 @@ function Home(props) {
           className="home-btn"
           onClick={(e) => {
             enterSite();
-            navigate('/demo');
+            navigate('/about');
           }}
         >
           Enter

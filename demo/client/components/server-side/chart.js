@@ -30,7 +30,12 @@ function LineChart() {
       },
     ],
   };
-  return <Line data={chartResData} width={600} height={200} />;
+  return (
+    <div className="wrap-container">
+      <h2>Response Time Graph</h2>
+      <Line data={chartResData} width={600} height={200} />
+    </div>
+  );
 }
 
 export default LineChart;
