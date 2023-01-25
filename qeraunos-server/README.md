@@ -1,4 +1,12 @@
-# Qeraunos
+# Qeraunos Server Side Caching
+
+1. [Overview](#overview)
+2. [How it works](#how-it-works)
+3. [Demo](#demo)
+4. [Prerequisites](#prerequisites)
+5. [Getting Started](#getting-started)
+6. [Contributing](#contributing)
+7. [Authors](#author)
 
 Qeraunos, a lightweight GraphQL caching algorithm to meet your GraphQL caching needs.
 
@@ -6,7 +14,6 @@ Qeraunos is a custom built middleware cache based on a mix of LFU and LRU evicti
 
 **Features**
 
-- Client side caching abilities harnessing the power of IndexedDB through localForage
 - Server side caching abilities with our custom cache, or with the option to add Redis to extend your server side caching capacity
 - Caching mutations on server side
 - Efficient design with O(1) insertion, deletion, and lookup

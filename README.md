@@ -2,7 +2,7 @@
 
 <h2 align="center"> Qeraunos, a lightweight GraphQL caching algorithm to meet your GraphQL caching needs. </h2>
 
-<h3 align="center"> <a>View Demo</a></h3>
+<h3 align="center"> <a href="https://qeraunos.com" target="__blank">View Demo</a></h3>
 
 # **Table of Contents**
 
