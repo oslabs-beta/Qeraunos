@@ -24,7 +24,7 @@ const Checkbox = () => {
     const startTime = Date.now();
 
     const queryTimeObj = await axios({
-      url: 'http://localhost:3000/graphql',
+      url: 'http://qeraunos.com/graphql',
       method: 'post',
       data: {
         query: queryString,
