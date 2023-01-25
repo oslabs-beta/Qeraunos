@@ -47,7 +47,7 @@ const Checkbox = () => {
         return obj;
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
       });
 
     setResponseTimesClient([...responseTimesClient, queryTimeObj]);
