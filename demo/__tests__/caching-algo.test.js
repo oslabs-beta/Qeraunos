@@ -1,10 +1,10 @@
-const LfuCache = require('../caching/LFU-caching2');
+const QeraunosServer = require('../server/qeraunos-server');
 
 describe('LFU caching test', () => {
   let newLFU;
 
   beforeEach((done) => {
-    newLFU = new LfuCache(3);
+    newLFU = new QeraunosServer(3);
     done();
   });
 
