@@ -39,7 +39,7 @@ Additionally, since Redis is a popular database to use for caching, we integrate
 
 # Demo
 
-Please visit our website [Qeraunos](https://qeraunos.com) to see a demonstration of how our client-side and server-side caching works.
+Feel free to visit our website [Qeraunos](https://qeraunos.com) to get an interactive demonstration of how our client-side and server-side caching works.
 
 After entering our site, you will be met with our server side demonstration with the ability to run GraphQL queries and mutations with our interactive sidebar utilizing the Star Wars API.
 
@@ -81,33 +81,35 @@ While our client-side demonstration looks identical to the server-side, it utili
 
 ## **Client Side Caching Installation**
 
-1. Install Qeraunos from npm
+1. Install Qeraunos from npm.
 
-```js
-npm install @qeraunos/client
-```
+    ```js
+    npm install @qeraunos/client
+    ```
 
-2. Import QeraunosClient from ‘@qeraunos/client’ within a component that will be requiring a cache
+2. Import QeraunosClient from ‘@qeraunos/client’ within a component that will be requiring a cache.
 
-```js
-import qeraunosClient from '@qeraunos/client';
-```
+    ```js
+    import qeraunosClient from '@qeraunos/client';
+    ```
 
-3. Declare a new instance of QeraunosClient passing in the desired size of the cache as a number
+3. Declare a new instance of QeraunosClient passing in the desired size of the cache as a number.
 
-```js
-const qeraunos = new qeraunosClient(size);
-```
+    ```js
+    const qeraunos = new qeraunosClient(size);
+    ```
 
-<p align="center"><img src="./resources/client-import-example.png" width="500" /></p>
+    And your code might look something like this.
+    <p align="left"><img src="./resources/client-import-example.png" width="500" /></p>
 
-4. To initiate the cache and query GraphQL, simply call the qeraunos.query method within an asynchronous function and pass in a query string and /grapphql endpoint as parameters
+4. To initiate the cache and query GraphQL, simply call the qeraunos.query method within an asynchronous function and pass in a query string and /grapphql endpoint as parameters.
 
-```js
-qeraunos.query('queryString', 'GraphQL Endpoint');
-```
+    ```js
+    qeraunos.query('queryString', 'GraphQL Endpoint');
+    ```
+    And your code might look like below.
+    <p align="left"><img src="./resources/client-query-example.png" width="500"/></p>
 
-<p align="center"><img src="./resources/client-query-example.png" width="500"/></p>
 5. When the .query method has finished executing, a response with the results returned from GraphQL will be provided. If this is the first time this has been executed, LocalForage will create a new cache within IndexedDB labeled “qeraunos”, and the GraphQL query and result will be cached as key value pairs within “qeraunos”.
 
 6. To access the cache, open the console on your browser and navigate to Application -> Storage -> IndexedDB -> localforage -> keyvaluepairs.
@@ -115,35 +117,44 @@ qeraunos.query('queryString', 'GraphQL Endpoint');
 ## **Server Side Caching Installation**
 
 1. Install Qeraunos from npm.
-   ```
+   ```js
    npm install @qeraunos/server
    ```
 2. Import Qeraunos into your server file.
-   ```
+   ```js
    const Qeraunos = require('@qeraunos/server');
    ```
-3. If not using Redis, create an instance of Qeraunos by inputting just your schema if you’re not using redis. Below your instance, set what size you’d want your cache to be by calling qeraunos.setSize. Then skip step 4.
+3. Import all your GraphQL schemas into one file like so.
 
-   ```
+    ```js
+    const schema = require('./schema/schema');
+    ```
+
+4. If not using Redis, create an instance of Qeraunos by inputting just your schema if you’re not using redis. Below your instance, set what size you’d want your cache to be by calling qeraunos.setSize. Then skip step 4.
+
+   ```js
    const qeraunos = new Qeraunos(schema);
    qeraunos.setSize(num);
    ```
 
-4. If using Redis, create an instance of qeraunos by passing in your schema, redis host, redis port, and redis password respectively, like below.
+5. If using Redis, create an instance of qeraunos by passing in your schema, redis host, redis port, and redis password respectively, like below.
 
-   ```
+   ```js
    const qeraunos = new Qeraunos(schema, RedisHost, RedisPort, RedisPassword);
    ```
 
-5. On your server file for your graphQL endpoint of "/graphql", simply put in qeraunos.query as your middleware and return res.locals back to your front end like this.
+6. On your server file for your graphQL endpoint of "/graphql", simply put in qeraunos.query as your middleware and return res.locals back to your front end like this.
 
-   ```
+   ```js
    app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
      return res.status(200).send(res.locals);
      });
    ```
+7. Overall, your server file might look something like this.
+    <p align="left"><img src="./resources/server-file-ex.png" width="500"/></p>
 
-6. You're set to go and should find your query reponse times drastically reduced for cached queries!
+8. You're set to go and should find your query response times drastically reduced for cached queries!
+
 
 # Built with
 
@@ -187,43 +198,46 @@ We are constantly trying to improve our code so we actively welcome all pull req
 1. Fork Qeraunos
 2. Pull down our dev branch with command
 
-```
-git pull origin dev
-```
+    ```
+    git pull origin dev
+    ```
 
 3. Create your own Feature Branch with the command
 
-```
-git checkout -b <yourFeatureName>
-```
+    ```
+    git checkout -b <yourFeatureName>
+    ```
 
 4. Add your changes with the command
 
-```
-git add .
-```
+    ```
+    git add .
+    ```
 
 5. Stage and commit your changes with the command
 
-```
-git commit -m "<your comment>"
-```
+    ```
+    git commit -m "<your comment>"
+    ```
 
 6. Merge your branch with the dev branch locally with the command
 
-```
-git merge dev
-```
+    ```
+    git merge dev
+    ```
 
 7. Resolve any merge conflicts
 8. Push up your branch with the command
 
-```
-git push origin <your feature branch name>
-```
+    ```
+    git push origin <your feature branch name>
+    ```
 
 9. Open a pull request
 10. Don't forget to star this repo! We look forward to your contributions!
+
+# Show your support!
+Give a ⭐️ if this project interests you or helped you!
 
 # License
 
@@ -233,9 +247,12 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 
 Visit our [website](https://qeraunos.com) or contact the team with the links below!
 
-# Author
+# Authors
 
-- Amrit Ramos | [Github](https://github.com/amritvela) | [LinkedIn](https://www.linkedin.com/in/amrit-ramos-2103a879/)
-- Arthur Huynh | [Github](https://github.com/arthurynh) | [LinkedIn](https://www.linkedin.com/in/arthurnhuynh/)
-- Dennis Cheung | [Github](https://github.com/Dennis-JS) | [LinkedIn](https://www.linkedin.com/in/denniskhcheung/)
-- Jason Hwang | [Github](https://github.com/hwangja1019) | [LinkedIn](https://www.linkedin.com/in/jason-jh-hwang/)
+Amrit Ramos | [Github](https://github.com/amritvela) | [LinkedIn](https://www.linkedin.com/in/amrit-ramos-2103a879/)
+
+Arthur Huynh | [Github](https://github.com/arthurynh) | [LinkedIn](https://www.linkedin.com/in/arthurnhuynh/)
+
+Dennis Cheung | [Github](https://github.com/Dennis-JS) | [LinkedIn](https://www.linkedin.com/in/denniskhcheung/)
+
+Jason Hwang | [Github](https://github.com/hwangja1019) | [LinkedIn](https://www.linkedin.com/in/jason-jh-hwang/)
