@@ -1,12 +1,9 @@
 # Qeraunos Client Side Caching
 
-1. [Overview](#overview)
-2. [How it works](#how-it-works)
-3. [Demo](#demo)
-4. [Prerequisites](#prerequisites)
-5. [Getting Started](#getting-started)
-6. [Contributing](#contributing)
-7. [Authors](#author)
+1. [Prerequisites](#prerequisites)
+2. [Getting Started](#getting-started)
+3. [Contributing](#contributing)
+4. [Authors](#authors)
 
 ## Overview
 
@@ -19,7 +16,8 @@ Note: if you want to cache utilizing your server please download Qeraunos/Server
 
 - Client side caching abilities harnessing the power of IndexedDB through localForage
 - Efficient design with O(1) insertion, deletion, and lookup
-  See more complete documentation at http://qeraunos.com and https://github.com/oslabs-beta/Qeraunos.
+
+For more complete documentation see our [website](http://qeraunos.com) and our [GitHub](https://github.com/oslabs-beta/Qeraunos).
 
 ## Prerequisites Client Side Caching
 

@@ -1,6 +1,6 @@
 <p align="center"><img src="./demo/client/resources/qeraunos-logo.svg" /></p>
 
-<h2 align="center"> Qeraunos, a lightweight GraphQL caching algorithm to meet your GraphQL caching needs. </h2>
+<h2 align="center"> A lightweight GraphQL caching algorithm to meet your GraphQL caching needs. </h2>
 
 <h3 align="center"> <a href="http://qeraunos.com" target="__blank">View Demo</a></h3>
 
@@ -251,10 +251,10 @@ Visit our [website](http://qeraunos.com) or contact the team with the links belo
 
 # Authors
 
-Amrit Ramos | [Github](https://github.com/amritvela) | [LinkedIn](https://www.linkedin.com/in/amrit-ramos-2103a879/)
+Amrit Ramos | [GitHub](https://github.com/amritvela) | [LinkedIn](https://www.linkedin.com/in/amrit-ramos-2103a879/)
 
-Arthur Huynh | [Github](https://github.com/arthurynh) | [LinkedIn](https://www.linkedin.com/in/arthurnhuynh/)
+Arthur Huynh | [GitHub](https://github.com/arthurynh) | [LinkedIn](https://www.linkedin.com/in/arthurnhuynh/)
 
-Dennis Cheung | [Github](https://github.com/Dennis-JS) | [LinkedIn](https://www.linkedin.com/in/denniskhcheung/)
+Dennis Cheung | [GitHub](https://github.com/Dennis-JS) | [LinkedIn](https://www.linkedin.com/in/denniskhcheung/)
 
-Jason Hwang | [Github](https://github.com/hwangja1019) | [LinkedIn](https://www.linkedin.com/in/jason-jh-hwang/)
+Jason Hwang | [GitHub](https://github.com/hwangja1019) | [LinkedIn](https://www.linkedin.com/in/jason-jh-hwang/)
