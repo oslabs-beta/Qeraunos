@@ -14,11 +14,12 @@
   box-shadow: #f5f5f5 0px 2px 8px 0px;
   background-color: inherit;
   color: #f5f5f5;
+  transition: all 0.3s ease-in-out;
   h1,
   h2,
   h3,
   p {
-    color: white;
+    color: #f5f5f5;
     text-align: center;
   }
   h1 {
@@ -33,6 +34,10 @@
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
   }
+}
+
+.member-card:hover {
+  transform: scale(1.05);
 }
 
 .member-pic {

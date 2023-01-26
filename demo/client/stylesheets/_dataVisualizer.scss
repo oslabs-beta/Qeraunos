@@ -17,8 +17,7 @@
   text-align: center;
   width: 100%;
   h1 {
-    // margin-left: 500px;
-    color: white;
+    color: #f5f5f5;
     text-align: center;
     font-size: 1.4rem;
   }
@@ -39,8 +38,8 @@
   background-color: #f5f5f5;
   border: 1px solid #f5f5f5;
   border-radius: 10px;
-  margin: auto;
-  padding: 1.5rem;
+  margin: 1rem 0.5rem 1rem 0.5rem;
+  padding: 0.5rem 5rem 0.5rem 5rem;
   object-fit: contain;
   position: relative;
   width: 95%;
@@ -50,16 +49,13 @@
 }
 
 .dataVisualizer {
-  padding: 50px;
-  margin: 1.4rem;
+  padding: 1rem;
+  margin: 1rem;
   flex-grow: 1;
   flex-wrap: wrap;
-  //   min-width: 50%;
   max-width: 60%;
-  //   min-height: 40vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
 
   box-shadow: #f5f5f5 0px 2px 8px 0px;
   background-color: #f5f5f5;
@@ -71,7 +67,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin: 1.4rem;
 }
 
 //sidebar
@@ -175,7 +170,7 @@
   height: 15rem;
   overflow-y: scroll;
   background-color: #484848;
-  color: white;
+  color: #f5f5f5;
   border-radius: 10px;
   position: relative;
   margin: auto;
@@ -189,7 +184,7 @@
   //   max-width: 100%;
   //   width: 100%;
   background-color: #484848;
-  color: white;
+  color: #f5f5f5;
   border-radius: 10px;
 }
 

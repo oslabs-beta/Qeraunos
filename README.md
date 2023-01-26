@@ -1,8 +1,8 @@
-<p align="center"><img src="./demo/client/resources/qeraunos-logo.svg" /></p>
+<p align='center'><img src='./demo/client/resources/qeraunos-logo.svg' /></p>
 
-<h2 align="center"> A lightweight GraphQL caching algorithm to meet your GraphQL caching needs. </h2>
+<h2 align='center'> A lightweight GraphQL caching algorithm to meet your GraphQL caching needs. </h2>
 
-<h3 align="center"> <a href="http://qeraunos.com" target="__blank">View Demo</a></h3>
+<h3 align='center'> <a href='https://qeraunos.com' target='__blank'>View Demo</a></h3>
 
 # **Table of Contents**
 
@@ -39,7 +39,7 @@ Additionally, since Redis is a popular database to use for caching, we integrate
 
 # Demo
 
-Feel free to visit our website [Qeraunos](://qeraunos.com) to get an interactive demonstration of how our client-side and server-side caching works.
+Feel free to visit our website [Qeraunos](https://qeraunos.com) to get an interactive demonstration of how our client-side and server-side caching works.
 
 After entering our site, you will be met with our server side demonstration with the ability to run GraphQL queries and mutations with our interactive sidebar utilizing the Star Wars API.
 
@@ -47,15 +47,15 @@ After entering our site, you will be met with our server side demonstration with
 
 1. Select the fields you would like to query and a preview of the GraphQL query will be shown below.
 
-2. Click the "Run Query" button to see the GraphQL query result. The metrics on the right will show the uncached response time populated on the graph and a cache hit/miss result will be logged to the statistics below. A cache miss will be logged the first time a unique query is run indicating that the query was not found in our cache and will be stored.
+2. Click the 'Run Query' button to see the GraphQL query result. The metrics on the right will show the uncached response time populated on the graph and a cache hit/miss result will be logged to the statistics below. A cache miss will be logged the first time a unique query is run indicating that the query was not found in our cache and will be stored.
 
-3. If the "Run Query" button is pressed again with the same query, you will notice that the response time has been lowered dramatically as we have a cache hit, indicating that the query data was stored in our cache instead of having to query our database.
+3. If the 'Run Query' button is pressed again with the same query, you will notice that the response time has been lowered dramatically as we have a cache hit, indicating that the query data was stored in our cache instead of having to query our database.
 
 ## **Server-Side Mutations**
 
 1. To mutate data stored in our cache and database, select a name and property to mutate and input the updated data. Our responsive string builder will format the request into a GraphQL mutation request.
 
-2. Click on "Run Mutation" to send the request for our database and cache to be updated. The data before and after the mutation will be shown below.
+2. Click on 'Run Mutation' to send the request for our database and cache to be updated. The data before and after the mutation will be shown below.
 
 3. To test if the mutated data is stored in our cache, simply run a query with the mutated property selected to see the updated data in our cache.
 
@@ -65,9 +65,9 @@ While our client-side demonstration looks identical to the server-side, it utili
 
 1. Select the fields you would like to query and a preview of the GraphQL query will be shown below.
 
-2. Click the "Run Query" button to see the GraphQL query result. The metrics on the right will show the uncached response time populated on the graph and a cache hit/miss result will be logged to the statistics below. A cache miss will be logged the first time a unique query is run indicating that the query was not found in our cache and will be stored.
+2. Click the 'Run Query' button to see the GraphQL query result. The metrics on the right will show the uncached response time populated on the graph and a cache hit/miss result will be logged to the statistics below. A cache miss will be logged the first time a unique query is run indicating that the query was not found in our cache and will be stored.
 
-3. If the "Run Query" button is pressed again with the same query, you will notice that the response time has been lowered dramatically as we have a cache hit, indicating that the query data was stored in our cache instead of having to query our database.
+3. If the 'Run Query' button is pressed again with the same query, you will notice that the response time has been lowered dramatically as we have a cache hit, indicating that the query data was stored in our cache instead of having to query our database.
 
 # Prerequisites
 
@@ -100,7 +100,7 @@ While our client-side demonstration looks identical to the server-side, it utili
    ```
 
    And your code might look something like this.
-   <p align="left"><img src="./resources/client-import-example.png" width="500" /></p>
+   <p align='left'><img src='./resources/client-import-example.png' width='500' /></p>
 
 4. To initiate the cache and query GraphQL, simply call the qeraunos.query method within an asynchronous function and pass in a query string and /grapphql endpoint as parameters.
 
@@ -109,9 +109,9 @@ While our client-side demonstration looks identical to the server-side, it utili
    ```
 
    And your code might look like below.
-   <p align="left"><img src="./resources/client-query-example.png" width="500"/></p>
+   <p align='left'><img src='./resources/client-query-example.png' width='500'/></p>
 
-5. When the .query method has finished executing, a response with the results returned from GraphQL will be provided. If this is the first time this has been executed, LocalForage will create a new cache within IndexedDB labeled "qeraunos", and the GraphQL query and result will be cached as key value pairs within "qeraunos".
+5. When the .query method has finished executing, a response with the results returned from GraphQL will be provided. If this is the first time this has been executed, LocalForage will create a new cache within IndexedDB labeled 'qeraunos', and the GraphQL query and result will be cached as key value pairs within 'qeraunos'.
 
 6. To access the cache, open the console on your browser and navigate to Application -> Storage -> IndexedDB -> localforage -> keyvaluepairs.
 
@@ -144,7 +144,7 @@ While our client-side demonstration looks identical to the server-side, it utili
    const qeraunos = new Qeraunos(schema, RedisHost, RedisPort, RedisPassword);
    ```
 
-6. On your server file for your graphQL endpoint of "/graphql", simply put in qeraunos.query as your middleware and return res.locals back to your front end like this.
+6. On your server file for your graphQL endpoint of '/graphql', simply put in qeraunos.query as your middleware and return res.locals back to your front end like this.
 
    ```js
    app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
@@ -153,7 +153,7 @@ While our client-side demonstration looks identical to the server-side, it utili
    ```
 
 7. Overall, your server file might look something like this.
-<p align="left"><img src="./resources/server-file-ex.png" width="500"/></p>
+<p align='left'><img src='./resources/server-file-ex.png' width='500'/></p>
 
 8. You're set to go and should find your query response times drastically reduced for cached queries!
 
@@ -218,7 +218,7 @@ We are constantly trying to improve our code so we actively welcome all pull req
 5. Stage and commit your changes with the command
 
    ```
-   git commit -m "<your comment>"
+   git commit -m '<your comment>'
    ```
 
 6. Merge your branch with the dev branch locally with the command
@@ -247,7 +247,7 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 
 # Contact
 
-Visit our [website](http://qeraunos.com) or contact the team with the links below!
+Visit our [website](https://qeraunos.com) or contact the team with the links below!
 
 # Authors
 
