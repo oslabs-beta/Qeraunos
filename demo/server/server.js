@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 exports.__esModule = true;
 var express = require('express');
 var path = require('path');
@@ -17,42 +17,39 @@ app.use('/', express.static(path.resolve(__dirname, '../build')));
 var qeraunos = new Qeraunos(schema);
 qeraunos.setSize(100);
 app.use('/graphql', qeraunos.query, function (req, res) {
-  return res.status(200).send(res.locals);
+    return res.status(200).send(res.locals);
 });
-app.use(
-  '/clearCache',
-  function (req, res) {
+app.use('/clearCache', function (req, res, next) {
     qeraunos.setSize(100);
     return next();
-  },
-  function (req, res) {
+}, function (req, res) {
     return res.status(200).send('cleared');
-  }
-);
-app.use(
-  '/graphql-front',
-  //Queranos.checkCache --> if found return res.status(200).send(res.data)
-  //if not found --> explicitly call from DB and cache from there
-  expressGraphQL({
+});
+app.use('/graphql-front', 
+//Queranos.checkCache --> if found return res.status(200).send(res.data)
+//if not found --> explicitly call from DB and cache from there
+expressGraphQL({
     schema: schema,
-    graphiql: true,
-  })
-);
+    graphiql: true
+}));
+app.get('*', function (req, res) {
+    res.redirect('/');
+});
 // 404 error handler
 app.use(function (req, res) {
-  return res.sendStatus(404);
+    return res.sendStatus(404);
 });
 //Global error handler
 app.use(function (err, req, res, next) {
-  var defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
-    status: 500,
-    message: { err: 'An error occurred' },
-  };
-  var errorObj = Object.assign({}, defaultErr, err);
-  return res.status(errorObj.status).json(errorObj.message);
+    var defaultErr = {
+        log: 'Express error handler caught unknown middleware error',
+        status: 500,
+        message: { err: 'An error occurred' }
+    };
+    var errorObj = Object.assign({}, defaultErr, err);
+    return res.status(errorObj.status).json(errorObj.message);
 });
 app.listen(PORT, function () {
-  console.log('Server listening on port: '.concat(PORT, '...'));
+    console.log("Server listening on port: ".concat(PORT, "..."));
 });
 module.exports = app;
