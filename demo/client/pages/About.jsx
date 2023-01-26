@@ -3,11 +3,11 @@ import { ReactComponent as Overview } from '../resources/icons/overviewIcon.svg'
 
 function About() {
   return (
-    <div className="installation-display">
-      <div className="installation-header">
+    <div className='installation-display'>
+      <div className='installation-header'>
         <h1>About Qeraunos</h1>
       </div>
-      <div className="installation-container">
+      <div className='installation-container'>
         <h2>Overview</h2>
         <p>
           Qeraunos is a custom built middleware cache based on a mix of LFU and
@@ -17,8 +17,8 @@ function About() {
         </p>
         <p>
           For more complete documentation see our
-          <a href="https://github.com/oslabs-beta/Qeraunos" target="blank">
-            &nbsp;Github.
+          <a href='https://github.com/oslabs-beta/Qeraunos' target='blank'>
+            &nbsp;GitHub.
           </a>
         </p>
         <h2>How it works</h2>

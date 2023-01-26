@@ -6,13 +6,13 @@
 @import './installation';
 
 $black: #10151d;
-$light-grey: #9d9ca1;
-$dark-grey: #767579;
+$light-grey: #b0b0b0;
+$dark-grey: #484848;
 $primary-blue: #010e42;
 $secondary-blue: blue;
 $alert: red;
-$white: blue;
-$foreground: #ebe9e5;
+$white: #fbfbfb;
+$foreground: #f5f5f5;
 
 * {
   margin: none;
@@ -41,7 +41,7 @@ h6 {
 }
 
 .h1-black {
-  color: $black;
+  color: black;
 }
 
 p,
