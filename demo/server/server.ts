@@ -28,9 +28,16 @@ app.use('/graphql', qeraunos.query, (req: Request, res: Response) => {
   return res.status(200).send(res.locals);
 });
 
-app.use('/clearCache', qeraunos.setSize(100), (req: Request, res: Response) => {
-  return res.status(200).send("cleared");
-})
+app.use(
+  '/clearCache',
+  function (req: Request, res: Response, next: NextFunction) {
+    qeraunos.setSize(100);
+    return next();
+  },
+  function (req: Request, res: Response) {
+    return res.status(200).send('cleared');
+  }
+);
 
 app.use(
   '/graphql-front',
@@ -41,6 +48,10 @@ app.use(
     graphiql: true,
   })
 );
+
+app.get('*', (req: Request, res: Response) => {
+  res.redirect('/');
+});
 
 // 404 error handler
 app.use((req: Request, res: Response) => {
