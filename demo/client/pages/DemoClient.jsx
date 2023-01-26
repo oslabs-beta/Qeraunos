@@ -4,11 +4,11 @@ import DataVisualizer2 from '../container/DataVisualizerClient';
 
 function DemoClient() {
   return (
-    <div className="main-display">
-      <div className="demo-header">
+    <div className='main-display'>
+      <div className='demo-header'>
         <h1> Demo client side caching</h1>
       </div>
-      <div className="main">
+      <div className='main'>
         <SidebarClient />
         <DataVisualizer2 />
       </div>

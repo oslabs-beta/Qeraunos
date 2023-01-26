@@ -31,7 +31,7 @@ function LineChart() {
     ],
   };
   return (
-    <div className="wrap-container">
+    <div className='wrap-container'>
       <h2>Response Time Graph</h2>
       <Line data={chartResData} />
     </div>

@@ -5,18 +5,18 @@ import { ReactComponent as Logo } from '../resources/qeraunos-logo.svg';
 function Navbar(props) {
   const { enterSite } = props;
   return (
-    <nav className="nav">
-      <div className="nav-logo">
-        <Link to="/" onClick={() => enterSite()}>
-          <Logo className="logo" />
+    <nav className='nav'>
+      <div className='nav-logo'>
+        <Link to='/' onClick={() => enterSite()}>
+          <Logo className='logo' />
         </Link>
       </div>
       <div>
         <ul>
           <li>
             <NavLink
-              to="/about"
-              value="About"
+              to='/about'
+              value='About'
               style={({ active }) => (active ? active : undefined)}
             >
               About
@@ -24,8 +24,8 @@ function Navbar(props) {
           </li>
           <li>
             <NavLink
-              to="/demo"
-              value="Demo"
+              to='/demo'
+              value='Demo'
               style={({ active }) => (active ? active : undefined)}
             >
               Demo Server
@@ -33,8 +33,8 @@ function Navbar(props) {
           </li>
           <li>
             <NavLink
-              to="/demo-client"
-              value="DemoClient"
+              to='/demo-client'
+              value='DemoClient'
               style={({ active }) => (active ? active : undefined)}
             >
               Demo Client
@@ -42,8 +42,8 @@ function Navbar(props) {
           </li>
           <li>
             <NavLink
-              to="/team"
-              value="team"
+              to='/team'
+              value='team'
               style={({ active }) => (active ? active : undefined)}
             >
               Team

@@ -41,10 +41,10 @@ const MetricsClient = () => {
   };
 
   return (
-    <div className="wrap-container">
+    <div className='wrap-container'>
       <h2>Hit/Miss Rate Chart</h2>
       <div>
-        <Doughnut className="doughnut" data={doughnutData} options={options} />
+        <Doughnut className='doughnut' data={doughnutData} options={options} />
       </div>
     </div>
   );

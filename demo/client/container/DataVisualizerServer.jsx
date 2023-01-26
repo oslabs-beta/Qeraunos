@@ -9,11 +9,11 @@ import Metrics from '../components/server-side/metrics';
 
 const DataVisualizer = () => {
   return (
-    <div className="dataVisualizer">
+    <div className='dataVisualizer'>
       <div>
         <LineChart />
       </div>
-      <div className="dataVisualizer-bottom">
+      <div className='dataVisualizer-bottom'>
         <div>
           <Results />
         </div>

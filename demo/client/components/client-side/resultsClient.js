@@ -19,7 +19,7 @@ function ResultsClient() {
   const hitRate = Math.floor((count / totalCache) * 100);
 
   return (
-    <div className="wrap-container">
+    <div className='wrap-container'>
       <h2>Results</h2>
       {uncached !== 'N/A' && <p>Uncached response: {uncached} ms</p>}
       {uncached === 'N/A' && <p>Uncached response: {uncached}</p>}
