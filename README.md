@@ -153,7 +153,7 @@ While our client-side demonstration looks identical to the server-side, it utili
    ```
 
 7. Overall, your server file might look something like this.
-<p align="left"><img src="./resources/server-file-ex.png" width="500"/></p>
+    <p align="left"><img src="./resources/server-file-ex.png" width="500"/></p>
 
 8. You're set to go and should find your query response times drastically reduced for cached queries!
 
