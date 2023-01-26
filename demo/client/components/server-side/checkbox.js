@@ -23,7 +23,7 @@ const Checkbox = () => {
     const startTime = Date.now();
 
     const queryTimeObj = await axios({
-      url: 'http://qeraunos.com/graphql',
+      url: 'https://qeraunos.com/graphql',
       method: 'post',
       data: {
         query: queryString,
@@ -54,7 +54,7 @@ const Checkbox = () => {
 
   const resetCache = async () => {
     await axios({
-      url: 'http://qeraunos.com/clearCache',
+      url: 'https://qeraunos.com/clearCache',
       method: 'get',
     }).then((res) => console.log(res));
   };
