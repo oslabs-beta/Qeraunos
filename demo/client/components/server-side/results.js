@@ -26,11 +26,9 @@ function Results() {
       {cached !== 'N/A' && <p>Cached response: {cached} ms</p>}
       {cached === 'N/A' && <p>Cached response: {cached}</p>}
       <h3>Cache Statistics</h3>
-      {/* <div className="numbers-container"> */}
       <p>Cache Hits: {`${count}`}</p>
       <p>Cache Miss: {`${cacheMiss}`}</p>
       <p>Hit Rate: {`${hitRate}%`}</p>
-      {/* </div> */}
     </div>
   );
 }

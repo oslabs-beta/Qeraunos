@@ -13,8 +13,12 @@ const DataVisualizer2 = () => {
         <LineChart2 />
       </div>
       <div className="dataVisualizer-bottom">
-        <ResultsClient />
-        <MetricsClient />
+        <div className="widget">
+          <ResultsClient />
+        </div>
+        <div className="widget">
+          <MetricsClient />
+        </div>
       </div>
     </div>
   );

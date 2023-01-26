@@ -14,8 +14,12 @@ const DataVisualizer = () => {
         <LineChart />
       </div>
       <div className="dataVisualizer-bottom">
-        <Results />
-        <Metrics />
+        <div>
+          <Results />
+        </div>
+        <div>
+          <Metrics />
+        </div>
       </div>
     </div>
   );

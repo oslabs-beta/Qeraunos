@@ -5,6 +5,7 @@
   color: white;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0 2rem;
   padding: 0 1rem;
@@ -26,6 +27,7 @@
     margin: 0;
     list-style: none;
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 
     li.active {
