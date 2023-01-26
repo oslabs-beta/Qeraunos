@@ -19,7 +19,7 @@ const Mutation = () => {
 
   const setMutation = async () => {
     const previewData = await axios({
-      url: 'http://qeraunos.com/graphql',
+      url: 'https://qeraunos.com/graphql',
       method: 'post',
       data: {
         query: previewString,
@@ -36,7 +36,7 @@ const Mutation = () => {
       });
 
     const mutateData = await axios({
-      url: 'http://qeraunos.com/graphql',
+      url: 'https://qeraunos.com/graphql',
       method: 'post',
       data: {
         query: queryString,
