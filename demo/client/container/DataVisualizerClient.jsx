@@ -8,15 +8,15 @@ import MetricsClient from '../components/client-side/metricsClient';
 
 const DataVisualizer2 = () => {
   return (
-    <div className="dataVisualizer">
+    <div className='dataVisualizer'>
       <div>
         <LineChart2 />
       </div>
-      <div className="dataVisualizer-bottom">
-        <div className="widget">
+      <div className='dataVisualizer-bottom'>
+        <div className='widget'>
           <ResultsClient />
         </div>
-        <div className="widget">
+        <div className='widget'>
           <MetricsClient />
         </div>
       </div>

@@ -48,7 +48,7 @@ function UserCards() {
     fullTeam.push(member);
   }
 
-  return <div className="team">{fullTeam}</div>;
+  return <div className='team'>{fullTeam}</div>;
 }
 
 export default UserCards;

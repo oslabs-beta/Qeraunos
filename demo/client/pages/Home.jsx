@@ -13,11 +13,11 @@ function Home(props) {
   };
 
   return (
-    <div className="home">
-      <div className="home-inner">
+    <div className='home'>
+      <div className='home-inner'>
         <Logo />
         <button
-          className="home-btn"
+          className='home-btn'
           onClick={(e) => {
             enterSite();
             navigate('/about');
