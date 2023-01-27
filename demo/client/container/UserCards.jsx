@@ -11,24 +11,28 @@ function UserCards() {
       name: 'Amrit Kaur Ramos',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/amrit-ramos-2103a879/',
+      GitHubLink: 'https://github.com/amritvela',
       image: AmritRamos,
     },
     {
       name: 'Arthur Huynh',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/arthurnhuynh/',
+      GitHubLink: 'https://github.com/arthurynh',
       image: ArthurHuynh,
     },
     {
       name: 'Dennis Cheung',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/denniskhcheung/',
+      GitHubLink: 'https://github.com/Dennis-JS',
       image: DennisCheung,
     },
     {
       name: 'Jason Hwang',
       title: 'Software Engineer',
       linkedIn: 'https://www.linkedin.com/in/jason-jh-hwang/',
+      GitHubLink: 'https://github.com/hwangja1019',
       image: JasonHwang,
     },
   ];
@@ -42,6 +46,7 @@ function UserCards() {
         name={team[i].name}
         title={team[i].title}
         linkedIn={team[i].linkedIn}
+        GitHubLink={team[i].GitHubLink}
         image={team[i].image}
       />
     );
