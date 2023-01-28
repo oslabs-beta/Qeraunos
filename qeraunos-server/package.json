@@ -1,0 +1,32 @@
+{
+  "name": "@qeraunos/server",
+  "version": "1.0.7",
+  "description": "lightweight server-side caching solution for GraphQL",
+  "main": "qeraunos.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oslabs-beta/Qeraunos.git"
+  },
+  "keywords": [
+    "graphql",
+    "cache",
+    "lightweight",
+    "redis",
+    "qeraunos",
+    "server-side",
+    "caching"
+  ],
+  "author": "Qeraunos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oslabs-beta/Qeraunos/issues"
+  },
+  "homepage": "https://github.com/oslabs-beta/Qeraunos#readme",
+  "dependencies": {
+    "express-graphql": "^0.12.0",
+    "redis": "^4.5.1"
+  }
+}
